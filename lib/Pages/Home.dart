@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
+import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,7 +16,24 @@ class _HomeState extends State<Home> {
   String markets = 'Wote';
   String subcounties = '';
   String wards = '';
+  // List<String> makueniSubcounties = [
+  //   'Kibwezi East',
+  //   'Kibwezi West',
+  //   'Kilome',
+  //   'Makueni',
+  //   'Mbooni East',
+  //   'Mbooni West',
+  // ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  get makueniSubcounties => [
+        'Kibwezi East',
+        'Kibwezi West',
+        'Kilome',
+        'Makueni',
+        'Mbooni East',
+        'Mbooni West',
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +98,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                padding: EdgeInsets.zero,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: const [
@@ -93,7 +113,7 @@ class _HomeState extends State<Home> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 4),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -109,7 +129,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 24, 12, 0),
+                padding: const EdgeInsets.only(top: 24),
                 child: Column(
                   children: [
                     Row(
@@ -119,7 +139,7 @@ class _HomeState extends State<Home> {
                           child: BlueBox(total: total, name: markets),
                         ),
                         const SizedBox(
-                          width: 24,
+                          width: 12,
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -128,7 +148,7 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     const SizedBox(
-                      height: 24,
+                      height: 12,
                     ),
                     Row(
                       children: [
@@ -137,7 +157,7 @@ class _HomeState extends State<Home> {
                           child: BlueBox(total: total, name: markets),
                         ),
                         const SizedBox(
-                          width: 24,
+                          width: 12,
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -148,10 +168,189 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
+              Flexible(
+                fit: FlexFit.tight,
+                child: Padding(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'SubCounties',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 26, 114, 186),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: LineChart(
+                            LineChartData(
+                              titlesData: FlTitlesData(
+                                show: true,
+                                bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 10,
+                                  getTitlesWidget: (value, meta) {
+                                    return const Text(
+                                      'Makueni',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  },
+                                )),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 10,
+                                      getTitlesWidget: (value, _) {
+                                        return const Text(
+                                          'Makueni',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.black,
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
+                              borderData: FlBorderData(show: true),
+                              gridData: FlGridData(show: true),
+                              minX: 0,
+                              maxX:
+                                  6, // Adjust this value based on the number of data points
+                              minY: 0,
+                              maxY: 6,
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: [
+                                    const FlSpot(0, 3),
+                                    const FlSpot(1, 1),
+                                    const FlSpot(2, 4),
+                                    const FlSpot(3, 2),
+                                    const FlSpot(4, 5),
+                                    const FlSpot(5, 1),
+                                    const FlSpot(6, 3),
+                                  ],
+                                  isCurved: true,
+                                  color: Colors.blue,
+                                  dotData: FlDotData(show: false),
+                                  belowBarData: BarAreaData(show: true),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        const Text(
+                          'Wards',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 26, 114, 186),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: LineChart(
+                            LineChartData(
+                              titlesData: FlTitlesData(
+                                show: true,
+                                bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 10,
+                                  getTitlesWidget: (value, meta) {
+                                    return const Text(
+                                      'Makueni',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  },
+                                )),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 10,
+                                      getTitlesWidget: (value, _) {
+                                        return const Text(
+                                          'Makueni',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.black,
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
+                              borderData: FlBorderData(show: true),
+                              gridData: FlGridData(show: true),
+                              minX: 0,
+                              maxX:
+                                  6, // Adjust this value based on the number of data points
+                              minY: 0,
+                              maxY: 6,
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: [
+                                    const FlSpot(0, 3),
+                                    const FlSpot(1, 1),
+                                    const FlSpot(2, 4),
+                                    const FlSpot(3, 2),
+                                    const FlSpot(4, 5),
+                                    const FlSpot(5, 1),
+                                    const FlSpot(6, 3),
+                                  ],
+                                  isCurved: true,
+                                  color: Colors.blue,
+                                  dotData: FlDotData(show: false),
+                                  belowBarData: BarAreaData(show: true),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+              const Align(
+                  alignment: Alignment.bottomRight,
+                  child: YellowButton(label: "Start Mapping")),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class MakueniSubcountyListWidget extends StatelessWidget {
+  const MakueniSubcountyListWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> makueniSubcounties = [
+      'KEast',
+    ];
+
+    return Column(
+      children: [
+        for (var subcounty in makueniSubcounties)
+          Text(
+            subcounty,
+            style: const TextStyle(
+              fontSize: 10,
+              color: Color.fromARGB(255, 26, 114, 186),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+      ],
     );
   }
 }
