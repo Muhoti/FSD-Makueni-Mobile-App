@@ -26,11 +26,20 @@ class FootNote extends StatelessWidget {
             ),
           ],
         ),
-        child: const Center(
-          child: Text(
-            'Powered by \n Oakar Services', // Center the text vertically
-            style: TextStyle(color: Colors.white),
+        child: Center(
+          child: Column(
+            children: const [
+              Text(
+                'Powered by', // Center the text vertically
+                style: TextStyle(color: Colors.white),
+              ),
+              Text(
+                'Oakar Services', // Center the text vertically
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
           ),
+          
         ),
       ),
     );

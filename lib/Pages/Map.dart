@@ -25,7 +25,7 @@ class _MapState extends State<Map> {
               child: IconButton(
                 onPressed: () => {
                   Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (_) => const Home()))
+                      context, MaterialPageRoute(builder: (_) =>  Home()))
                 },
                 icon: const Icon(Icons.arrow_back),
               ),
@@ -37,7 +37,7 @@ class _MapState extends State<Map> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const Home(),
+                builder: (context) =>  Home(),
               ));
         }),
       ),

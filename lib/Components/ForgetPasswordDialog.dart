@@ -32,7 +32,7 @@ class _ForgetPasswordDialogState extends State<ForgetPasswordDialog> {
             const Text("Enter Email",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                    fontSize: 24, color: Color.fromARGB(160, 2, 47, 99))),
+                    fontSize: 24, color: Color.fromARGB(255, 26, 114, 186))),
             TextResponse(label: error),
             MyTextInput(
               title: 'Email',

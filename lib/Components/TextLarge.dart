@@ -19,7 +19,7 @@ class _TextLargeState extends State<TextLarge> {
       style: const TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.bold,
-        color: Color.fromARGB(255, 0, 85, 165),
+        color: Color.fromARGB(255, 26, 114, 186),
       ),),
     );
   }

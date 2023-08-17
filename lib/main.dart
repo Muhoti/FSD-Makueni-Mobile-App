@@ -5,8 +5,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextLarge.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextMedium.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
 
@@ -29,10 +27,10 @@ class _MyAppState extends State<MyApp> {
     var token = await storage.read(key: 'mljwt');
     if (token != null) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const Login()));
+          context, MaterialPageRoute(builder: (_) => const Home()));
     } else {
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (_) => const Home()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const Login()));
     }
   }
 

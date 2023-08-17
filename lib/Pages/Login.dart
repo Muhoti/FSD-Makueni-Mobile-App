@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
 import 'package:fsd_makueni_mobile_app/Components/ForgetPasswordDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
@@ -9,6 +12,7 @@ import 'package:fsd_makueni_mobile_app/Components/TextMedium.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
+import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Register.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:email_validator/email_validator.dart';
@@ -33,112 +37,189 @@ class _LoginState extends State<Login> {
     return MaterialApp(
       title: 'Login',
       theme: ThemeData(
-        
-        primaryColor: const Color(
-            0xFFFF6200), // Define the accent color for buttons, etc.
-        scaffoldBackgroundColor: Colors.white, // Set the scaffold background color to orange
-        colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color(0x00fda766)),
+        primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Center(
-                child: Container(
-                    constraints: const BoxConstraints.tightForFinite(),
-                    child: SingleChildScrollView(
-                      child: Form(
-                          child: Center(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(84, 24, 84, 12),
-                              child: Image.asset('assets/images/logo.png'),
-                            ),
-                            const TextLarge(label: "Login"),
-                            TextResponse(label: error),
-                            MyTextInput(
-                              title: 'Email',
-                              lines: 1,
-                              value: '',
-                              type: TextInputType.emailAddress,
-                              onSubmit: (value) {
-                                setState(() {
-                                  email = value;
-                                });
-                              },
-                            ),
-                            MyTextInput(
-                              title: 'Password',
-                              lines: 1,
-                              value: '',
-                              type: TextInputType.visiblePassword,
-                              onSubmit: (value) {
-                                setState(() {
-                                  password = value;
-                                });
-                              },
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Show the ForgetPasswordDialog when the "Forget Password" link is clicked.
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const ForgetPasswordDialog(),
-                                );
-                              },
-                              child: const TextSmall(
-                                label: 'Forgot Password?',
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/bg.png'), // Replace with your image path
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 50,),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          width: 200, // Set the desired width
+                        ),
+                      ),
+                      const Text(
+                        'MLIMS',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 28,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        'Haven of Opportunities',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(48),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
                               ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
+                            child: Column(
+                              children: [
+                                Form(
+                                    child: Center(
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                      const Text(
+                                        'Login',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 28,
+                                            color: Color.fromARGB(
+                                                255, 26, 114, 186),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextResponse(label: error),
+                                      MyTextInput(
+                                        title: 'Email Address',
+                                        lines: 1,
+                                        value: '',
+                                        type: TextInputType.emailAddress,
+                                        onSubmit: (value) {
+                                          setState(() {
+                                            email = value;
+                                          });
+                                        },
+                                      ),
+                                      MyTextInput(
+                                        title: 'Password',
+                                        lines: 1,
+                                        value: '',
+                                        type: TextInputType.visiblePassword,
+                                        onSubmit: (value) {
+                                          setState(() {
+                                            password = value;
+                                          });
+                                        },
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            'Forgot Password?',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // Show the ForgetPasswordDialog when the "Forget Password" link is clicked.
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    const ForgetPasswordDialog(),
+                                              );
+                                            },
+                                            child: const Text(
+                                              'Click Here',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SubmitButton(
+                                        label: "Submit",
+                                        onButtonPressed: () async {
+                                          setState(() {
+                                            isLoading = LoadingAnimationWidget
+                                                .staggeredDotsWave(
+                                              color: const Color.fromARGB(
+                                                  255, 26, 114, 186),
+                                              size: 100,
+                                            );
+                                          });
+                                          var res = await registerUser(
+                                              email, password);
+                                          setState(() {
+                                            isLoading = null;
+                                            if (res.error == null) {
+                                              error = res.success;
+                                            } else {
+                                              error = res.error;
+                                            }
+                                          });
+                                          if (res.error != null) {
+                                            await storage.write(
+                                                key: 'mljwt', value: res.token);
+                                            // PROCEED TO NEXT PAGE
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                         Home()));
+                                          }
+                                        },
+                                      ),
+                                    ]))),
+                              ],
                             ),
-                            SubmitButton(
-                              label: "Login",
-                              onButtonPressed: () async {
-                                setState(() {
-                                  isLoading =
-                                      LoadingAnimationWidget.staggeredDotsWave(
-                                    color: Color.fromRGBO(0, 128, 0, 1),
-                                    size: 100,
-                                  );
-                                });
-                                var res = await login(email, password);
-                                setState(() {
-                                  isLoading = null;
-                                  if (res.error == null) {
-                                    error = res.success;
-                                  } else {
-                                    error = res.error;
-                                  }
-                                });
-                                if (res.error == null) {
-                                  await storage.write(
-                                      key: 'erjwt', value: res.token);
-                                  // PROCEED TO NEXT PAGE
-                                }
-                              },
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Show the ForgetPasswordDialog when the "Forget Password" link is clicked.
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => const Register(),
-                                );
-                              },
-                              child: const TextMedium(
-                                label: 'REGISTER',
-                              ),
-                            ),
-                          ]))),
-                    )),
-              )
-            ],
-          )),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Align(alignment: Alignment.bottomLeft, child: FootNote())
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

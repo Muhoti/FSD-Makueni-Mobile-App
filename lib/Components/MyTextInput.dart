@@ -76,7 +76,7 @@ class _MyTextInputState extends State<MyTextInput> {
                 filled: false,
                 label: Text(
                   widget.title.toString(),
-                  style: const TextStyle(color: Color.fromARGB(255, 0, 135, 61)),
+                  style: const TextStyle(color: Color.fromARGB(255, 26, 114, 186)),
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.auto)));
   }
