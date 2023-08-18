@@ -28,7 +28,8 @@ class _YellowButtonState extends State<YellowButton> {
           onPressed: widget.onButtonPressed,
           child: Text(
             widget.label,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16, 
+            color: Color.fromARGB(255, 26, 114, 186)),
           )),
     );
   }

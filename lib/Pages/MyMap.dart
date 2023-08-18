@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
+import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
-import 'package:fsd_makueni_mobile_app/Pages/MapSearch.dart';
 
 class MyMap extends StatefulWidget {
   const MyMap({super.key});
@@ -15,6 +12,17 @@ class MyMap extends StatefulWidget {
 class _MyMapState extends State<MyMap> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+
+void _showPlotDetailsDialog() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return const PlotDetails();
+      },
+    );
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -80,11 +88,8 @@ class _MyMapState extends State<MyMap> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: YellowButton(
-                  label: "Start Mapping",
-                  onButtonPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => const MapSearch()));
-                  },
+                  label: "Capture Point",
+                  onButtonPressed: _showPlotDetailsDialog,
                 ),
               ),
             ],

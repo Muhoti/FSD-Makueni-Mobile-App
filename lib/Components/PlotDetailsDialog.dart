@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
+import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Models/SearchItem.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
+import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -20,6 +22,8 @@ class _PlotDetailsState extends State<PlotDetails> {
   String searchItem = 'Name';
   String check = '';
   String error = '';
+  bool isChecked = false;
+
   final storage = const FlutterSecureStorage();
 
   List<SearchItem> entries = <SearchItem>[];
@@ -148,10 +152,9 @@ class _PlotDetailsState extends State<PlotDetails> {
                   )
                 ],
               ),
-              
               entries.isNotEmpty
                   ? Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                       child: Card(
                         elevation: 12,
                         child: SizedBox(
@@ -191,6 +194,37 @@ class _PlotDetailsState extends State<PlotDetails> {
                       ),
                     )
                   : const SizedBox(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                      value: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      }),
+                  const Text(
+                    'No match found?',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SubmitButton(
+                  label: "New Valuation Record",
+                  onButtonPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ValuationForm()));
+                  },
+                ),
+              ),
             ],
           ),
         ),

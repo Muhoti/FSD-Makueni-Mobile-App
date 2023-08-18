@@ -22,7 +22,7 @@ class _SubmitButtonState extends State<SubmitButton> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0), // Rounded corners
               ),
-              padding: const EdgeInsets.fromLTRB(40, 8, 40, 8)),
+              padding: const EdgeInsets.fromLTRB(40, 12, 40, 12)),
           onPressed: widget.onButtonPressed,
           child: Text(
             widget.label,
