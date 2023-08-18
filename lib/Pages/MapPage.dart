@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 
-class MyMap extends StatefulWidget {
-  const MyMap({super.key});
+class MapPage extends StatefulWidget {
+  const MapPage({super.key});
 
   @override
-  State<MyMap> createState() => _MyMapState();
+  State<MapPage> createState() => _MapPageState();
 }
 
-class _MyMapState extends State<MyMap> {
+class _MapPageState extends State<MapPage> {
+  var long = 36.2, lat = -2.3;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-void _showPlotDetailsDialog() {
+  void _showPlotDetailsDialog() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -22,11 +24,10 @@ void _showPlotDetailsDialog() {
     );
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MyMap',
+      title: 'MapPage',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -82,9 +83,17 @@ void _showPlotDetailsDialog() {
           ),
         ),
         body: Container(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(0),
           child: Column(
             children: [
+              Expanded(
+                child: SizedBox(
+                  child: MyMap(
+                    lat: lat,
+                    lon: long,
+                  ),
+                ),
+              ),
               Align(
                 alignment: Alignment.bottomRight,
                 child: YellowButton(

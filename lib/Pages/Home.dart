@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
-import 'package:fsd_makueni_mobile_app/Pages/MyMap.dart';
+import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -326,7 +325,7 @@ class _HomeState extends State<Home> {
                   label: "Start Mapping",
                   onButtonPressed: () {
                     Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (_) => const MyMap()));
+                        context, MaterialPageRoute(builder: (_) => const MapPage()));
                   },
                 ),
               ),

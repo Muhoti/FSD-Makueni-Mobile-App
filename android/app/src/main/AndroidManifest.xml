@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.fsd_makueni_mobile_app">
    <application
-        android:label="fsd_makueni_mobile_app"
+        android:label="MLIMS"
         android:name="${applicationName}"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@drawable/logo">
         <activity
             android:name=".MainActivity"

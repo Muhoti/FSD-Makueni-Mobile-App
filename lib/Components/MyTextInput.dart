@@ -66,8 +66,7 @@ class _MyTextInputState extends State<MyTextInput> {
             enableSuggestions: false,
             autocorrect: false,
             style:
-                const TextStyle(color: Color.fromARGB(
-                    255, 0, 85, 165)), // Set the text color to white
+                const TextStyle(color: Color.fromARGB(255, 42, 44, 46)), // Set the text color to white
 
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),

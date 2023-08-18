@@ -7,12 +7,8 @@ import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
 import 'package:fsd_makueni_mobile_app/Components/ForgetPasswordDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextLarge.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextMedium.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
-import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Register.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -32,6 +28,19 @@ class _LoginState extends State<Login> {
   String password = '';
   var isLoading;
   final storage = const FlutterSecureStorage();
+
+  verifyUser(token) async {
+    var token = await storage.read(key: "mljwt");
+    var decoded = parseJwt(token.toString());
+
+    if (decoded["error"] == "Invalid token") {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const Login()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const Home()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +66,9 @@ class _LoginState extends State<Login> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 50,),
+                      const SizedBox(
+                        height: 50,
+                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
                         child: Image.asset(
@@ -184,8 +195,10 @@ class _LoginState extends State<Login> {
                                               size: 100,
                                             );
                                           });
-                                          var res = await registerUser(
-                                              email, password);
+                                          print("login beginning");
+                                          print("the error is $error");
+                                          var res =
+                                              await login(email, password);
                                           setState(() {
                                             isLoading = null;
                                             if (res.error == null) {
@@ -194,15 +207,11 @@ class _LoginState extends State<Login> {
                                               error = res.error;
                                             }
                                           });
-                                          if (res.error != null) {
+                                          if (res.error == null) {
                                             await storage.write(
                                                 key: 'mljwt', value: res.token);
                                             // PROCEED TO NEXT PAGE
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                         Home()));
+                                            verifyUser(res.token);
                                           }
                                         },
                                       ),
@@ -243,7 +252,7 @@ Future<Message> login(String email, String password) async {
   }
   try {
     final response = await http.post(
-      Uri.parse("${getUrl()}mobile/login"),
+      Uri.parse("${getUrl()}auth/login"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

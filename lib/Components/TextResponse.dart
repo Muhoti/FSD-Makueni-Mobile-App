@@ -17,7 +17,7 @@ class _TextResponseState extends State<TextResponse> {
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: Colors.deepOrange,
       ),),
     );
   }
