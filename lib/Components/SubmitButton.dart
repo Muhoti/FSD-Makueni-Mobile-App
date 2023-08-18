@@ -17,17 +17,17 @@ class _SubmitButtonState extends State<SubmitButton> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 49, 162, 255),
-          padding: const EdgeInsets.fromLTRB(60, 8, 60, 8)
-        ),
-        onPressed: widget.onButtonPressed,
-        child: Text(
-        widget.label,
-        style: const TextStyle(
-          fontSize:16
-        ),
-      )),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 49, 162, 255),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0), // Rounded corners
+              ),
+              padding: const EdgeInsets.fromLTRB(40, 8, 40, 8)),
+          onPressed: widget.onButtonPressed,
+          child: Text(
+            widget.label,
+            style: const TextStyle(fontSize: 16),
+          )),
     );
   }
 }

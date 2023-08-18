@@ -3,6 +3,7 @@ import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
+import 'package:fsd_makueni_mobile_app/Pages/MyMap.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -319,9 +320,16 @@ class _HomeState extends State<Home> {
                       ],
                     )),
               ),
-              const Align(
-                  alignment: Alignment.bottomRight,
-                  child: YellowButton(label: "Start Mapping")),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: YellowButton(
+                  label: "Start Mapping",
+                  onButtonPressed: () {
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (_) => const MyMap()));
+                  },
+                ),
+              ),
             ],
           ),
         ),
