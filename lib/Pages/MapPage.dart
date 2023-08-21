@@ -33,55 +33,7 @@ class _MapPageState extends State<MapPage> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-            icon: Image.asset(
-              'assets/images/menuicon.png',
-              width: 24,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                const Drawer();
-              },
-              icon: Image.asset(
-                'assets/images/user.png',
-                width: 50, // Set the desired width
-              ),
-              //icon: const Icon(FontAwesome.user_circle)
-            )
-          ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Handle drawer item 1 tap
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Handle drawer item 2 tap
-                },
-              ),
-            ],
-          ),
-        ),
+      
         body: Container(
           padding: EdgeInsets.all(0),
           child: Column(

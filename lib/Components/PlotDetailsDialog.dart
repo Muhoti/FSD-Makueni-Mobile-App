@@ -8,6 +8,8 @@ import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 class PlotDetails extends StatefulWidget {
   const PlotDetails({super.key});
@@ -50,6 +52,12 @@ class _PlotDetailsState extends State<PlotDetails> {
     } catch (e) {
       // todo
     }
+  }
+
+  addAttribute() {
+    storage.write(key: "EDITING", value: "FALSE");
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
 
   @override
@@ -169,14 +177,17 @@ class _PlotDetailsState extends State<PlotDetails> {
                                 onPressed: () {
                                   setState(() {
                                     storage.write(
-                                        key: "NationalID",
+                                        key: "LandOwnerID",
                                         value: entries[index].NationalID);
+                                    storage.write(
+                                        key: "EDITING", value: "TRUE");
                                     entries.clear();
                                   });
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Home()));
+                                          builder: (context) =>
+                                              const ValuationForm()));
                                 },
                                 child: Align(
                                     alignment: Alignment.centerLeft,
@@ -218,10 +229,15 @@ class _PlotDetailsState extends State<PlotDetails> {
                 child: SubmitButton(
                   label: "New Valuation Record",
                   onButtonPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ValuationForm()));
+                    isChecked ? addAttribute() : (){
+                      Fluttertoast.showToast(
+                              msg: "Checkbox not checked!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.black87,
+                              textColor: Colors.white,
+                            );
+                    };
                   },
                 ),
               ),
@@ -231,4 +247,6 @@ class _PlotDetailsState extends State<PlotDetails> {
       ),
     );
   }
+
+ 
 }

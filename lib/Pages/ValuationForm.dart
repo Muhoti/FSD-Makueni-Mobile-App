@@ -1,10 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextLarge.dart';
+import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
+import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
+import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ValuationForm extends StatefulWidget {
   const ValuationForm({super.key});
@@ -19,8 +26,54 @@ class _ValuationFormState extends State<ValuationForm> {
   String nationalId = '';
   String email = '';
   String plotNo = '';
+  String error = '';
+  var isLoading;
+
+  final storage = const FlutterSecureStorage();
+  dynamic data;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() async {
+    var editing = await storage.read(key: "EDITING");
+    print("editing is $editing");
+
+    if (editing == "TRUE") {
+      try {
+        var id = await storage.read(key: "LandOwnerID");
+        print("the parcel id is $id");
+
+        // Prefill Form
+        try {
+          final response = await get(
+            Uri.parse("${getUrl()}farmerresources/$id"),
+          );
+
+          var body = await json.decode(response.body);
+          print("the body is ${body[0]}");
+
+          setState(() {
+            nationalId = id as String;
+            data = body[0];
+            name = body[0]["FarmerID"];
+            phone = body[0]["TotalAcreage"];
+            email = body[0]["FarmOwnership"];
+            plotNo = body[0]["IrrigationType"];
+          });
+
+          print("valuation forms: $name, $email, $phone, $nationalId");
+        } catch (e) {
+          print(e);
+        }
+      } catch (e) {}
+    } else {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,55 +84,6 @@ class _ValuationFormState extends State<ValuationForm> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-            icon: Image.asset(
-              'assets/images/menuicon.png',
-              width: 24,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                const Drawer();
-              },
-              icon: Image.asset(
-                'assets/images/user.png',
-                width: 50, // Set the desired width
-              ),
-              //icon: const Icon(FontAwesome.user_circle)
-            )
-          ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Handle drawer item 1 tap
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Handle drawer item 2 tap
-                },
-              ),
-            ],
-          ),
-        ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(0),
@@ -91,6 +95,22 @@ class _ValuationFormState extends State<ValuationForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.zero,
+                              child: Image.asset(
+                                'assets/images/menuicon.png',
+                                width: 24,
+                              ),
+                            ),
+                            UserContainer(),
+                          ],
+                        ),
+                      ),
                       const Text(
                         'Valuation Data',
                         style: TextStyle(
@@ -99,8 +119,9 @@ class _ValuationFormState extends State<ValuationForm> {
                             color: Color.fromARGB(255, 0, 85, 165)),
                       ),
                       Text(
-                        'Plot No: $plotNo',
-                        style: const TextStyle(fontSize: 16, color: Colors.black),
+                        'Plot No: $nationalId',
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
                   ),
@@ -108,7 +129,7 @@ class _ValuationFormState extends State<ValuationForm> {
                 MyTextInput(
                   title: 'Name',
                   lines: 1,
-                  value: '',
+                  value: name,
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
@@ -122,7 +143,7 @@ class _ValuationFormState extends State<ValuationForm> {
                 MyTextInput(
                   title: 'Phone',
                   lines: 1,
-                  value: '',
+                  value: phone,
                   type: TextInputType.phone,
                   onSubmit: (value) {
                     setState(() {
@@ -136,7 +157,7 @@ class _ValuationFormState extends State<ValuationForm> {
                 MyTextInput(
                   title: 'National ID',
                   lines: 1,
-                  value: '',
+                  value: nationalId,
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
@@ -150,7 +171,7 @@ class _ValuationFormState extends State<ValuationForm> {
                 MyTextInput(
                   title: 'Email',
                   lines: 1,
-                  value: '',
+                  value: email,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -162,11 +183,18 @@ class _ValuationFormState extends State<ValuationForm> {
                   alignment: Alignment.bottomCenter,
                   child: SubmitButton(
                     label: "Submit",
-                    onButtonPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const ValuationForm()));
+                    onButtonPressed: () async {
+                      setState(() {
+                        storage.write(key: "EDITING", value: "FALSE");
+                        error = "";
+                        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+                          color: const Color.fromRGBO(0, 128, 0, 1),
+                          size: 100,
+                        );
+                      });
+
+                      var res =
+                          await submitData(name, nationalId, email, phone);
                     },
                   ),
                 ),
@@ -175,6 +203,74 @@ class _ValuationFormState extends State<ValuationForm> {
           ),
         ),
       ),
+    );
+  }
+}
+
+Future<Message> submitData(
+  String name,
+  String nationalId,
+  String email,
+  String phone,
+) async {
+  if (name.isEmpty || nationalId.isEmpty || email.isEmpty || phone.isEmpty) {
+    return Message(
+        token: null, success: null, error: "All Fields Must Be Filled!");
+  }
+
+  try {
+    const storage = FlutterSecureStorage();
+    var token = await storage.read(key: "mljwt");
+    var response;
+
+    response = await post(
+      Uri.parse("${getUrl()}farmerresources"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token!
+      },
+      body: jsonEncode(<String, String>{
+        'Name': name,
+        'NationalID': nationalId,
+        'Email': email,
+        'Phone': phone
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 203) {
+      return Message.fromJson(jsonDecode(response.body));
+    } else {
+      return Message(
+        token: null,
+        success: null,
+        error: "Connection to server failed!",
+      );
+    }
+  } catch (e) {
+    return Message(
+      token: null,
+      success: null,
+      error: "Connection to server failed!",
+    );
+  }
+}
+
+class Message {
+  var token;
+  var success;
+  var error;
+
+  Message({
+    required this.token,
+    required this.success,
+    required this.error,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      token: json['token'],
+      success: json['success'],
+      error: json['error'],
     );
   }
 }

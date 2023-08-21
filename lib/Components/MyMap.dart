@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'Utils.dart';
@@ -43,18 +44,42 @@ class _MyMapState extends State<MyMap> {
         child: Card(
             clipBehavior: Clip.hardEdge,
             elevation: 2,
-            child: WebView(
-              initialUrl: "${getUrl()}map",
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                controller = webViewController;
-                webViewController.evaluateJavascript(
-                    "adjustMarker('${widget.lon}','${widget.lat}')");
-              },
-              onPageFinished: (v) {
-                controller.evaluateJavascript(
-                    "adjustMarker('${widget.lon}','${widget.lat}')");
-              },
+            child: Column(
+              children: [
+                 Flexible(
+                   child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.zero,
+                          child: Image.asset(
+                            'assets/images/menuicon.png',
+                            width: 24,
+                          ),
+                        ),
+                        UserContainer(),
+                      ],
+                    ),
+                                 ),
+                 ),
+                Expanded(
+                  child: WebView(
+                    initialUrl: "${getUrl()}map",
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (WebViewController webViewController) {
+                      controller = webViewController;
+                      webViewController.evaluateJavascript(
+                          "adjustMarker('${widget.lon}','${widget.lat}')");
+                    },
+                    onPageFinished: (v) {
+                      controller.evaluateJavascript(
+                          "adjustMarker('${widget.lon}','${widget.lat}')");
+                    },
+                  ),
+                ),
+              ],
             )));
   }
 }
