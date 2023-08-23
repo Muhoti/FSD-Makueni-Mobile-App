@@ -36,6 +36,12 @@ class _HomeState extends State<Home> {
         'Mbooni West',
       ];
 
+  toggleDrawer() {
+    setState(() {
+      const Drawer();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,55 +51,55 @@ class _HomeState extends State<Home> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.white,
-        //   leading: IconButton(
-        //     onPressed: () {
-        //       _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-        //     },
-        //     icon: Image.asset(
-        //       'assets/images/menuicon.png',
-        //       width: 24,
-        //     ),
-        //   ),
-        //   actions: [
-        //     IconButton(
-        //       onPressed: () {
-        //         const Drawer();
-        //       },
-        //       icon: Image.asset(
-        //         'assets/images/user.png',
-        //         width: 50, // Set the desired width
-        //       ),
-        //       //icon: const Icon(FontAwesome.user_circle)
-        //     )
-        //   ],
-        // ),
-        // drawer: Drawer(
-        //   child: ListView(
-        //     padding: EdgeInsets.zero,
-        //     children: [
-        //       const DrawerHeader(
-        //         decoration: BoxDecoration(
-        //           color: Colors.blue,
-        //         ),
-        //         child: Text('Drawer Header'),
-        //       ),
-        //       ListTile(
-        //         title: const Text('Item 1'),
-        //         onTap: () {
-        //           // Handle drawer item 1 tap
-        //         },
-        //       ),
-        //       ListTile(
-        //         title: const Text('Item 2'),
-        //         onTap: () {
-        //           // Handle drawer item 2 tap
-        //         },
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
+            icon: Image.asset(
+              'assets/images/menuicon.png',
+              width: 24,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                toggleDrawer();
+              },
+              icon: Image.asset(
+                'assets/images/user.png',
+                width: 50, // Set the desired width
+              ),
+              //icon: const Icon(FontAwesome.user_circle)
+            )
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Drawer Header'),
+              ),
+              ListTile(
+                title: const Text('Item 1'),
+                onTap: () {
+                  // Handle drawer item 1 tap
+                },
+              ),
+              ListTile(
+                title: const Text('Item 2'),
+                onTap: () {
+                  // Handle drawer item 2 tap
+                },
+              ),
+            ],
+          ),
+        ),
         body: Container(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -105,9 +111,12 @@ class _HomeState extends State<Home> {
                   children: [
                     Padding(
                       padding: EdgeInsets.zero,
-                      child: Image.asset(
-                        'assets/images/menuicon.png',
-                        width: 24,
+                      child: GestureDetector(
+                        onTap: toggleDrawer(),
+                        child: Image.asset(
+                          'assets/images/menuicon.png',
+                          width: 24,
+                        ),
                       ),
                     ),
                     UserContainer(),

@@ -15,14 +15,7 @@ class _MapPageState extends State<MapPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _showPlotDetailsDialog() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return const PlotDetails();
-      },
-    );
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +39,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: YellowButton(
-                  label: "Capture Point",
-                  onButtonPressed: _showPlotDetailsDialog,
-                ),
-              ),
+             
             ],
           ),
         ),
