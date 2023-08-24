@@ -50,25 +50,28 @@ class _ValuationFormState extends State<ValuationForm> {
 
     if (editing == "TRUE") {
       try {
-        var id = await storage.read(key: "LandOwnerID");
+        var id = await storage.read(key: "NationalID");
         print("the parcel id is $id");
 
         // Prefill Form
         try {
           final response = await get(
-            Uri.parse("${getUrl()}farmerresources/$id"),
+            Uri.parse("${getUrl()}valuation/search/$id"),
           );
 
-          var body = await json.decode(response.body);
-          print("the body is ${body[0]}");
+          var data = await json.decode(response.body);
+          print("the body is ${data[0]["Phone"]}");
+          print("the body is ${data[0]["Email"]}");
+          print("the body is ${data[0]["OwnerName"]}");
+          print("the body data is $data");
 
           setState(() {
             nationalId = id as String;
-            data = body[0];
-            name = body[0]["FarmerID"];
-            phone = body[0]["TotalAcreage"];
-            email = body[0]["FarmOwnership"];
-            plotNo = body[0]["IrrigationType"];
+            data = data[0];
+            name = data[0]["OwnerName"];
+            phone = data[0]["Phone"];
+            email = data[0]["Email"];
+            plotNo = data[0]["NewPlotNumber"];
           });
 
           print("valuation forms: $name, $email, $phone, $nationalId");
@@ -88,7 +91,7 @@ class _ValuationFormState extends State<ValuationForm> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
-         drawer: Drawer(
+        drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -113,7 +116,6 @@ class _ValuationFormState extends State<ValuationForm> {
             ],
           ),
         ),
-        
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(0),

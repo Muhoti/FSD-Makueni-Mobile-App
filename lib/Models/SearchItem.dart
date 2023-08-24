@@ -1,5 +1,7 @@
 class SearchItem {
-  final String Name;
+  // final String OwnerName;
   final String NationalID;
-  SearchItem(this.Name, this.NationalID);
+  SearchItem(
+    // this.OwnerName, 
+    this.NationalID);
 }

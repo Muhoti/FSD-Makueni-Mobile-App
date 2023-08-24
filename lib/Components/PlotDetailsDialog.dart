@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
 class PlotDetails extends StatefulWidget {
   const PlotDetails({super.key});
 
@@ -36,17 +35,22 @@ class _PlotDetailsState extends State<PlotDetails> {
     });
     try {
       final response = await http.get(
-          Uri.parse("${getUrl()}workplan/searchfarmer/$v"),
+        // workplan/searchfarmer/$v
+        // valuation/search/$v/0
+          Uri.parse("${getUrl()}valuation/search/$v/0"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           });
 
       var data = json.decode(response.body);
+      print("searched item is ${data}");
+      
 
       setState(() {
         entries.clear();
         for (var item in data) {
-          entries.add(SearchItem(item["Name"], item["NationalID"]));
+          entries.add(SearchItem( item["NationalID"]));
+          print("returned ${item["NationalID"]}, ${item["NationalID"]}");
         }
       });
     } catch (e) {
@@ -177,7 +181,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                                 onPressed: () {
                                   setState(() {
                                     storage.write(
-                                        key: "LandOwnerID",
+                                        key: "NationalID",
                                         value: entries[index].NationalID);
                                     storage.write(
                                         key: "EDITING", value: "TRUE");
@@ -192,7 +196,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                        'Name: ${entries[index].Name} \n ID: ${entries[index].NationalID}')),
+                                        'ID: ${entries[index].NationalID}')),
                               );
                             },
                             separatorBuilder:
@@ -229,15 +233,17 @@ class _PlotDetailsState extends State<PlotDetails> {
                 child: SubmitButton(
                   label: "New Valuation Record",
                   onButtonPressed: () {
-                    isChecked ? addAttribute() : (){
-                      Fluttertoast.showToast(
+                    isChecked
+                        ? addAttribute()
+                        : () {
+                            Fluttertoast.showToast(
                               msg: "Checkbox not checked!",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               backgroundColor: Colors.black87,
                               textColor: Colors.white,
                             );
-                    };
+                          };
                   },
                 ),
               ),
@@ -247,6 +253,4 @@ class _PlotDetailsState extends State<PlotDetails> {
       ),
     );
   }
-
- 
 }
