@@ -17,14 +17,6 @@ class _HomeState extends State<Home> {
   String markets = 'Wote';
   String subcounties = '';
   String wards = '';
-  // List<String> makueniSubcounties = [
-  //   'Kibwezi East',
-  //   'Kibwezi West',
-  //   'Kilome',
-  //   'Makueni',
-  //   'Mbooni East',
-  //   'Mbooni West',
-  // ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   get makueniSubcounties => [
@@ -36,10 +28,8 @@ class _HomeState extends State<Home> {
         'Mbooni West',
       ];
 
-  toggleDrawer() {
-    setState(() {
-      const Drawer();
-    });
+   void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
   }
 
   @override
@@ -51,30 +41,6 @@ class _HomeState extends State<Home> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-            icon: Image.asset(
-              'assets/images/menuicon.png',
-              width: 24,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                toggleDrawer();
-              },
-              icon: Image.asset(
-                'assets/images/user.png',
-                width: 50, // Set the desired width
-              ),
-              //icon: const Icon(FontAwesome.user_circle)
-            )
-          ],
-        ),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -112,10 +78,11 @@ class _HomeState extends State<Home> {
                     Padding(
                       padding: EdgeInsets.zero,
                       child: GestureDetector(
-                        onTap: toggleDrawer(),
+                        onTap: _openDrawer,
                         child: Image.asset(
-                          'assets/images/menuicon.png',
+                          'assets/images/menuicon.png', // Replace with your image asset
                           width: 24,
+                          height: 24,
                         ),
                       ),
                     ),

@@ -20,6 +20,11 @@ class MyMap extends StatefulWidget {
 
 class _MyMapState extends State<MyMap> {
   late WebViewController controller;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
 
   void _showPlotDetailsDialog() {
     showModalBottomSheet(
@@ -41,6 +46,32 @@ class _MyMapState extends State<MyMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Handle drawer item 1 tap
+              },
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {
+                // Handle drawer item 2 tap
+              },
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         children: [
           WebView(
@@ -61,9 +92,13 @@ class _MyMapState extends State<MyMap> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 24),
-                child: Image.asset(
-                  'assets/images/whitemenu.png',
-                  width: 24,
+                child: GestureDetector(
+                  onTap: _openDrawer,
+                  child: Image.asset(
+                    'assets/images/whitemenu.png', // Replace with your image asset
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
               ),
               UserContainer(),

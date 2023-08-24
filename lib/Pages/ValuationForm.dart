@@ -40,6 +40,10 @@ class _ValuationFormState extends State<ValuationForm> {
     super.initState();
   }
 
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
   getData() async {
     var editing = await storage.read(key: "EDITING");
     print("editing is $editing");
@@ -84,6 +88,32 @@ class _ValuationFormState extends State<ValuationForm> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
+         drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Drawer Header'),
+              ),
+              ListTile(
+                title: const Text('Item 1'),
+                onTap: () {
+                  // Handle drawer item 1 tap
+                },
+              ),
+              ListTile(
+                title: const Text('Item 2'),
+                onTap: () {
+                  // Handle drawer item 2 tap
+                },
+              ),
+            ],
+          ),
+        ),
+        
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(0),
@@ -102,9 +132,13 @@ class _ValuationFormState extends State<ValuationForm> {
                           children: [
                             Padding(
                               padding: EdgeInsets.zero,
-                              child: Image.asset(
-                                'assets/images/menuicon.png',
-                                width: 24,
+                              child: GestureDetector(
+                                onTap: _openDrawer,
+                                child: Image.asset(
+                                  'assets/images/menuicon.png', // Replace with your image asset
+                                  width: 24,
+                                  height: 24,
+                                ),
                               ),
                             ),
                             UserContainer(),
