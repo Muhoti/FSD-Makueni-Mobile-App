@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
-import 'package:fsd_makueni_mobile_app/Pages/Landing.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
 
 void main() {

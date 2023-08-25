@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
+import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
@@ -55,30 +57,28 @@ class _HomeState extends State<Home> {
   }
 
   getStats() async {
-    
+    try {
+      var id = await storage.read(key: "NationalID");
+
+      // Prefill Form
       try {
-        var id = await storage.read(key: "NationalID");
+        final response = await get(
+          Uri.parse("${getUrl()}valuation/topstats"),
+        );
 
-        // Prefill Form
-        try {
-          final response = await get(
-            Uri.parse("${getUrl()}valuation/topstats"),
-          );
+        var data = await json.decode(response.body);
+        print("stats data is $data");
 
-          var data = await json.decode(response.body);
-          print("stats data is $data");
-
-          setState(() {
-            total = data["Allplots"];
-            markets = data["Markets"];
-            wards = data["Wards"];
-            subcounties = data["Subcounties"];
-          });
-        } catch (e) {
-          print(e);
-        }
-      } catch (e) {}
-    
+        setState(() {
+          total = data["Allplots"];
+          markets = data["Markets"];
+          wards = data["Wards"];
+          subcounties = data["Subcounties"];
+        });
+      } catch (e) {
+        print(e);
+      }
+    } catch (e) {}
   }
 
   void _openDrawer() {
@@ -94,31 +94,7 @@ class _HomeState extends State<Home> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Handle drawer item 1 tap
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Handle drawer item 2 tap
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: const MyDrawer(),
         body: Container(
           padding: const EdgeInsets.all(24),
           child: Column(
