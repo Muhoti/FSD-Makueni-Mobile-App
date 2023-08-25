@@ -30,16 +30,21 @@ class FootNote extends StatelessWidget {
           child: Column(
             children: const [
               Text(
-                'Powered by', // Center the text vertically
-                style: TextStyle(color: Colors.white),
+                'Powered By',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
               ),
               Text(
-                'Oakar Services', // Center the text vertically
-                style: TextStyle(color: Colors.white),
+                'Oakar Services Ltd',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
               ),
             ],
           ),
-          
         ),
       ),
     );

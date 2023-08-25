@@ -5,6 +5,7 @@ import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
+import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'Utils.dart';
 import 'dart:io';
@@ -70,9 +71,12 @@ class _MyMapState extends State<MyMap> {
               Padding(
                 padding: const EdgeInsets.only(left: 24),
                 child: GestureDetector(
-                  onTap: _openDrawer,
+                  onTap: () {
+                    Navigator.pushReplacement(context, 
+                    MaterialPageRoute(builder: (_)=>const Home()));
+                  },
                   child: Image.asset(
-                    'assets/images/whitemenu.png', // Replace with your image asset
+                    'assets/images/bluearrow.png', // Replace with your image asset
                     width: 24,
                     height: 24,
                   ),

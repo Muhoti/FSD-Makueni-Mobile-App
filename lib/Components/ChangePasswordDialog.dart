@@ -43,7 +43,7 @@ class _ForgetPasswordDialogState extends State<ChangePasswordDialog> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
-                  color: Color.fromRGBO(0, 128, 0, 1),
+                  color: Color.fromARGB(255, 26, 114, 186),
                 ),
               ),
               TextSmall(label: error),

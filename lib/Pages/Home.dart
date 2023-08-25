@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fsd_makueni_mobile_app/Components/ChangePasswordDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
+import 'package:fsd_makueni_mobile_app/Components/UserProfileDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
@@ -85,6 +87,14 @@ class _HomeState extends State<Home> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  void _openUserProfileDialog(){
+     showDialog(
+      context: context,
+      builder: (_) =>
+          const UserProfileDialog(), // Create an instance of the dialog
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -115,7 +125,9 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ),
-                    UserContainer(),
+                    GestureDetector(
+                      onTap: _openUserProfileDialog,
+                      child: UserContainer()),
                   ],
                 ),
               ),
