@@ -35,22 +35,20 @@ class _PlotDetailsState extends State<PlotDetails> {
     });
     try {
       final response = await http.get(
-        // workplan/searchfarmer/$v
-        // valuation/search/$v/0
           Uri.parse("${getUrl()}valuation/search/$v/0"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           });
 
       var data = json.decode(response.body);
-      print("searched item is ${data}");
-      
+      print("data is $data[0]");
+      plotNumber = data[0]["NewPlotNumber"];
+      plotName = data[0]["OwnerName"];
 
       setState(() {
         entries.clear();
         for (var item in data) {
-          entries.add(SearchItem( item["NationalID"]));
-          print("returned ${item["NationalID"]}, ${item["NationalID"]}");
+          entries.add(SearchItem(item["NationalID"]));
         }
       });
     } catch (e) {

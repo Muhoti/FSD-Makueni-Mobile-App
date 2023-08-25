@@ -46,12 +46,10 @@ class _ValuationFormState extends State<ValuationForm> {
 
   getData() async {
     var editing = await storage.read(key: "EDITING");
-    print("editing is $editing");
 
     if (editing == "TRUE") {
       try {
         var id = await storage.read(key: "NationalID");
-        print("the parcel id is $id");
 
         // Prefill Form
         try {
@@ -60,21 +58,15 @@ class _ValuationFormState extends State<ValuationForm> {
           );
 
           var data = await json.decode(response.body);
-          print("the body is ${data[0]["Phone"]}");
-          print("the body is ${data[0]["Email"]}");
-          print("the body is ${data[0]["OwnerName"]}");
-          print("the body data is $data");
 
           setState(() {
             nationalId = id as String;
-            data = data[0];
             name = data[0]["OwnerName"];
             phone = data[0]["Phone"];
             email = data[0]["Email"];
             plotNo = data[0]["NewPlotNumber"];
           });
 
-          print("valuation forms: $name, $email, $phone, $nationalId");
         } catch (e) {
           print(e);
         }
