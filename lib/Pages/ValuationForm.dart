@@ -27,6 +27,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String email = '';
   String plotNo = '';
   String error = '';
+  String? editing = '';
   var isLoading;
 
   final storage = const FlutterSecureStorage();
@@ -45,7 +46,7 @@ class _ValuationFormState extends State<ValuationForm> {
   }
 
   getData() async {
-    var editing = await storage.read(key: "EDITING");
+    editing = await storage.read(key: "EDITING");
 
     if (editing == "TRUE") {
       try {
@@ -66,7 +67,6 @@ class _ValuationFormState extends State<ValuationForm> {
             email = data[0]["Email"];
             plotNo = data[0]["NewPlotNumber"];
           });
-
         } catch (e) {
           print(e);
         }
@@ -115,7 +115,7 @@ class _ValuationFormState extends State<ValuationForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -146,11 +146,12 @@ class _ValuationFormState extends State<ValuationForm> {
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 0, 85, 165)),
                       ),
+                      editing == "TRUE" ?
                       Text(
-                        'Plot No: $nationalId',
+                        'Plot No: $plotNo',
                         style:
                             const TextStyle(fontSize: 16, color: Colors.black),
-                      ),
+                      ) : const SizedBox()
                     ],
                   ),
                 ),

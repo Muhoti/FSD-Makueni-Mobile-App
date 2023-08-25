@@ -122,7 +122,7 @@ Future<Message> changePassword(FlutterSecureStorage storage, String oldpassword,
   }
 
   try {
-    var token = await storage.read(key: "erjwt");
+    var token = await storage.read(key: "mljwt");
     var decoded = parseJwt(token.toString());
 
     var id = decoded["UserID"];

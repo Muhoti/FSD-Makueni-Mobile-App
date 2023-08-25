@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
+import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
+import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,10 +18,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String total = '2';
-  String markets = 'Wote';
+  String total = '';
+  String markets = '';
   String subcounties = '';
   String wards = '';
+  dynamic data;
+  String username = '';
+
+  final storage = const FlutterSecureStorage();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   get makueniSubcounties => [
@@ -28,7 +37,51 @@ class _HomeState extends State<Home> {
         'Mbooni West',
       ];
 
-   void _openDrawer() {
+  @override
+  void initState() {
+    getStats();
+
+    fetchUser();
+    super.initState();
+  }
+
+  fetchUser() async {
+    var token = await storage.read(key: "mljwt");
+    var decoded = parseJwt(token.toString());
+
+    setState(() {
+      username = decoded["Name"];
+    });
+  }
+
+  getStats() async {
+    
+      try {
+        var id = await storage.read(key: "NationalID");
+
+        // Prefill Form
+        try {
+          final response = await get(
+            Uri.parse("${getUrl()}valuation/topstats"),
+          );
+
+          var data = await json.decode(response.body);
+          print("stats data is $data");
+
+          setState(() {
+            total = data["Allplots"];
+            markets = data["Markets"];
+            wards = data["Wards"];
+            subcounties = data["Subcounties"];
+          });
+        } catch (e) {
+          print(e);
+        }
+      } catch (e) {}
+    
+  }
+
+  void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
 
@@ -94,8 +147,8 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.zero,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Align(
+                  children: [
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Welcome',
@@ -106,13 +159,13 @@ class _HomeState extends State<Home> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Duncan Muteti',
+                        username,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Color.fromARGB(255, 42, 45, 48),
                         ),
@@ -129,14 +182,14 @@ class _HomeState extends State<Home> {
                       children: [
                         Flexible(
                           fit: FlexFit.tight,
-                          child: BlueBox(total: total, name: markets),
+                          child: BlueBox(total: total, name: "Mapped Plots"),
                         ),
                         const SizedBox(
                           width: 12,
                         ),
                         Flexible(
                           fit: FlexFit.tight,
-                          child: BlueBox(total: total, name: markets),
+                          child: BlueBox(total: markets, name: "Markets"),
                         ),
                       ],
                     ),
@@ -147,14 +200,15 @@ class _HomeState extends State<Home> {
                       children: [
                         Flexible(
                           fit: FlexFit.tight,
-                          child: BlueBox(total: total, name: markets),
+                          child: BlueBox(total: wards, name: "Wards"),
                         ),
                         const SizedBox(
                           width: 12,
                         ),
                         Flexible(
                           fit: FlexFit.tight,
-                          child: BlueBox(total: total, name: markets),
+                          child:
+                              BlueBox(total: subcounties, name: "Sub Counties"),
                         ),
                       ],
                     ),
