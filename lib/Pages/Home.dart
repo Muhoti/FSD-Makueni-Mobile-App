@@ -22,6 +22,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final storage = const FlutterSecureStorage();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String total = '';
   String markets = '';
   String subcounties = '';
@@ -29,24 +32,53 @@ class _HomeState extends State<Home> {
   dynamic data;
   String username = '';
 
-  final storage = const FlutterSecureStorage();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<FlSpot> subcountyData = [];
+  List<FlSpot> wardData = [];
 
-  get makueniSubcounties => [
-        'Kibwezi East',
-        'Kibwezi West',
-        'Kilome',
-        'Makueni',
-        'Mbooni East',
-        'Mbooni West',
-      ];
+  final subcountyList = [
+    {"SubCounty": "Isiolo", "count": "2"},
+    {"SubCounty": "Marakwet", "count": "1"},
+    {"SubCounty": "West Pokot", "count": "3"},
+    // Add more data as needed...
+  ];
+
+  final wardList = [
+    {"Ward": "Isiolo", "count": "2"},
+    {"Ward": "Marakwet", "count": "1"},
+    {"Ward": "Pokot", "count": "3"},
+    // Add more data as needed...
+  ];
 
   @override
   void initState() {
     getStats();
 
     fetchUser();
+    loadChartData();
     super.initState();
+  }
+
+  void loadChartData() {
+    // Populate subcounty data
+    subcountyData = subcountyList.asMap().entries.map((entry) {
+      final index = entry.key.toDouble() + 1;
+      final count = double.parse(entry.value["count"]!);
+      final subcounty = entry.value["SubCounty"];
+
+      print('values are:$index, $count, $subcounty');
+
+      return FlSpot(
+        index, 
+        count
+        );
+    }).toList();
+
+    // Populate ward data
+    // wardData = wardList.asMap().entries.map((entry) {
+    //   final index = entry.key.toDouble() + 1;
+    //   final count = double.parse(entry.value["count"]!);
+    //   return FlSpot(index, count);
+    // }).toList();
   }
 
   fetchUser() async {
@@ -87,8 +119,8 @@ class _HomeState extends State<Home> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
-  void _openUserProfileDialog(){
-     showDialog(
+  void _openUserProfileDialog() {
+    showDialog(
       context: context,
       builder: (_) =>
           const UserProfileDialog(), // Create an instance of the dialog
@@ -106,293 +138,343 @@ class _HomeState extends State<Home> {
         key: _scaffoldKey,
         drawer: const MyDrawer(),
         body: Container(
+          constraints: const BoxConstraints.tightForFinite(),
           padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: GestureDetector(
-                        onTap: _openDrawer,
-                        child: Image.asset(
-                          'assets/images/menuicon.png', // Replace with your image asset
-                          width: 24,
-                          height: 24,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.zero,
+                        child: GestureDetector(
+                          onTap: _openDrawer,
+                          child: Image.asset(
+                            'assets/images/menuicon.png', // Replace with your image asset
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: _openUserProfileDialog,
-                      child: UserContainer()),
-                  ],
+                      GestureDetector(
+                          onTap: _openUserProfileDialog,
+                          child: UserContainer()),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Welcome',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Color.fromARGB(255, 26, 114, 186),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        username,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Color.fromARGB(255, 42, 45, 48),
-                        ),
-                      ),
-                    ),
-                  ],
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Welcome',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 28,
+                        color: Color.fromARGB(255, 26, 114, 186),
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Column(
+                const SizedBox(height: 4),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    username,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Color.fromARGB(255, 42, 45, 48),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: BlueBox(total: total, name: "Mapped Plots"),
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: BlueBox(total: markets, name: "Markets"),
-                        ),
-                      ],
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: BlueBox(total: total, name: "Mapped Plots"),
                     ),
                     const SizedBox(
-                      height: 12,
+                      width: 12,
                     ),
-                    Row(
-                      children: [
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: BlueBox(total: wards, name: "Wards"),
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child:
-                              BlueBox(total: subcounties, name: "Sub Counties"),
-                        ),
-                      ],
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: BlueBox(total: markets, name: "Markets"),
                     ),
                   ],
                 ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                child: Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'SubCounties',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 26, 114, 186),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: LineChart(
-                            LineChartData(
-                              titlesData: FlTitlesData(
-                                show: true,
-                                bottomTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                  showTitles: true,
-                                  reservedSize: 10,
-                                  getTitlesWidget: (value, meta) {
-                                    return const Text(
-                                      'Makueni',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.black,
-                                      ),
-                                    );
-                                  },
-                                )),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 10,
-                                      getTitlesWidget: (value, _) {
-                                        return const Text(
-                                          'Makueni',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.black,
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              ),
-                              borderData: FlBorderData(show: true),
-                              gridData: FlGridData(show: true),
-                              minX: 0,
-                              maxX:
-                                  6, // Adjust this value based on the number of data points
-                              minY: 0,
-                              maxY: 6,
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: [
-                                    const FlSpot(0, 3),
-                                    const FlSpot(1, 1),
-                                    const FlSpot(2, 4),
-                                    const FlSpot(3, 2),
-                                    const FlSpot(4, 5),
-                                    const FlSpot(5, 1),
-                                    const FlSpot(6, 3),
-                                  ],
-                                  isCurved: true,
-                                  color: Colors.blue,
-                                  dotData: FlDotData(show: false),
-                                  belowBarData: BarAreaData(show: true),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          'Wards',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 26, 114, 186),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: LineChart(
-                            LineChartData(
-                              titlesData: FlTitlesData(
-                                show: true,
-                                bottomTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                  showTitles: true,
-                                  reservedSize: 10,
-                                  getTitlesWidget: (value, meta) {
-                                    return const Text(
-                                      'Makueni',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.black,
-                                      ),
-                                    );
-                                  },
-                                )),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 10,
-                                      getTitlesWidget: (value, _) {
-                                        return const Text(
-                                          'Makueni',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.black,
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              ),
-                              borderData: FlBorderData(show: true),
-                              gridData: FlGridData(show: true),
-                              minX: 0,
-                              maxX:
-                                  6, // Adjust this value based on the number of data points
-                              minY: 0,
-                              maxY: 6,
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: [
-                                    const FlSpot(0, 3),
-                                    const FlSpot(1, 1),
-                                    const FlSpot(2, 4),
-                                    const FlSpot(3, 2),
-                                    const FlSpot(4, 5),
-                                    const FlSpot(5, 1),
-                                    const FlSpot(6, 3),
-                                  ],
-                                  isCurved: true,
-                                  color: Colors.blue,
-                                  dotData: FlDotData(show: false),
-                                  belowBarData: BarAreaData(show: true),
-                                ),
-                              ],
-                            ),
-                          ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: BlueBox(total: wards, name: "Wards"),
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: BlueBox(total: subcounties, name: "Sub Counties"),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                const Text(
+                  'SubCounties',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 26, 114, 186),
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 250,
+                  width: double.infinity,
+                  child: LineChart(
+                    LineChartData(
+                      titlesData: FlTitlesData(
+                        show: true,
+                        bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 10,
+                          // getTitlesWidget: (value, meta) {
+                          //   return Container(
+                          //     width: 250,
+                          //     child: SizedBox(
+                          //       height: 300,
+                          //       child: ListView.builder(
+                          //         itemCount: subcountyList.length,
+                          //         itemBuilder:
+                          //             (BuildContext context, int index) {
+                          //           final subcounty =
+                          //               subcountyList[index]["SubCounty"];
+                          //           return Text(subcounty!);
+                          //         },
+                          //       ),
+                          //     ),
+                          //   );
+                          // },
+                        )),
+                      ),
+                      borderData: FlBorderData(show: true),
+                      gridData: FlGridData(show: true),
+                      minX: 0,
+                      maxX:
+                          6, // Adjust this value based on the number of data points
+                      minY: 0,
+                      maxY: 4,
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: subcountyData,
+                          isCurved: true,
+                          color: Colors.blue,
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(show: true),
                         ),
                       ],
-                    )),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: YellowButton(
-                  label: "Start Mapping",
-                  onButtonPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => const MapPage()));
-                  },
+                    ),
+                  ),
                 ),
-              ),
-            ],
+
+                // Flexible(
+                //   fit: FlexFit.tight,
+                //   child: Padding(
+                //       padding: const EdgeInsets.only(top: 24),
+                //       child: Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           const Text(
+                //             'SubCounties',
+                //             style: TextStyle(
+                //                 fontSize: 16,
+                //                 color: Color.fromARGB(255, 26, 114, 186),
+                //                 fontWeight: FontWeight.bold),
+                //           ),
+                //           Flexible(
+                //             fit: FlexFit.tight,
+                //             child: LineChart(
+                //               LineChartData(
+                //                 titlesData: FlTitlesData(
+                //                   show: true,
+                //                   bottomTitles: AxisTitles(
+                //                       sideTitles: SideTitles(
+                //                     showTitles: true,
+                //                     reservedSize: 10,
+                //                     getTitlesWidget: (value, meta) {
+                //                       return Container(
+                //                         width: 250,
+                //                         child: SizedBox(
+                //                           height: 300,
+                //                           child: ListView.builder(
+                //                             itemCount: subcountyList.length,
+                //                             itemBuilder: (BuildContext context,
+                //                                 int index) {
+                //                               final subcounty =
+                //                                   subcountyList[index]
+                //                                       ["SubCounty"];
+                //                               return Text(subcounty!);
+                //                             },
+                //                           ),
+                //                         ),
+                //                       );
+                //                     },
+                //                   )),
+                //                   leftTitles: AxisTitles(
+                //                     sideTitles: SideTitles(
+                //                         showTitles: true,
+                //                         reservedSize: 10,
+                //                         getTitlesWidget: (value, _) {
+                //                           return Container(
+                //                             width: 250,
+                //                             child: SizedBox(
+                //                               height: 300,
+                //                               child: ListView.builder(
+                //                                 itemCount: wardList.length,
+                //                                 itemBuilder:
+                //                                     (BuildContext context,
+                //                                         int index) {
+                //                                   final count =
+                //                                       subcountyList[index]
+                //                                           ["count"];
+                //                                   return Text(count!);
+                //                                 },
+                //                               ),
+                //                             ),
+                //                           );
+                //                         }),
+                //                   ),
+                //                 ),
+                //                 borderData: FlBorderData(show: true),
+                //                 gridData: FlGridData(show: true),
+                //                 minX: 0,
+                //                 maxX:
+                //                     6, // Adjust this value based on the number of data points
+                //                 minY: 0,
+                //                 maxY: 4,
+                //                 lineBarsData: [
+                //                   LineChartBarData(
+                //                     spots: subcountyData,
+                //                     isCurved: true,
+                //                     color: Colors.blue,
+                //                     dotData: FlDotData(show: false),
+                //                     belowBarData: BarAreaData(show: true),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //           const SizedBox(
+                //             height: 8,
+                //           ),
+                //           const Text(
+                //             'Wards',
+                //             style: TextStyle(
+                //                 fontSize: 16,
+                //                 color: Color.fromARGB(255, 26, 114, 186),
+                //                 fontWeight: FontWeight.bold),
+                //           ),
+                //           Flexible(
+                //             fit: FlexFit.tight,
+                //             child: LineChart(
+                //               LineChartData(
+                //                 titlesData: FlTitlesData(
+                //                   show: true,
+                //                   bottomTitles: AxisTitles(
+                //                       sideTitles: SideTitles(
+                //                     showTitles: true,
+                //                     reservedSize: 10,
+                //                     getTitlesWidget: (value, meta) {
+                //                       return Container(
+                //                         width: 250,
+                //                         child: SizedBox(
+                //                           height: 300,
+                //                           child: ListView.builder(
+                //                             itemCount: wardList.length,
+                //                             itemBuilder: (BuildContext context,
+                //                                 int index) {
+                //                               final wards =
+                //                                   wardList[index]["Ward"];
+                //                               return Text(wards!);
+                //                             },
+                //                           ),
+                //                         ),
+                //                       );
+                //                     },
+                //                   )),
+                //                   leftTitles: AxisTitles(
+                //                     sideTitles: SideTitles(
+                //                         showTitles: true,
+                //                         reservedSize: 10,
+                //                         getTitlesWidget: (value, _) {
+                //                           return Container(
+                //                             width: 250,
+                //                             child: SizedBox(
+                //                               height: 300,
+                //                               child: ListView.builder(
+                //                                 itemCount: wardList.length,
+                //                                 itemBuilder:
+                //                                     (BuildContext context,
+                //                                         int index) {
+                //                                   final count =
+                //                                       wardList[index]["count"];
+                //                                   return Text(count!);
+                //                                 },
+                //                               ),
+                //                             ),
+                //                           );
+                //                         }),
+                //                   ),
+                //                 ),
+                //                 borderData: FlBorderData(show: true),
+                //                 gridData: FlGridData(show: true),
+                //                 minX: 0,
+                //                 maxX: wardData.length
+                //                     .toDouble(), // Adjust this value based on the number of data points
+                //                 minY: 0,
+                //                 maxY: wardData.length.toDouble(),
+                //                 lineBarsData: [
+                //                   LineChartBarData(
+                //                     spots: wardData,
+                //                     isCurved: true,
+                //                     color: Colors.blue,
+                //                     dotData: FlDotData(show: true),
+                //                     belowBarData: BarAreaData(show: true),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       )),
+                // ),
+                // Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: YellowButton(
+                //     label: "Start Mapping",
+                //     onButtonPressed: () {
+                //       Navigator.pushReplacement(context,
+                //           MaterialPageRoute(builder: (_) => const MapPage()));
+                //     },
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class MakueniSubcountyListWidget extends StatelessWidget {
-  const MakueniSubcountyListWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    List<String> makueniSubcounties = [
-      'KEast',
-    ];
-
-    return Column(
-      children: [
-        for (var subcounty in makueniSubcounties)
-          Text(
-            subcounty,
-            style: const TextStyle(
-              fontSize: 10,
-              color: Color.fromARGB(255, 26, 114, 186),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-      ],
     );
   }
 }

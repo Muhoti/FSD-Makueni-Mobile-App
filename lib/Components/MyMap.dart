@@ -42,6 +42,7 @@ class _MyMapState extends State<MyMap> {
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
     }
+
     super.initState();
   }
 
@@ -72,8 +73,8 @@ class _MyMapState extends State<MyMap> {
                 padding: const EdgeInsets.only(left: 24),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacement(context, 
-                    MaterialPageRoute(builder: (_)=>const Home()));
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) => const Home()));
                   },
                   child: Image.asset(
                     'assets/images/bluearrow.png', // Replace with your image asset

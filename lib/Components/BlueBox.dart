@@ -13,7 +13,6 @@ class BlueBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
-        width: 120,
         height: 70,
         decoration: BoxDecoration(
           color: Colors.blue,

@@ -1,15 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
-import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';
-import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:http/http.dart' as http;
+import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';     
 
 class UserProfileDialog extends StatefulWidget {
   const UserProfileDialog({super.key});

@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -23,6 +24,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final storage = const FlutterSecureStorage();
+  bool servicestatus = false;
+  late LocationPermission permission;
+  bool haspermission = false;
+  late Position position;
+  var long = 0.0, lat = 0.0;
+
   Future<void> authenticateUser() async {
     var token = await storage.read(key: 'mljwt');
     if (token != null) {
@@ -34,8 +41,62 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  promptUserForLocation() async {
+    servicestatus = await Geolocator.isLocationServiceEnabled();
+    if (servicestatus) {
+      permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+         if (permission == LocationPermission.deniedForever) {
+          permission = await Geolocator.requestPermission();
+        } else {
+          haspermission = true;
+        }
+      } else {
+        haspermission = true;
+      }
+
+      if (haspermission) {
+        storage.write(key: 'haspermission', value: "true");
+        // Call getLocation Function on Home page
+        //getLocation();
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+            "Location is required! You will be logged out. Please turn on your location"),
+      ));
+     
+    }
+  }
+
+  getLocation() async {
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      long = position.longitude;
+      lat = position.latitude;
+    });
+
+    LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 1,
+    );
+    StreamSubscription<Position> positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position position) {
+      setState(() {
+        long = position.longitude;
+        lat = position.latitude;
+      });
+    });
+  }
+
   @override
   void initState() {
+    promptUserForLocation();
+
     Timer(const Duration(seconds: 3), () {
       authenticateUser();
     });

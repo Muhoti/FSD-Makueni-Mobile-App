@@ -6,14 +6,20 @@ import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextStyle style = const TextStyle(
-        color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
+  State<MyDrawer> createState() => _MyDrawerState();
+}
 
+class _MyDrawerState extends State<MyDrawer> {
+  bool _isNotHovered = true;
+  TextStyle style = const TextStyle(
+      color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
+
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       child: Container(
         decoration: const BoxDecoration(
@@ -67,22 +73,34 @@ class MyDrawer extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (_) => const Home()));
                             },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Icon(Icons.home,
-                                    color: Colors.white), // Home Icon
-                                SizedBox(
-                                  width: 50,
+                            child: MouseRegion(
+                              onEnter: (_) => setState(() => _isNotHovered = true),
+                              onExit: (_) => setState(() => _isNotHovered = false),
+                              child: Container(
+                                padding: _isNotHovered
+                                    ? EdgeInsets.all(0)
+                                    : EdgeInsets.all(16),
+                                color: _isNotHovered
+                                    ? Colors.blue.withOpacity(0.7)
+                                    : Colors.transparent,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: const [
+                                    Icon(Icons.home,
+                                        color: Colors.white), // Home Icon
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    Text(
+                                      'Home',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Home',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
