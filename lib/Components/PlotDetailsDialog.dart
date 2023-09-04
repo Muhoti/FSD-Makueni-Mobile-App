@@ -4,7 +4,6 @@ import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Models/SearchItem.dart';
-import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

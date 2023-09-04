@@ -2,15 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextLarge.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
-import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';

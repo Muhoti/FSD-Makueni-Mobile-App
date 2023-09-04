@@ -10,7 +10,6 @@ import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
-import 'package:fsd_makueni_mobile_app/Pages/Register.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:http/http.dart' as http;

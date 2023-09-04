@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -29,26 +31,29 @@ class _HomeState extends State<Home> {
   String wards = '';
   dynamic data;
   String username = '';
+  List<dynamic> subcountyList = [];
+
+  List<dynamic> wardList = [];
 
   List<FlSpot> subcountyData = [];
   List<FlSpot> wardData = [];
 
-  final subcountyList = [
-    {"SubCounty": "Isiolo", "count": "2"},
-    {"SubCounty": "Marakwet", "count": "1"},
-    {"SubCounty": "West Pokot", "count": "3"},
-    // Add more data as needed...
-  ];
+  // final subcountyList = [
+  //   {"SubCounty": "Isiolo", "count": "2"},
+  //   {"SubCounty": "Marakwet", "count": "1"},
+  //   {"SubCounty": "West Pokot", "count": "3"},
+  //   // Add more data as needed...
+  // ];
 
-  final wardList = [
-    {"Ward": "Wote", "count": "4"},
-    {"Ward": "Kisauni", "count": "3"},
-    {"Ward": "Mwingi", "count": "5"},
-    {"Ward": "Wote", "count": "4"},
-    {"Ward": "Kisauni", "count": "3"},
-    {"Ward": "Mwingi", "count": "5"},
-    // Add more data as needed...
-  ];
+  // final wardList = [
+  //   {"Ward": "Wote", "count": "4"},
+  //   {"Ward": "Kisauni", "count": "3"},
+  //   {"Ward": "Mwingi", "count": "5"},
+  //   {"Ward": "Wote", "count": "4"},
+  //   {"Ward": "Kisauni", "count": "3"},
+  //   {"Ward": "Mwingi", "count": "5"},
+  //   // Add more data as needed...
+  // ];
 
   @override
   void initState() {
@@ -59,28 +64,47 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  void loadChartData() {
-    // Populate subcounty data
-    subcountyData = subcountyList.asMap().entries.map((entry) {
-      final index = entry.key.toDouble() + 1;
-      final count = double.parse(entry.value["count"]!);
-      final subcounty = entry.value["SubCounty"];
+  Future<void> loadChartData() async {
+    try {
+      try {
+        final response = await get(
+          Uri.parse("${getUrl()}valuation/stats"),
+        );
 
-      print('Subcounty values are:$index, $count, $subcounty');
+        var data = await json.decode(response.body);
+        print("graph data is $data");
 
-      return FlSpot(index, count);
-    }).toList();
+        setState(() {
+          subcountyList = data["subcounties"];
+          wardList = data["wards"];
+          print("subcounties are $subcountyList and wards are $wardList");
+        });
 
-    // Populate ward data
-    wardData = wardList.asMap().entries.map((entry) {
-      final index = entry.key.toDouble() + 1;
-      final count = double.parse(entry.value["count"]!);
-      final ward = entry.value["Ward"];
+        // Populate subcounty data
+        subcountyData = subcountyList.asMap().entries.map((entry) {
+          final index = entry.key.toDouble() + 1;
+          final count = double.parse(entry.value["count"]!);
+          final subcounty = entry.value["SubCounty"];
 
-      print('Wards values are:$index, $count, $ward');
+          print('Subcounty values are:$index, $count, $subcounty');
 
-      return FlSpot(index, count);
-    }).toList();
+          return FlSpot(index, count);
+        }).toList();
+
+        // Populate ward data
+        wardData = wardList.asMap().entries.map((entry) {
+          final index = entry.key.toDouble() + 1;
+          final count = double.parse(entry.value["count"]!);
+          final ward = entry.value["Ward"];
+
+          print('Wards values are:$index, $count, $ward');
+
+          return FlSpot(index, count);
+        }).toList();
+      } catch (e) {
+        print(e);
+      }
+    } catch (e) {}
   }
 
   fetchUser() async {
@@ -251,12 +275,26 @@ class _HomeState extends State<Home> {
                     LineChartData(
                       titlesData: FlTitlesData(
                         show: true,
-                        topTitles: AxisTitles(
+                        bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 10,
+                          reservedSize: 20,
+                          getTitlesWidget: (value, meta) {
+                            return Text("home");
+                          },
                         )),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: false,
+                          ),
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: false,
+                          ),
+                        ),
                       ),
+
                       borderData: FlBorderData(show: true),
                       gridData: FlGridData(show: true),
                       minX: 0,
@@ -299,11 +337,21 @@ class _HomeState extends State<Home> {
                         bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 10,
+                          reservedSize: 20,
                           getTitlesWidget: (value, meta) {
                             return Text("couw");
                           },
                         )),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: false,
+                          ),
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: false,
+                          ),
+                        ),
                       ),
                       borderData: FlBorderData(show: true),
                       gridData: FlGridData(show: true),
