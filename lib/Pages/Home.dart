@@ -11,6 +11,7 @@ import 'package:fsd_makueni_mobile_app/Components/MyFloatingButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserProfileDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
+import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 
@@ -82,7 +83,7 @@ class _HomeState extends State<Home> {
 
         // Populate subcounty data
         subcountyData = subcountyList.asMap().entries.map((entry) {
-          final index = entry.key.toDouble() + 1;
+          final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
           final subcounty = entry.value["SubCounty"];
 
@@ -93,7 +94,7 @@ class _HomeState extends State<Home> {
 
         // Populate ward data
         wardData = wardList.asMap().entries.map((entry) {
-          final index = entry.key.toDouble() + 1;
+          final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
           final ward = entry.value["Ward"];
 
@@ -163,6 +164,18 @@ class _HomeState extends State<Home> {
       home: Scaffold(
         key: _scaffoldKey,
         drawer: const MyDrawer(),
+        floatingActionButton:  YellowButton(label: 'Start Mapping',
+        onButtonPressed: () => Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const MapPage()))
+        ),
+        //MyFloatingButton(label: 'Map',
+
+          
+          // child: Text('Map'),
+          // child: MyFloatingButton(
+          //   label: "Start Mapping",
+          // ),
+       // ),
         body: Container(
           constraints: const BoxConstraints.tightForFinite(),
           padding: const EdgeInsets.all(24),
@@ -278,9 +291,18 @@ class _HomeState extends State<Home> {
                         bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 20,
+                          interval: 1,
                           getTitlesWidget: (value, meta) {
-                            return Text("home");
+                            if (subcountyList.isNotEmpty) {
+                              final index = value
+                                  .toInt()
+                                  .clamp(0, subcountyList.length - 1);
+
+                              return Text(subcountyList[index.toInt()]
+                                      ["SubCounty"] ??
+                                  "");
+                            } else
+                              return Text("");
                           },
                         )),
                         topTitles: AxisTitles(
@@ -294,14 +316,10 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-
                       borderData: FlBorderData(show: true),
                       gridData: FlGridData(show: true),
                       minX: 0,
-                      maxX:
-                          6, // Adjust this value based on the number of data points
                       minY: 0,
-                      maxY: 4,
                       lineBarsData: [
                         LineChartBarData(
                           spots: subcountyData,
@@ -339,7 +357,7 @@ class _HomeState extends State<Home> {
                           showTitles: true,
                           reservedSize: 20,
                           getTitlesWidget: (value, meta) {
-                            return Text("couw");
+                            return Text(value.toString());
                           },
                         )),
                         topTitles: AxisTitles(
@@ -356,8 +374,8 @@ class _HomeState extends State<Home> {
                       borderData: FlBorderData(show: true),
                       gridData: FlGridData(show: true),
                       minX: 0,
-                      maxX:
-                          6, // Adjust this value based on the number of data points
+                      maxX: (wardData.length + 1)
+                          .toDouble(), // Adjust this value based on the number of data points
                       minY: 0,
                       maxY: 10,
                       lineBarsData: [
@@ -375,19 +393,19 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 24,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: MyFloatingButton(
-                    label: "Start Mapping",
-                    onButtonPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => const MapPage()));
-                    },
-                  ),
-                ),
               ],
             ),
           ),
+          // Align(
+          //   alignment: Alignment.bottomRight,
+          //   child: MyFloatingButton(
+          //     label: "Start Mapping",
+          //     onButtonPressed: () {
+          //       Navigator.pushReplacement(context,
+          //           MaterialPageRoute(builder: (_) => const MapPage()));
+          //     },
+          //   ),
+          // ),
         ),
       ),
     );

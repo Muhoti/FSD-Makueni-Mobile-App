@@ -23,6 +23,7 @@ class _PlotDetailsState extends State<PlotDetails> {
   String check = '';
   String error = '';
   bool isChecked = false;
+  String searchbox = '';
 
   final storage = const FlutterSecureStorage();
 
@@ -33,11 +34,29 @@ class _PlotDetailsState extends State<PlotDetails> {
       entries.clear();
     });
     try {
-      final response = await http.get(
-          Uri.parse("${getUrl()}valuation/search/$v/0"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8'
-          });
+      dynamic response;
+
+      switch (searchbox) {
+        case 'National ID':
+          response = await http.get(
+              Uri.parse("${getUrl()}valuation/search/$v/0"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8'
+              });
+
+          break;
+          case 'Name':
+          response = await http.get(
+              Uri.parse("${getUrl()}valuation/search/$v/0"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8'
+              });
+
+          break;
+        default:
+          'National ID';
+          return response;
+      }
 
       var data = json.decode(response.body);
       print("data is $data[0]");
@@ -59,6 +78,37 @@ class _PlotDetailsState extends State<PlotDetails> {
     storage.write(key: "EDITING", value: "FALSE");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
+  }
+
+  checkLabel() {
+    switch (searchItem) {
+      case 'Name':
+        setState(() {
+          searchbox = 'Name';
+        });
+
+        break;
+      case 'Phone':
+        setState(() {
+          searchbox = 'Phone';
+        });
+
+        break;
+      case 'National ID':
+        setState(() {
+          searchbox = 'National ID';
+        });
+
+        break;
+      case 'Parcel No':
+        setState(() {
+          searchbox = 'Parcel No';
+        });
+        break;
+      default:
+    }
+
+    return searchbox;
   }
 
   @override
@@ -146,14 +196,14 @@ class _PlotDetailsState extends State<PlotDetails> {
                         maxLines: 1,
                         enableSuggestions: false,
                         autocorrect: false,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(8),
-                            border: OutlineInputBorder(
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(8),
+                            border: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Color.fromARGB(255, 26, 114, 186))),
                             filled: false,
-                            labelText: "Parcel No.",
-                            labelStyle: TextStyle(
+                            labelText: checkLabel(),
+                            labelStyle: const TextStyle(
                                 color: Color.fromARGB(255, 26, 114, 186)),
                             floatingLabelBehavior: FloatingLabelBehavior.auto),
                       ),
