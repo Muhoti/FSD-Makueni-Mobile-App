@@ -215,6 +215,230 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'SubCounty',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Ward',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Market',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'New Plot Number',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'LR Number',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Tenure',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Land Use',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Length',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Width',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Area',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Unit of Acreage',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Email',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Email',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Email',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Email',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Email',
+                  lines: 1,
+                  value: email,
+                  type: TextInputType.emailAddress,
+                  onSubmit: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SubmitButton(
