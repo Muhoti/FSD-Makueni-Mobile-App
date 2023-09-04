@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
+import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
@@ -52,7 +53,7 @@ class _ValuationFormState extends State<ValuationForm> {
         // Prefill Form
         try {
           final response = await get(
-            Uri.parse("${getUrl()}valuation/search/$id"),
+            Uri.parse("${getUrl()}valuation/searchid/$id"),
           );
 
           var data = await json.decode(response.body);
@@ -64,6 +65,8 @@ class _ValuationFormState extends State<ValuationForm> {
             email = data[0]["Email"];
             plotNo = data[0]["NewPlotNumber"];
           });
+
+          print("valuation data is $data");
         } catch (e) {
           print(e);
         }
@@ -148,15 +151,17 @@ class _ValuationFormState extends State<ValuationForm> {
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 0, 85, 165)),
                       ),
-                      editing == "TRUE" ?
-                      Text(
-                        'Plot No: $plotNo',
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.black),
-                      ) : const SizedBox()
+                      editing == "TRUE"
+                          ? Text(
+                              'Plot No: $plotNo',
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.black),
+                            )
+                          : const SizedBox()
                     ],
                   ),
                 ),
+                TextResponse(label: error),
                 MyTextInput(
                   title: 'Name',
                   lines: 1,
@@ -226,6 +231,14 @@ class _ValuationFormState extends State<ValuationForm> {
 
                       var res =
                           await submitData(name, nationalId, email, phone);
+                      setState(() {
+                        isLoading = null;
+                        if (res.error == null) {
+                          error = res.success;
+                        } else {
+                          error = res.error;
+                        }
+                      });
                     },
                   ),
                 ),
@@ -249,13 +262,15 @@ Future<Message> submitData(
         token: null, success: null, error: "All Fields Must Be Filled!");
   }
 
+  print("All fields are required");
+
   try {
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
     var response;
 
     response = await post(
-      Uri.parse("${getUrl()}farmerresources"),
+      Uri.parse("${getUrl()}valuation/create"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'token': token!

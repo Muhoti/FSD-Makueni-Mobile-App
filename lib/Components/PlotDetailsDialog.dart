@@ -34,10 +34,20 @@ class _PlotDetailsState extends State<PlotDetails> {
       entries.clear();
     });
     try {
+      var id = await storage.read(key: "NationalID");
+
       dynamic response;
 
       switch (searchbox) {
         case 'National ID':
+          response = await http.get(
+              Uri.parse("${getUrl()}/valuation/searchid/:$id"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8'
+              });
+
+          break;
+        case 'Name':
           response = await http.get(
               Uri.parse("${getUrl()}valuation/search/$v/0"),
               headers: <String, String>{
@@ -45,7 +55,15 @@ class _PlotDetailsState extends State<PlotDetails> {
               });
 
           break;
-          case 'Name':
+        case 'Phone':
+          response = await http.get(
+              Uri.parse("${getUrl()}valuation/search/$v/0"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8'
+              });
+
+          break;
+        case 'Parcel No':
           response = await http.get(
               Uri.parse("${getUrl()}valuation/search/$v/0"),
               headers: <String, String>{
