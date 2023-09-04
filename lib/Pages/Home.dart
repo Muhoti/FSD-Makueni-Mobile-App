@@ -164,18 +164,10 @@ class _HomeState extends State<Home> {
       home: Scaffold(
         key: _scaffoldKey,
         drawer: const MyDrawer(),
-        floatingActionButton:  YellowButton(label: 'Start Mapping',
-        onButtonPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => const MapPage()))
-        ),
-        //MyFloatingButton(label: 'Map',
-
-          
-          // child: Text('Map'),
-          // child: MyFloatingButton(
-          //   label: "Start Mapping",
-          // ),
-       // ),
+        floatingActionButton: YellowButton(
+            label: 'Start Mapping',
+            onButtonPressed: () => Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const MapPage()))),
         body: Container(
           constraints: const BoxConstraints.tightForFinite(),
           padding: const EdgeInsets.all(24),
@@ -355,9 +347,16 @@ class _HomeState extends State<Home> {
                         bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 20,
+                          interval: 1,
                           getTitlesWidget: (value, meta) {
-                            return Text(value.toString());
+                            if (wardList.isNotEmpty) {
+                              final index =
+                                  value.toInt().clamp(0, wardList.length - 1);
+
+                              return Text(
+                                  wardList[index.toInt()]["Ward"] ?? "");
+                            } else
+                              return Text("");
                           },
                         )),
                         topTitles: AxisTitles(
@@ -374,13 +373,10 @@ class _HomeState extends State<Home> {
                       borderData: FlBorderData(show: true),
                       gridData: FlGridData(show: true),
                       minX: 0,
-                      maxX: (wardData.length + 1)
-                          .toDouble(), // Adjust this value based on the number of data points
                       minY: 0,
-                      maxY: 10,
                       lineBarsData: [
                         LineChartBarData(
-                          spots: wardData,
+                          spots: subcountyData,
                           isCurved: true,
                           color: Colors.blue,
                           dotData: FlDotData(show: false),
