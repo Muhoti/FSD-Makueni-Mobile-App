@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
-import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
-import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapPage extends StatefulWidget {

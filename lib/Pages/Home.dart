@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fsd_makueni_mobile_app/Components/ChangePasswordDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
-import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
+import 'package:fsd_makueni_mobile_app/Components/MyFloatingButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserProfileDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
-import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 
@@ -43,9 +41,12 @@ class _HomeState extends State<Home> {
   ];
 
   final wardList = [
-    {"Ward": "Isiolo", "count": "2"},
-    {"Ward": "Marakwet", "count": "1"},
-    {"Ward": "Pokot", "count": "3"},
+    {"Ward": "Wote", "count": "4"},
+    {"Ward": "Kisauni", "count": "3"},
+    {"Ward": "Mwingi", "count": "5"},
+    {"Ward": "Wote", "count": "4"},
+    {"Ward": "Kisauni", "count": "3"},
+    {"Ward": "Mwingi", "count": "5"},
     // Add more data as needed...
   ];
 
@@ -65,20 +66,21 @@ class _HomeState extends State<Home> {
       final count = double.parse(entry.value["count"]!);
       final subcounty = entry.value["SubCounty"];
 
-      print('values are:$index, $count, $subcounty');
+      print('Subcounty values are:$index, $count, $subcounty');
 
-      return FlSpot(
-        index, 
-        count
-        );
+      return FlSpot(index, count);
     }).toList();
 
     // Populate ward data
-    // wardData = wardList.asMap().entries.map((entry) {
-    //   final index = entry.key.toDouble() + 1;
-    //   final count = double.parse(entry.value["count"]!);
-    //   return FlSpot(index, count);
-    // }).toList();
+    wardData = wardList.asMap().entries.map((entry) {
+      final index = entry.key.toDouble() + 1;
+      final count = double.parse(entry.value["count"]!);
+      final ward = entry.value["Ward"];
+
+      print('Wards values are:$index, $count, $ward');
+
+      return FlSpot(index, count);
+    }).toList();
   }
 
   fetchUser() async {
@@ -229,7 +231,7 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
                 const Text(
@@ -239,6 +241,9 @@ class _HomeState extends State<Home> {
                       color: Color.fromARGB(255, 26, 114, 186),
                       fontWeight: FontWeight.bold),
                 ),
+                const SizedBox(
+                  height: 4,
+                ),
                 SizedBox(
                   height: 250,
                   width: double.infinity,
@@ -246,27 +251,10 @@ class _HomeState extends State<Home> {
                     LineChartData(
                       titlesData: FlTitlesData(
                         show: true,
-                        bottomTitles: AxisTitles(
+                        topTitles: AxisTitles(
                             sideTitles: SideTitles(
                           showTitles: true,
                           reservedSize: 10,
-                          // getTitlesWidget: (value, meta) {
-                          //   return Container(
-                          //     width: 250,
-                          //     child: SizedBox(
-                          //       height: 300,
-                          //       child: ListView.builder(
-                          //         itemCount: subcountyList.length,
-                          //         itemBuilder:
-                          //             (BuildContext context, int index) {
-                          //           final subcounty =
-                          //               subcountyList[index]["SubCounty"];
-                          //           return Text(subcounty!);
-                          //         },
-                          //       ),
-                          //     ),
-                          //   );
-                          // },
                         )),
                       ),
                       borderData: FlBorderData(show: true),
@@ -288,188 +276,67 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-
-                // Flexible(
-                //   fit: FlexFit.tight,
-                //   child: Padding(
-                //       padding: const EdgeInsets.only(top: 24),
-                //       child: Column(
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: [
-                //           const Text(
-                //             'SubCounties',
-                //             style: TextStyle(
-                //                 fontSize: 16,
-                //                 color: Color.fromARGB(255, 26, 114, 186),
-                //                 fontWeight: FontWeight.bold),
-                //           ),
-                //           Flexible(
-                //             fit: FlexFit.tight,
-                //             child: LineChart(
-                //               LineChartData(
-                //                 titlesData: FlTitlesData(
-                //                   show: true,
-                //                   bottomTitles: AxisTitles(
-                //                       sideTitles: SideTitles(
-                //                     showTitles: true,
-                //                     reservedSize: 10,
-                //                     getTitlesWidget: (value, meta) {
-                //                       return Container(
-                //                         width: 250,
-                //                         child: SizedBox(
-                //                           height: 300,
-                //                           child: ListView.builder(
-                //                             itemCount: subcountyList.length,
-                //                             itemBuilder: (BuildContext context,
-                //                                 int index) {
-                //                               final subcounty =
-                //                                   subcountyList[index]
-                //                                       ["SubCounty"];
-                //                               return Text(subcounty!);
-                //                             },
-                //                           ),
-                //                         ),
-                //                       );
-                //                     },
-                //                   )),
-                //                   leftTitles: AxisTitles(
-                //                     sideTitles: SideTitles(
-                //                         showTitles: true,
-                //                         reservedSize: 10,
-                //                         getTitlesWidget: (value, _) {
-                //                           return Container(
-                //                             width: 250,
-                //                             child: SizedBox(
-                //                               height: 300,
-                //                               child: ListView.builder(
-                //                                 itemCount: wardList.length,
-                //                                 itemBuilder:
-                //                                     (BuildContext context,
-                //                                         int index) {
-                //                                   final count =
-                //                                       subcountyList[index]
-                //                                           ["count"];
-                //                                   return Text(count!);
-                //                                 },
-                //                               ),
-                //                             ),
-                //                           );
-                //                         }),
-                //                   ),
-                //                 ),
-                //                 borderData: FlBorderData(show: true),
-                //                 gridData: FlGridData(show: true),
-                //                 minX: 0,
-                //                 maxX:
-                //                     6, // Adjust this value based on the number of data points
-                //                 minY: 0,
-                //                 maxY: 4,
-                //                 lineBarsData: [
-                //                   LineChartBarData(
-                //                     spots: subcountyData,
-                //                     isCurved: true,
-                //                     color: Colors.blue,
-                //                     dotData: FlDotData(show: false),
-                //                     belowBarData: BarAreaData(show: true),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //           const SizedBox(
-                //             height: 8,
-                //           ),
-                //           const Text(
-                //             'Wards',
-                //             style: TextStyle(
-                //                 fontSize: 16,
-                //                 color: Color.fromARGB(255, 26, 114, 186),
-                //                 fontWeight: FontWeight.bold),
-                //           ),
-                //           Flexible(
-                //             fit: FlexFit.tight,
-                //             child: LineChart(
-                //               LineChartData(
-                //                 titlesData: FlTitlesData(
-                //                   show: true,
-                //                   bottomTitles: AxisTitles(
-                //                       sideTitles: SideTitles(
-                //                     showTitles: true,
-                //                     reservedSize: 10,
-                //                     getTitlesWidget: (value, meta) {
-                //                       return Container(
-                //                         width: 250,
-                //                         child: SizedBox(
-                //                           height: 300,
-                //                           child: ListView.builder(
-                //                             itemCount: wardList.length,
-                //                             itemBuilder: (BuildContext context,
-                //                                 int index) {
-                //                               final wards =
-                //                                   wardList[index]["Ward"];
-                //                               return Text(wards!);
-                //                             },
-                //                           ),
-                //                         ),
-                //                       );
-                //                     },
-                //                   )),
-                //                   leftTitles: AxisTitles(
-                //                     sideTitles: SideTitles(
-                //                         showTitles: true,
-                //                         reservedSize: 10,
-                //                         getTitlesWidget: (value, _) {
-                //                           return Container(
-                //                             width: 250,
-                //                             child: SizedBox(
-                //                               height: 300,
-                //                               child: ListView.builder(
-                //                                 itemCount: wardList.length,
-                //                                 itemBuilder:
-                //                                     (BuildContext context,
-                //                                         int index) {
-                //                                   final count =
-                //                                       wardList[index]["count"];
-                //                                   return Text(count!);
-                //                                 },
-                //                               ),
-                //                             ),
-                //                           );
-                //                         }),
-                //                   ),
-                //                 ),
-                //                 borderData: FlBorderData(show: true),
-                //                 gridData: FlGridData(show: true),
-                //                 minX: 0,
-                //                 maxX: wardData.length
-                //                     .toDouble(), // Adjust this value based on the number of data points
-                //                 minY: 0,
-                //                 maxY: wardData.length.toDouble(),
-                //                 lineBarsData: [
-                //                   LineChartBarData(
-                //                     spots: wardData,
-                //                     isCurved: true,
-                //                     color: Colors.blue,
-                //                     dotData: FlDotData(show: true),
-                //                     belowBarData: BarAreaData(show: true),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //       )),
-                // ),
-                // Align(
-                //   alignment: Alignment.bottomRight,
-                //   child: YellowButton(
-                //     label: "Start Mapping",
-                //     onButtonPressed: () {
-                //       Navigator.pushReplacement(context,
-                //           MaterialPageRoute(builder: (_) => const MapPage()));
-                //     },
-                //   ),
-                // ),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Text(
+                  'Wards',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 26, 114, 186),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                  height: 250,
+                  width: double.infinity,
+                  child: LineChart(
+                    LineChartData(
+                      titlesData: FlTitlesData(
+                        show: true,
+                        bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 10,
+                          getTitlesWidget: (value, meta) {
+                            return Text("couw");
+                          },
+                        )),
+                      ),
+                      borderData: FlBorderData(show: true),
+                      gridData: FlGridData(show: true),
+                      minX: 0,
+                      maxX:
+                          6, // Adjust this value based on the number of data points
+                      minY: 0,
+                      maxY: 10,
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: wardData,
+                          isCurved: true,
+                          color: Colors.blue,
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(show: true),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: MyFloatingButton(
+                    label: "Start Mapping",
+                    onButtonPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (_) => const MapPage()));
+                    },
+                  ),
+                ),
               ],
             ),
           ),
