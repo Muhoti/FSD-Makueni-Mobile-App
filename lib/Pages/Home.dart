@@ -39,23 +39,6 @@ class _HomeState extends State<Home> {
   List<FlSpot> subcountyData = [];
   List<FlSpot> wardData = [];
 
-  // final subcountyList = [
-  //   {"SubCounty": "Isiolo", "count": "2"},
-  //   {"SubCounty": "Marakwet", "count": "1"},
-  //   {"SubCounty": "West Pokot", "count": "3"},
-  //   // Add more data as needed...
-  // ];
-
-  // final wardList = [
-  //   {"Ward": "Wote", "count": "4"},
-  //   {"Ward": "Kisauni", "count": "3"},
-  //   {"Ward": "Mwingi", "count": "5"},
-  //   {"Ward": "Wote", "count": "4"},
-  //   {"Ward": "Kisauni", "count": "3"},
-  //   {"Ward": "Mwingi", "count": "5"},
-  //   // Add more data as needed...
-  // ];
-
   @override
   void initState() {
     getStats();

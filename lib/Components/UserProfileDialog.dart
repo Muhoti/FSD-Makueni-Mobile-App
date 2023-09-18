@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';     
+import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';
+import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 
 class UserProfileDialog extends StatefulWidget {
   const UserProfileDialog({super.key});
@@ -18,6 +18,23 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
   var isLoading;
   String error = '';
   final storage = const FlutterSecureStorage();
+
+  fetchUser() async {
+    var token = await storage.read(key: "mljwt");
+    var decoded = parseJwt(token.toString());
+
+    setState(() {
+      name = decoded["Name"];
+      nationalId = decoded["NationalID"];
+      phone = decoded["Phone"];
+    });
+  }
+
+  @override
+  void initState() {
+    fetchUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

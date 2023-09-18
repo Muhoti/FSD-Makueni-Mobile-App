@@ -74,18 +74,20 @@ class _MyDrawerState extends State<MyDrawer> {
                                       builder: (_) => const Home()));
                             },
                             child: MouseRegion(
-                              onEnter: (_) => setState(() => _isNotHovered = true),
-                              onExit: (_) => setState(() => _isNotHovered = false),
+                              onEnter: (_) =>
+                                  setState(() => _isNotHovered = true),
+                              onExit: (_) =>
+                                  setState(() => _isNotHovered = false),
                               child: Container(
                                 padding: _isNotHovered
-                                    ? EdgeInsets.all(0)
-                                    : EdgeInsets.all(16),
+                                    ? const EdgeInsets.all(0)
+                                    : const EdgeInsets.all(16),
                                 color: _isNotHovered
-                                    ? Colors.blue.withOpacity(0.7)
-                                    : Colors.transparent,
-                                child: Row(
+                                    ? Colors.transparent
+                                    : Colors.blue.withOpacity(0.8),
+                                child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     Icon(Icons.home,
                                         color: Colors.white), // Home Icon
                                     SizedBox(

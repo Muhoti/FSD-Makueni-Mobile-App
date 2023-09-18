@@ -249,7 +249,9 @@ Future<Message> login(String email, String password) async {
       error: "Password is too short!",
     );
   }
+
   try {
+    
     final response = await http.post(
       Uri.parse("${getUrl()}auth/login"),
       headers: <String, String>{
@@ -257,6 +259,7 @@ Future<Message> login(String email, String password) async {
       },
       body: jsonEncode(<String, String>{'Email': email, 'Password': password}),
     );
+
     if (response.statusCode == 200 || response.statusCode == 203) {
       return Message.fromJson(jsonDecode(response.body));
     } else {

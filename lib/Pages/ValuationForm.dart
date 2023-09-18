@@ -1,5 +1,6 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
@@ -7,6 +8,7 @@ import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
+import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -23,7 +25,19 @@ class _ValuationFormState extends State<ValuationForm> {
   String phone = '';
   String nationalId = '';
   String email = '';
+  String subcounty = '';
+  String ward = '';
+  String market = '';
   String plotNo = '';
+  String lrNo = '';
+  String tenure = '';
+  String landuse = '';
+  String length = '';
+  String width = '';
+  String area = '';
+  String unit = '';
+  String rate = '';
+  String sitevalue = '';
   String error = '';
   String? editing = '';
   var isLoading;
@@ -64,6 +78,18 @@ class _ValuationFormState extends State<ValuationForm> {
             phone = data[0]["Phone"];
             email = data[0]["Email"];
             plotNo = data[0]["NewPlotNumber"];
+            subcounty = data[0]["SubCounty"];
+            ward = data[0]["Ward"];
+            market = data[0]["Market"];
+            lrNo = data[0]["LR_Number"];
+            tenure = data[0]["Tenure"];
+            landuse = data[0]["LandUse"];
+            length = data[0]["Length"];
+            width = data[0]["Width"];
+            area = data[0]["Area"];
+            unit = data[0]["Unit_of_Area"];
+            rate = data[0]["Rate"];
+            sitevalue = data[0]["SiteValue"];
           });
 
           print("valuation data is $data");
@@ -215,13 +241,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'SubCounty',
                   lines: 1,
-                  value: email,
+                  value: subcounty,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -229,13 +255,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Ward',
                   lines: 1,
-                  value: email,
+                  value: ward,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -243,13 +269,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Market',
                   lines: 1,
-                  value: email,
+                  value: market,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -257,13 +283,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'New Plot Number',
                   lines: 1,
-                  value: email,
+                  value: plotNo,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -271,13 +297,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'LR Number',
                   lines: 1,
-                  value: email,
+                  value: lrNo,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -285,13 +311,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Tenure',
                   lines: 1,
-                  value: email,
+                  value: tenure,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -299,13 +325,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Land Use',
                   lines: 1,
-                  value: email,
+                  value: landuse,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -313,13 +339,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Length',
                   lines: 1,
-                  value: email,
+                  value: length,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -327,13 +353,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Width',
                   lines: 1,
-                  value: email,
+                  value: width,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -341,13 +367,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Area',
                   lines: 1,
-                  value: email,
+                  value: area,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -355,13 +381,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
                   title: 'Unit of Acreage',
                   lines: 1,
-                  value: email,
+                  value: unit,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -369,13 +395,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
-                  title: 'Email',
+                  title: 'Rate',
                   lines: 1,
-                  value: email,
+                  value: rate,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -383,55 +409,13 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
-                  title: 'Email',
+                  title: 'Site Value',
                   lines: 1,
-                  value: email,
-                  type: TextInputType.emailAddress,
-                  onSubmit: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                  },
-                ),
-                 const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Email',
-                  lines: 1,
-                  value: email,
-                  type: TextInputType.emailAddress,
-                  onSubmit: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                  },
-                ),
-                 const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Email',
-                  lines: 1,
-                  value: email,
-                  type: TextInputType.emailAddress,
-                  onSubmit: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                  },
-                ),
-                 const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Email',
-                  lines: 1,
-                  value: email,
+                  value: sitevalue,
                   type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
@@ -463,6 +447,10 @@ class _ValuationFormState extends State<ValuationForm> {
                           error = res.error;
                         }
                       });
+                      if (res.error == null) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) => const Home()));
+                      }
                     },
                   ),
                 ),

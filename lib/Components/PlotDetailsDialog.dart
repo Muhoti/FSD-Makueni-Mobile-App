@@ -19,11 +19,12 @@ class PlotDetails extends StatefulWidget {
 class _PlotDetailsState extends State<PlotDetails> {
   String plotName = '';
   String plotNumber = '';
-  String searchItem = 'Name';
+  String searchItem = 'Search';
   String check = '';
   String error = '';
   bool isChecked = false;
   String searchbox = '';
+  var si = '';
 
   final storage = const FlutterSecureStorage();
 
@@ -34,30 +35,32 @@ class _PlotDetailsState extends State<PlotDetails> {
       entries.clear();
     });
     try {
-      var id = await storage.read(key: "NationalID");
-
       dynamic response;
 
       switch (searchbox) {
         case 'National ID':
           response = await http.get(
-              Uri.parse("${getUrl()}/valuation/searchid/:$id"),
+              Uri.parse("${getUrl()}valuation/searchid/$v"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8'
               });
+
+          print("searching id: $v");
 
           break;
         case 'Name':
           response = await http.get(
-              Uri.parse("${getUrl()}valuation/search/$v/0"),
+              Uri.parse("${getUrl()}valuation/searchname/$v"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8'
               });
 
+          print("searching Name: $v");
+
           break;
         case 'Phone':
           response = await http.get(
-              Uri.parse("${getUrl()}valuation/search/$v/0"),
+              Uri.parse("${getUrl()}valuation/searchphone/$v"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8'
               });
@@ -65,7 +68,7 @@ class _PlotDetailsState extends State<PlotDetails> {
           break;
         case 'Parcel No':
           response = await http.get(
-              Uri.parse("${getUrl()}valuation/search/$v/0"),
+              Uri.parse("${getUrl()}valuation/searchparcel/$v"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8'
               });
@@ -85,6 +88,27 @@ class _PlotDetailsState extends State<PlotDetails> {
         entries.clear();
         for (var item in data) {
           entries.add(SearchItem(item["NationalID"]));
+
+          switch (searchItem) {
+            case 'Name':
+              si = item["OwnerName"];
+
+              break;
+            case 'National ID':
+              si = item["NationalID"];
+
+              break;
+            case 'Parcel No':
+              si = item["NewPlotNumber"];
+
+              break;
+            case 'Phone':
+              si = item["Phone"];
+
+              break;
+            default:
+          }
+          print("THE SEARCH ITEM IS: $si");
         }
       });
     } catch (e) {
@@ -181,6 +205,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                         });
                       },
                       entries: const [
+                        "Search",
                         "Name",
                         "Phone",
                         "National ID",
@@ -210,7 +235,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                             error = '';
                           });
                         },
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         maxLines: 1,
                         enableSuggestions: false,
                         autocorrect: false,
@@ -247,7 +272,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                                   setState(() {
                                     storage.write(
                                         key: "NationalID",
-                                        value: entries[index].NationalID);
+                                        value: entries[index].OwnerName);
                                     storage.write(
                                         key: "EDITING", value: "TRUE");
                                     entries.clear();
@@ -260,8 +285,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                                 },
                                 child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(
-                                        'ID: ${entries[index].NationalID}')),
+                                    child: Text('$searchItem: $si')),
                               );
                             },
                             separatorBuilder:
