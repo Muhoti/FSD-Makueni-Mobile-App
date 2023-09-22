@@ -3,7 +3,7 @@ import 'dart:convert';
 
 String getUrl() {
   return "http://192.168.1.136:3003/api/";
-  // return "https://api.nyamira.dat.co.ke/api/";
+  // return "https://185.215.180.181:9334/api/";
 }
 
 Map<String, dynamic> parseJwt(String token) {

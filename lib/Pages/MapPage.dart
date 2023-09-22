@@ -18,25 +18,27 @@ class _MapPageState extends State<MapPage> {
   late LocationPermission permission;
   bool haspermission = false;
   late Position position;
-  var long = 0.0, lat = 0.0;
+  var long = null, lat = null;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   getUserLocation() async {
-    String haspermission = storage.read(key: 'haspermission').toString();
-    print("the user's permission is $haspermission");
-    if (haspermission == 'true') {
+    LocationPermission perm = await Geolocator.checkPermission();
+    print(perm);
+    if (perm == LocationPermission.always || perm == LocationPermission.whileInUse) {
       position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       setState(() {
         long = position.longitude;
         lat = position.latitude;
       });
+      
       print("the latitude and long are $lat, $long");
 
       LocationSettings locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 1,
       );
+      
       StreamSubscription<Position> positionStream =
           Geolocator.getPositionStream(locationSettings: locationSettings)
               .listen((Position position) {
@@ -67,17 +69,12 @@ class _MapPageState extends State<MapPage> {
       } else {
         haspermission = true;
       }
-
-      if (haspermission) {
-        storage.write(key: 'haspermission', value: "true");
-        // Call getLocation Function on Home page
-        getUserLocation();
-      }
     }
   }
 
   @override
   void initState() {
+    promptUserForLocation();
     getUserLocation();
     super.initState();
   }
@@ -97,10 +94,12 @@ class _MapPageState extends State<MapPage> {
             children: [
               Expanded(
                 child: SizedBox(
-                  child: MyMap(
-                    lat: lat,
-                    lon: long,
-                  ),
+                  child: long != null && lat != null
+                      ? MyMap(
+                          lat: lat,
+                          lon: long,
+                        )
+                      : SizedBox(),
                 ),
               ),
             ],
