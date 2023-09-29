@@ -30,7 +30,7 @@ class _PlotDetailsState extends State<PlotDetails> {
 
   final storage = const FlutterSecureStorage();
 
-  _updateParcelDetails(data) {
+  updateParcelDetails(data) {
     storage.write(key: "EDITING", value: "FALSE");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
@@ -67,7 +67,7 @@ class _PlotDetailsState extends State<PlotDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Text("LR No/Parcel No: $lrno",
+              Text("LR No: $lrno",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(
                 height: 20,
@@ -97,7 +97,7 @@ class _PlotDetailsState extends State<PlotDetails> {
                 child: SubmitButton(
                   label: "Update Details",
                   onButtonPressed: () {
-                    _updateParcelDetails;
+                    updateParcelDetails(widget.data);
                   },
                 ),
               ),

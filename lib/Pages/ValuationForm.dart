@@ -38,6 +38,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String unit = '';
   String rate = '';
   String sitevalue = '';
+  String parcelNo = '';
   String error = '';
   String? editing = '';
   var isLoading;
@@ -90,6 +91,7 @@ class _ValuationFormState extends State<ValuationForm> {
             unit = data[0]["Unit_of_Area"];
             rate = data[0]["Rate"];
             sitevalue = data[0]["SiteValue"];
+            parcelNo = data[0]["ParcelNo"];
           });
 
           print("valuation data is $data");
@@ -248,10 +250,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'SubCounty',
                   lines: 1,
                   value: subcounty,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      subcounty = value;
                     });
                   },
                 ),
@@ -262,10 +264,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Ward',
                   lines: 1,
                   value: ward,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      ward = value;
                     });
                   },
                 ),
@@ -276,10 +278,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Market',
                   lines: 1,
                   value: market,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      market = value;
                     });
                   },
                 ),
@@ -290,10 +292,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'New Plot Number',
                   lines: 1,
                   value: plotNo,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      plotNo = value;
                     });
                   },
                 ),
@@ -304,10 +306,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'LR Number',
                   lines: 1,
                   value: lrNo,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      lrNo = value;
                     });
                   },
                 ),
@@ -318,10 +320,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Tenure',
                   lines: 1,
                   value: tenure,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      tenure = value;
                     });
                   },
                 ),
@@ -332,10 +334,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Land Use',
                   lines: 1,
                   value: landuse,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      landuse = value;
                     });
                   },
                 ),
@@ -346,10 +348,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Length',
                   lines: 1,
                   value: length,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      length = value;
                     });
                   },
                 ),
@@ -360,10 +362,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Width',
                   lines: 1,
                   value: width,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      width = value;
                     });
                   },
                 ),
@@ -374,10 +376,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Area',
                   lines: 1,
                   value: area,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      area = value;
                     });
                   },
                 ),
@@ -388,10 +390,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Unit of Acreage',
                   lines: 1,
                   value: unit,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      unit = value;
                     });
                   },
                 ),
@@ -402,10 +404,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Rate',
                   lines: 1,
                   value: rate,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      rate = value;
                     });
                   },
                 ),
@@ -416,10 +418,24 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Site Value',
                   lines: 1,
                   value: sitevalue,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      email = value;
+                      sitevalue = value;
+                    });
+                  },
+                ),
+                 const SizedBox(
+                  height: 10,
+                ),
+                MyTextInput(
+                  title: 'Parcel No',
+                  lines: 1,
+                  value: parcelNo,
+                  type: TextInputType.text,
+                  onSubmit: (value) {
+                    setState(() {
+                      parcelNo = value;
                     });
                   },
                 ),
@@ -438,7 +454,10 @@ class _ValuationFormState extends State<ValuationForm> {
                       });
 
                       var res =
-                          await submitData(name, nationalId, email, phone);
+                          await submitData(
+subcounty, ward, market, name, phone, nationalId, email, plotNo, lrNo, tenure, landuse, length, width, area, unit, rate, sitevalue, parcelNo
+                            
+                            );
                       setState(() {
                         isLoading = null;
                         if (res.error == null) {
@@ -464,10 +483,24 @@ class _ValuationFormState extends State<ValuationForm> {
 }
 
 Future<Message> submitData(
+    String subcounty,
+  String ward ,
+  String market,
   String name,
-  String nationalId,
-  String email,
-  String phone,
+ String phone,
+  String nationalId ,
+  String email ,
+  String plotNo ,
+  String lrNo,
+  String tenure ,
+  String landuse,
+  String length ,
+  String width,
+  String area,
+  String unit,
+  String rate,
+  String sitevalue,
+  String parcelNo ,
 ) async {
   if (name.isEmpty || nationalId.isEmpty || email.isEmpty || phone.isEmpty) {
     return Message(
@@ -488,10 +521,23 @@ Future<Message> submitData(
         'token': token!
       },
       body: jsonEncode(<String, String>{
-        'Name': name,
+        'SubCounty': name,
+        'Ward': nationalId,
+        'Market': email,
+        'OwnerName': phone,
+        'Phone': name,
         'NationalID': nationalId,
         'Email': email,
-        'Phone': phone
+        'NewPlotNumber': phone,
+        'LR_Number': name,
+        'Tenure': nationalId,
+        'LandUse': email,
+        'Length': phone,
+        'Width': name,
+        'Unit_of_Area': nationalId,
+        'Rate': email,
+        'SiteValue': phone,
+        'ParcelNo': parcelNo
       }),
     );
 
