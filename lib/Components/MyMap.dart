@@ -1,11 +1,14 @@
-// ignore_for_file: deprecated_member_use
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
+import 'package:fsd_makueni_mobile_app/Components/SearchPlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
+import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'Utils.dart';
 import 'dart:io';
@@ -23,16 +26,46 @@ class MyMap extends StatefulWidget {
 class _MyMapState extends State<MyMap> {
   late WebViewController controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late Map<String, dynamic> data;
+
+  void setDataFromJavaScript(Map<String, dynamic> newData) {
+    setState(() {
+      data = newData;
+    });
+
+    print("the data is ${data["lr_no"]}");
+
+    var dataSearch = data["lr_no"];
+
+    if (dataSearch != null) {
+      const storage = FlutterSecureStorage();
+
+      _displayPlotDetailsDialog(data);
+
+     
+    }
+  }
 
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
 
-  void _showPlotDetailsDialog() {
+// This function is called when the marker is placed into a land parcel.
+// It displays the details of the parcel selected.
+  _displayPlotDetailsDialog(data) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return const PlotDetails();
+        return PlotDetails(data: data,);
+      },
+    );
+  }
+
+  void _searchPlotDetailsDialog() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return const SearchPlotDetails();
       },
     );
   }
@@ -56,14 +89,32 @@ class _MyMapState extends State<MyMap> {
           WebView(
             initialUrl: "${getUrl()}map",
             javascriptMode: JavascriptMode.unrestricted,
+            javascriptChannels: {
+              JavascriptChannel(
+                name: 'setDataFromJavaScript',
+                onMessageReceived: (JavascriptMessage message) {
+                  // Parse the JSON data received from JavaScript
+                  final Map<String, dynamic> receivedData =
+                      jsonDecode(message.message);
+                  print("received data: $receivedData");
+                  print("end of data");
+                  // Call the Flutter method to set 'data'
+                  setDataFromJavaScript(receivedData);
+                },
+              ),
+            },
             onWebViewCreated: (WebViewController webViewController) {
               controller = webViewController;
-              webViewController.evaluateJavascript(
-                  "adjustMarker('${widget.lon}','${widget.lat}')");
+
+              // Call the JavaScript function to adjust the marker
+              // webViewController.evaluateJavascript(
+              //     "adjustMarker('${widget.lon}','${widget.lat}')");
             },
             onPageFinished: (v) {
-              controller.evaluateJavascript(
-                  "adjustMarker('${widget.lon}','${widget.lat}')");
+              // After the page is loaded, call the JavaScript function again
+              // controller.evaluateJavascript(
+              //   "adjustMarker('${widget.lon}','${widget.lat}')",
+              // );
             },
           ),
           Row(
@@ -92,7 +143,7 @@ class _MyMapState extends State<MyMap> {
               alignment: Alignment.bottomRight,
               child: YellowButton(
                 label: "Capture Point",
-                onButtonPressed: _showPlotDetailsDialog,
+                onButtonPressed: _searchPlotDetailsDialog,
               ),
             ),
           ),
