@@ -21,6 +21,7 @@ class ValuationForm extends StatefulWidget {
 }
 
 class _ValuationFormState extends State<ValuationForm> {
+  String id = '';
   String name = '';
   String phone = '';
   String nationalId = '';
@@ -61,44 +62,48 @@ class _ValuationFormState extends State<ValuationForm> {
   getData() async {
     editing = await storage.read(key: "EDITING");
 
+    print("editing is $editing");
+
     if (editing == "TRUE") {
       try {
-        var id = await storage.read(key: "NationalID");
+        var id = await storage.read(key: "ValuationID");
+        print("valuation id is $id");
 
         // Prefill Form
-        try {
-          final response = await get(
-            Uri.parse("${getUrl()}valuation/searchid/$id"),
-          );
+        final response = await get(
+          Uri.parse("${getUrl()}valuation/search/$id"),
+        );
 
-          var data = await json.decode(response.body);
+        print("current data is ${json.decode(response.body)}");
 
-          setState(() {
-            nationalId = id as String;
-            name = data[0]["OwnerName"];
-            phone = data[0]["Phone"];
-            email = data[0]["Email"];
-            plotNo = data[0]["NewPlotNumber"];
-            subcounty = data[0]["SubCounty"];
-            ward = data[0]["Ward"];
-            market = data[0]["Market"];
-            lrNo = data[0]["LR_Number"];
-            tenure = data[0]["Tenure"];
-            landuse = data[0]["LandUse"];
-            length = data[0]["Length"];
-            width = data[0]["Width"];
-            area = data[0]["Area"];
-            unit = data[0]["Unit_of_Area"];
-            rate = data[0]["Rate"];
-            sitevalue = data[0]["SiteValue"];
-            parcelNo = data[0]["ParcelNo"];
-          });
+        var data = json.decode(response.body);
+        print("current valuation data is ${data[0]["OwnerName"]}");
 
-          print("valuation data is $data");
-        } catch (e) {
-          print(e);
-        }
-      } catch (e) {}
+        setState(() {
+          nationalId = data[0]["NationalID"];
+          name = data[0]["OwnerName"];
+          phone = data[0]["Phone"];
+          email = data[0]["Email"];
+          plotNo = data[0]["NewPlotNumber"];
+          subcounty = data[0]["SubCounty"];
+          ward = data[0]["Ward"];
+          market = data[0]["Market"];
+          lrNo = data[0]["LR_Number"];
+          tenure = data[0]["Tenure"];
+          landuse = data[0]["LandUse"];
+          length = data[0]["Length"];
+          width = data[0]["Width"];
+          area = data[0]["Area"];
+          unit = data[0]["Unit_of_Area"];
+          rate = data[0]["Rate"];
+          sitevalue = data[0]["SiteValue"];
+          parcelNo = data[0]["ParcelNo"];
+        });
+
+        print("my datas is $data");
+      } catch (e) {
+        print(e);
+      }
     } else {}
   }
 
@@ -425,7 +430,7 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                 const SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 MyTextInput(
@@ -453,11 +458,25 @@ class _ValuationFormState extends State<ValuationForm> {
                         );
                       });
 
-                      var res =
-                          await submitData(
-subcounty, ward, market, name, phone, nationalId, email, plotNo, lrNo, tenure, landuse, length, width, area, unit, rate, sitevalue, parcelNo
-                            
-                            );
+                      var res = await submitData(
+                          subcounty,
+                          ward,
+                          market,
+                          name,
+                          phone,
+                          nationalId,
+                          email,
+                          plotNo,
+                          lrNo,
+                          tenure,
+                          landuse,
+                          length,
+                          width,
+                          area,
+                          unit,
+                          rate,
+                          sitevalue,
+                          parcelNo);
                       setState(() {
                         isLoading = null;
                         if (res.error == null) {
@@ -483,24 +502,24 @@ subcounty, ward, market, name, phone, nationalId, email, plotNo, lrNo, tenure, l
 }
 
 Future<Message> submitData(
-    String subcounty,
-  String ward ,
+  String subcounty,
+  String ward,
   String market,
   String name,
- String phone,
-  String nationalId ,
-  String email ,
-  String plotNo ,
+  String phone,
+  String nationalId,
+  String email,
+  String plotNo,
   String lrNo,
-  String tenure ,
+  String tenure,
   String landuse,
-  String length ,
+  String length,
   String width,
   String area,
   String unit,
   String rate,
   String sitevalue,
-  String parcelNo ,
+  String parcelNo,
 ) async {
   if (name.isEmpty || nationalId.isEmpty || email.isEmpty || phone.isEmpty) {
     return Message(
@@ -512,34 +531,42 @@ Future<Message> submitData(
   try {
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
+    var id = await storage.read(key: "ValuationID");
+    id = id.toString();
+
     var response;
 
-    response = await post(
-      Uri.parse("${getUrl()}valuation/create"),
+    print("submitting id is $id");
+
+    response = await put(
+      Uri.parse("${getUrl()}valuation/update/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'token': token!
       },
       body: jsonEncode(<String, String>{
-        'SubCounty': name,
-        'Ward': nationalId,
-        'Market': email,
-        'OwnerName': phone,
-        'Phone': name,
+        'SubCounty': subcounty,
+        'Ward': ward,
+        'Market': market,
+        'OwnerName': name,
+        'Phone': phone,
         'NationalID': nationalId,
         'Email': email,
-        'NewPlotNumber': phone,
-        'LR_Number': name,
-        'Tenure': nationalId,
-        'LandUse': email,
-        'Length': phone,
-        'Width': name,
-        'Unit_of_Area': nationalId,
-        'Rate': email,
-        'SiteValue': phone,
+        'NewPlotNumber': plotNo,
+        'LR_Number': lrNo,
+        'Tenure': tenure,
+        'LandUse': landuse,
+        'Length': length,
+        'Width': width,
+        'Area': area,
+        'Unit_of_Area': unit,
+        'Rate': rate,
+        'SiteValue': sitevalue,
         'ParcelNo': parcelNo
       }),
     );
+
+    print("the body is ${json.decode(response.body)}");
 
     if (response.statusCode == 200 || response.statusCode == 203) {
       return Message.fromJson(jsonDecode(response.body));

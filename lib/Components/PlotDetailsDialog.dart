@@ -19,6 +19,7 @@ class PlotDetails extends StatefulWidget {
 }
 
 class _PlotDetailsState extends State<PlotDetails> {
+  String id = '';
   String lrno = '';
   String nationalid = '';
   String ownername = '';
@@ -31,7 +32,8 @@ class _PlotDetailsState extends State<PlotDetails> {
   final storage = const FlutterSecureStorage();
 
   updateParcelDetails(data) {
-    storage.write(key: "EDITING", value: "FALSE");
+    storage.write(key: "EDITING", value: "TRUE");
+    storage.write(key: "ValuationID", value: id);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
@@ -39,10 +41,11 @@ class _PlotDetailsState extends State<PlotDetails> {
   @override
   void initState() {
     setState(() {
-      lrno = widget.data["lr_no"];
-      parcelno = widget.data["parcel_no"];
-      nationalid = widget.data["nationalid"].toString();
-      ownername = widget.data["ownername"];
+      id = widget.data["ValuationID"];
+      lrno = widget.data["LR_Number"];
+      parcelno = widget.data["ParcelNo"];
+      nationalid = widget.data["NationalID:"].toString();
+      ownername = widget.data["OwnerName"];
     });
     super.initState();
   }

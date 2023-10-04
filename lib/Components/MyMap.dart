@@ -33,16 +33,12 @@ class _MyMapState extends State<MyMap> {
       data = newData;
     });
 
-    print("the data is ${data["lr_no"]}");
-
-    var dataSearch = data["lr_no"];
+    var dataSearch = data["LR_Number"];
 
     if (dataSearch != null) {
-      const storage = FlutterSecureStorage();
+      print("displayed data is $data[LR_Number]");
 
       _displayPlotDetailsDialog(data);
-
-     
     }
   }
 
@@ -56,7 +52,9 @@ class _MyMapState extends State<MyMap> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return PlotDetails(data: data,);
+        return PlotDetails(
+          data: data,
+        );
       },
     );
   }
