@@ -42,9 +42,9 @@ class _MyMapState extends State<MyMap> {
     }
   }
 
-  void computePointCoordinates(Map<String, dynamic> newData) {
+  void computePointCoordinates(Map<String, dynamic> pointCoords) {
     setState(() {
-      data = newData;
+      data = pointCoords;
     });
 
     var dataSearch = data["LR_Number"];
@@ -52,7 +52,7 @@ class _MyMapState extends State<MyMap> {
     if (dataSearch != null) {
       print("displayed data is $data[LR_Number]");
 
-      _displayPlotDetailsDialog(data);
+      _searchPlotDetailsDialog();
     }
   }
 
