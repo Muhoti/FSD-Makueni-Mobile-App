@@ -256,54 +256,57 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 4,
                 ),
-                SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: LineChart(
-                    LineChartData(
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: 1,
-                          getTitlesWidget: (value, meta) {
-                            if (subcountyList.isNotEmpty) {
-                              final index = value
-                                  .toInt()
-                                  .clamp(0, subcountyList.length - 1);
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0),
+                  child: SizedBox(
+                    height: 250,
+                    width: double.infinity,
+                    child: LineChart(
+                      LineChartData(
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                            showTitles: true,
+                            interval: 1,
+                            getTitlesWidget: (value, meta) {
+                              if (subcountyList.isNotEmpty) {
+                                final index = value
+                                    .toInt()
+                                    .clamp(0, subcountyList.length - 1);
 
-                              return Text(subcountyList[index.toInt()]
-                                      ["SubCounty"] ??
-                                  "");
-                            } else
-                              return Text("");
-                          },
-                        )),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
+                                return Text(subcountyList[index.toInt()]
+                                        ["SubCounty"] ??
+                                    "");
+                              } else
+                                return Text("");
+                            },
+                          )),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
                           ),
                         ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
+                        borderData: FlBorderData(show: true),
+                        gridData: FlGridData(show: true),
+                        minX: 0,
+                        minY: 0,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: subcountyData,
+                            isCurved: true,
+                            color: Colors.blue,
+                            dotData: FlDotData(show: true),
+                            belowBarData: BarAreaData(show: true),
                           ),
-                        ),
+                        ],
                       ),
-                      borderData: FlBorderData(show: true),
-                      gridData: FlGridData(show: true),
-                      minX: 0,
-                      minY: 0,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: subcountyData,
-                          isCurved: true,
-                          color: Colors.blue,
-                          dotData: FlDotData(show: false),
-                          belowBarData: BarAreaData(show: true),
-                        ),
-                      ],
                     ),
                   ),
                 ),
@@ -320,52 +323,56 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 4,
                 ),
-                SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: LineChart(
-                    LineChartData(
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: 1,
-                          getTitlesWidget: (value, meta) {
-                            if (wardList.isNotEmpty) {
-                              final index =
-                                  value.toInt().clamp(0, wardList.length - 1);
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0),
+                  child: SizedBox(
+                    height: 250,
+                    width: double.infinity,
+                    child: LineChart(
+                      LineChartData(
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                            showTitles: true,
+                            interval: 1,
+                            getTitlesWidget: (value, meta) {
+                              if (wardList.isNotEmpty) {
+                                final index =
+                                    value.toInt().clamp(0, wardList.length - 1);
 
-                              return Text(
-                                  wardList[index.toInt()]["Ward"] ?? "");
-                            } else
-                              return Text("");
-                          },
-                        )),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
+                                return Text(
+                                    wardList[index.toInt()]["Ward"] ?? "");
+                              } else {
+                                return const Text("");
+                              }
+                            },
+                          )),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
                           ),
                         ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
+                        borderData: FlBorderData(show: true),
+                        gridData: FlGridData(show: true),
+                        minX: 0,
+                        minY: 0,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: subcountyData,
+                            isCurved: true,
+                            color: Colors.blue,
+                            dotData: FlDotData(show: true),
+                            belowBarData: BarAreaData(show: true),
                           ),
-                        ),
+                        ],
                       ),
-                      borderData: FlBorderData(show: true),
-                      gridData: FlGridData(show: true),
-                      minX: 0,
-                      minY: 0,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: subcountyData,
-                          isCurved: true,
-                          color: Colors.blue,
-                          dotData: FlDotData(show: false),
-                          belowBarData: BarAreaData(show: true),
-                        ),
-                      ],
                     ),
                   ),
                 ),
