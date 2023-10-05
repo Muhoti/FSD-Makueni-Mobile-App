@@ -42,6 +42,20 @@ class _MyMapState extends State<MyMap> {
     }
   }
 
+  void computePointCoordinates(Map<String, dynamic> newData) {
+    setState(() {
+      data = newData;
+    });
+
+    var dataSearch = data["LR_Number"];
+
+    if (dataSearch != null) {
+      print("displayed data is $data[LR_Number]");
+
+      _displayPlotDetailsDialog(data);
+    }
+  }
+
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
@@ -95,9 +109,19 @@ class _MyMapState extends State<MyMap> {
                   final Map<String, dynamic> receivedData =
                       jsonDecode(message.message);
                   print("received data: $receivedData");
-                  print("end of data");
                   // Call the Flutter method to set 'data'
                   setDataFromJavaScript(receivedData);
+                },
+              ),
+              JavascriptChannel(
+                name: 'computePointCoordinates',
+                onMessageReceived: (JavascriptMessage message) {
+                  // Parse the JSON data received from JavaScript
+                  final Map<String, dynamic> computedCoordinate =
+                      jsonDecode(message.message);
+                  print("received data: $computedCoordinate");
+                  // Call the Flutter method to set 'data'
+                  computePointCoordinates(computedCoordinate);
                 },
               ),
             },
