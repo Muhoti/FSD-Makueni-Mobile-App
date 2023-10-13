@@ -207,6 +207,7 @@ class _LoginState extends State<Login> {
                                             }
                                           });
                                           if (res.error == null) {
+                                            print("token stored");
                                             await storage.write(
                                                 key: 'mljwt', value: res.token);
                                             // PROCEED TO NEXT PAGE
@@ -251,7 +252,6 @@ Future<Message> login(String email, String password) async {
   }
 
   try {
-    
     final response = await http.post(
       Uri.parse("${getUrl()}auth/login"),
       headers: <String, String>{

@@ -47,10 +47,10 @@ class _MyMapState extends State<MyMap> {
       data = pointCoords;
     });
 
-    var dataSearch = data["LR_Number"];
+    var dataSearch = data;
 
     if (dataSearch != null) {
-      print("displayed data is $data[LR_Number]");
+      print("displayed data now $data");
 
       _searchPlotDetailsDialog();
     }
@@ -119,7 +119,7 @@ class _MyMapState extends State<MyMap> {
                   // Parse the JSON data received from JavaScript
                   final Map<String, dynamic> computedCoordinate =
                       jsonDecode(message.message);
-                  print("received data: $computedCoordinate");
+                  print("current data: $computedCoordinate");
                   // Call the Flutter method to set 'data'
                   computePointCoordinates(computedCoordinate);
                 },
