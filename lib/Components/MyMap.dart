@@ -128,15 +128,15 @@ class _MyMapState extends State<MyMap> {
             onWebViewCreated: (WebViewController webViewController) {
               controller = webViewController;
 
-              // Call the JavaScript function to adjust the marker
-              // webViewController.evaluateJavascript(
-              //     "adjustMarker('${widget.lon}','${widget.lat}')");
+              // Call the JavaScript function to adjust the marker.....REMOVE THIS IF NOT NEEDED
+              webViewController.evaluateJavascript(
+                  "adjustMarker('${widget.lon}','${widget.lat}')");
             },
             onPageFinished: (v) {
-              // After the page is loaded, call the JavaScript function again
-              // controller.evaluateJavascript(
-              //   "adjustMarker('${widget.lon}','${widget.lat}')",
-              // );
+              // After the page is loaded, call the JavaScript function again .....REMOVE THIS IF NOT NEEDED
+              controller.evaluateJavascript(
+                "adjustMarker('${widget.lon}','${widget.lat}')",
+              );
             },
           ),
           Row(
