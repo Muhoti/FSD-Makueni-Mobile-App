@@ -139,12 +139,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Home',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
         drawer: const MyDrawer(),
         floatingActionButton: YellowButton(
@@ -393,7 +388,7 @@ class _HomeState extends State<Home> {
           //   ),
           // ),
         ),
-      ),
-    );
+      );
+    
   }
 }

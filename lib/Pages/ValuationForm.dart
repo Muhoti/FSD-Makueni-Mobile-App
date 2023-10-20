@@ -109,12 +109,7 @@ class _ValuationFormState extends State<ValuationForm> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ValuationForm',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
         drawer: Drawer(
           child: ListView(
@@ -496,8 +491,7 @@ class _ValuationFormState extends State<ValuationForm> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

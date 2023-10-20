@@ -34,17 +34,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Register',
-      theme: ThemeData(
-        primaryColor: const Color(
-            0xFFFF6200), // Define the accent color for buttons, etc.
-        scaffoldBackgroundColor: const Color(
-            0xFFFF6200), // Set the scaffold background color to orange
-        colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color(0x00fda766)),
-      ),
-      home: Scaffold(
+    return Scaffold(
           resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
@@ -164,8 +154,7 @@ class _RegisterState extends State<Register> {
                     )),
               )
             ],
-          )),
-    );
+          ));
   }
 }
 

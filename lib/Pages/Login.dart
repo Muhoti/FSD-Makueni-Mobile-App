@@ -43,12 +43,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -229,8 +224,7 @@ class _LoginState extends State<Login> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
