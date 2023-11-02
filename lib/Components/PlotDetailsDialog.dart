@@ -20,11 +20,12 @@ class PlotDetails extends StatefulWidget {
 
 class _PlotDetailsState extends State<PlotDetails> {
   String id = '';
-  String lrno = '';
+  String plotNo = '';
   String nationalid = '';
   String ownername = '';
   String parcelno = '';
   String phone = '';
+
   String error = '';
   bool isChecked = false;
   String searchbox = '';
@@ -42,9 +43,9 @@ class _PlotDetailsState extends State<PlotDetails> {
   void initState() {
     setState(() {
       id = widget.data["ValuationID"];
-      lrno = widget.data["LR_Number"];
+      plotNo = widget.data["NewPlotNumber"];
       parcelno = widget.data["ParcelNo"];
-      nationalid = widget.data["NationalID:"].toString();
+      nationalid = widget.data["NationalID"];
       ownername = widget.data["OwnerName"];
     });
     super.initState();
@@ -70,12 +71,12 @@ class _PlotDetailsState extends State<PlotDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Text("LR No: $lrno",
+              Text("PlotNo: $plotNo",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(
                 height: 20,
               ),
-              Text("Parcel No: $nationalid",
+              Text("Parcel No: $parcelno",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(
                 height: 20,

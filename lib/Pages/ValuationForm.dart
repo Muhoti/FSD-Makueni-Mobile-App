@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
@@ -110,35 +112,37 @@ class _ValuationFormState extends State<ValuationForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
+      key: _scaffoldKey,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
               ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Handle drawer item 1 tap
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Handle drawer item 2 tap
-                },
-              ),
-            ],
-          ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Handle drawer item 1 tap
+              },
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {
+                // Handle drawer item 2 tap
+              },
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(0),
+      ),
+      body: Container(
+        constraints: const BoxConstraints.tightForFinite(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -189,7 +193,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     ],
                   ),
                 ),
-                TextResponse(label: error),
                 MyTextInput(
                   title: 'Name',
                   lines: 1,
@@ -303,7 +306,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   height: 10,
                 ),
                 MyTextInput(
-                  title: 'LR Number',
+                  title: 'Plot No',
                   lines: 1,
                   value: lrNo,
                   type: TextInputType.text,
@@ -386,17 +389,30 @@ class _ValuationFormState extends State<ValuationForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Unit of Acreage',
-                  lines: 1,
-                  value: unit,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      unit = value;
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: MySelectInput(
+                      label: 'Unit of Acreage',
+                      onSubmit: (value) {
+                        setState(() {
+                          unit = value;
+                        });
+                      },
+                      entries: const ["--Select--", "Ha", "Acres", "m²"],
+                      value: unit),
                 ),
+
+                // MyTextInput(
+                //   title: 'Unit of Acreage',
+                //   lines: 1,
+                //   value: unit,
+                //   type: TextInputType.text,
+                //   onSubmit: (value) {
+                //     setState(() {
+                //       unit = value;
+                //     });
+                //   },
+                // ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -439,6 +455,10 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
+                Center(
+                  child: isLoading ?? const SizedBox(),
+                ),
+                TextResponse(label: error),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SubmitButton(
@@ -491,7 +511,8 @@ class _ValuationFormState extends State<ValuationForm> {
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 }
 
@@ -526,50 +547,91 @@ Future<Message> submitData(
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
     var id = await storage.read(key: "ValuationID");
-    id = id.toString();
+    var long = await storage.read(key: "long");
+    var lat = await storage.read(key: "lat");
 
     var response;
 
     print("submitting id is $id");
 
-    response = await put(
-      Uri.parse("${getUrl()}valuation/update/$id"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'token': token!
-      },
-      body: jsonEncode(<String, String>{
-        'SubCounty': subcounty,
-        'Ward': ward,
-        'Market': market,
-        'OwnerName': name,
-        'Phone': phone,
-        'NationalID': nationalId,
-        'Email': email,
-        'NewPlotNumber': plotNo,
-        'LR_Number': lrNo,
-        'Tenure': tenure,
-        'LandUse': landuse,
-        'Length': length,
-        'Width': width,
-        'Area': area,
-        'Unit_of_Area': unit,
-        'Rate': rate,
-        'SiteValue': sitevalue,
-        'ParcelNo': parcelNo
-      }),
-    );
-
-    print("the body is ${json.decode(response.body)}");
-
-    if (response.statusCode == 200 || response.statusCode == 203) {
-      return Message.fromJson(jsonDecode(response.body));
-    } else {
-      return Message(
-        token: null,
-        success: null,
-        error: "Connection to server failed!",
+    if (id != null) {
+      response = await put(
+        Uri.parse("${getUrl()}valuation/update/$id"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'token': token!
+        },
+        body: jsonEncode(<String, dynamic>{
+          'SubCounty': subcounty,
+          'Ward': ward,
+          'Market': market,
+          'OwnerName': name,
+          'Phone': phone,
+          'NationalID': nationalId,
+          'Email': email,
+          'NewPlotNumber': plotNo,
+          'LR_Number': lrNo,
+          'Tenure': tenure,
+          'Longitude': long,
+          'Latitude': lat,
+          'LandUse': landuse,
+          'Length': length,
+          'Width': width,
+          'Area': area,
+          'Unit_of_Area': unit,
+          'Rate': rate,
+          'SiteValue': sitevalue,
+          'ParcelNo': parcelNo
+        }),
       );
+      if (response.statusCode == 200 || response.statusCode == 203) {
+        return Message.fromJson(jsonDecode(response.body));
+      } else {
+        return Message(
+          token: null,
+          success: null,
+          error: "Connection to server failed!",
+        );
+      }
+    } else {
+      response = await post(
+        Uri.parse("${getUrl()}valuation/create"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'token': token!
+        },
+        body: jsonEncode(<String, dynamic>{
+          'SubCounty': subcounty,
+          'Ward': ward,
+          'Market': market,
+          'OwnerName': name,
+          'Phone': phone,
+          'NationalID': nationalId,
+          'Email': email,
+          'NewPlotNumber': plotNo,
+          'LR_Number': lrNo,
+          'Tenure': tenure,
+          'LandUse': landuse,
+          'Length': length,
+          'Longitude': long,
+          'Latitude': lat,
+          'Width': width,
+          'Area': area,
+          'Unit_of_Area': unit,
+          'Rate': rate,
+          'SiteValue': sitevalue,
+          'ParcelNo': parcelNo
+        }),
+      );
+      if (response.statusCode == 200 || response.statusCode == 203) {
+        return Message.fromJson(jsonDecode(response.body));
+      } else {
+        return Message(
+          token: null,
+          success: null,
+          error: "Connection to server failed!",
+        );
+      }
     }
   } catch (e) {
     return Message(

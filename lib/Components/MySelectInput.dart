@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 
 class MySelectInput extends StatefulWidget {
+  final String label;
   final String value;
+
   final List<String> entries;
   final Function(dynamic) onSubmit;
 
@@ -10,7 +11,7 @@ class MySelectInput extends StatefulWidget {
       {super.key,
       required this.onSubmit,
       required this.entries,
-      required this.value});
+      required this.value, required this.label});
 
   @override
   State<StatefulWidget> createState() => _MySelectInputState();

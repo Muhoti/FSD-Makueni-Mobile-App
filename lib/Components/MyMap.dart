@@ -43,17 +43,14 @@ class _MyMapState extends State<MyMap> {
   }
 
   void computePointCoordinates(Map<String, dynamic> pointCoords) {
+    final storage = const FlutterSecureStorage();
     setState(() {
       data = pointCoords;
     });
 
-    var dataSearch = data;
-
-    if (dataSearch != null) {
-      print("displayed data now $data");
-
-      _searchPlotDetailsDialog();
-    }
+    storage.write(key: "long", value: pointCoords["coordinate"][0].toString());
+    storage.write(key: "lat", value: pointCoords["coordinate"][1].toString());
+    _searchPlotDetailsDialog();
   }
 
   void _openDrawer() {
@@ -129,8 +126,8 @@ class _MyMapState extends State<MyMap> {
               controller = webViewController;
 
               // Call the JavaScript function to adjust the marker.....REMOVE THIS IF NOT NEEDED
-              webViewController.evaluateJavascript(
-                  "adjustMarker('${widget.lon}','${widget.lat}')");
+              // webViewController.evaluateJavascript(
+              //     "adjustMarker('${widget.lon}','${widget.lat}')");
             },
             onPageFinished: (v) {
               // After the page is loaded, call the JavaScript function again .....REMOVE THIS IF NOT NEEDED
@@ -159,16 +156,16 @@ class _MyMapState extends State<MyMap> {
               UserContainer(),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: YellowButton(
-                label: "Capture Point",
-                onButtonPressed: _searchPlotDetailsDialog,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(24),
+          //   child: Align(
+          //     alignment: Alignment.bottomRight,
+          //     child: YellowButton(
+          //       label: "Capture Point",
+          //       onButtonPressed: _searchPlotDetailsDialog,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

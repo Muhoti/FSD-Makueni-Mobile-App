@@ -247,7 +247,7 @@ Future<Message> login(String email, String password) async {
 
   try {
     final response = await http.post(
-      Uri.parse("${getUrl()}auth/login"),
+      Uri.parse("${getUrl()}mobile/login"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
