@@ -158,195 +158,183 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(24),
-        child: SizedBox(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: const EdgeInsets.all(24),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Plot Details',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Color.fromARGB(255, 0, 85, 165)),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text("Plot No: $plotNumber",
+                style: const TextStyle(fontSize: 16, color: Colors.black)),
+            const SizedBox(
+              height: 5,
+            ),
+            Text("Approved Parcel No: $parcelNo",
+                style: const TextStyle(fontSize: 16, color: Colors.black)),
+            const SizedBox(
+              height: 10,
+            ),
+           
+            const Text(
+              'Search Parcel',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Color.fromARGB(255, 0, 85, 165)),
+            ),
+            const SizedBox(
+              height: 0,
+            ),
+            Row(
               children: [
-                const Text(
-                  'Plot Details',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 0, 85, 165)),
-                ),
+                MySelectInput(
+                    label: 'Select Field',
+                    onSubmit: (searchParameter) {
+                      setState(() {
+                        searchItem = searchParameter;
+                      });
+                    },
+                    entries: const [
+                      "Search",
+                      "Name",
+                      "Phone",
+                      "National ID",
+                      "Parcel No"
+                    ],
+                    value: searchItem),
                 const SizedBox(
-                  height: 10,
+                  width: 5,
                 ),
-                Text("Plot No: $plotNumber",
-                    style:
-                        const TextStyle(fontSize: 16, color: Colors.black)),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text("Approved Parcel No: $parcelNo",
-                    style:
-                        const TextStyle(fontSize: 16, color: Colors.black)),
-                const SizedBox(
-                  height: 10,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  'Search Parcel',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 0, 85, 165)),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    MySelectInput(
-                        label: 'Select Field',
-                        onSubmit: (searchParameter) {
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 24, 0),
+                    child: TextField(
+                      onChanged: (value) {
+                        if (value.characters.length >=
+                            check.characters.length) {
+                          searchParcel(value);
+                        } else {
                           setState(() {
-                            searchItem = searchParameter;
+                            entries.clear();
                           });
-                        },
-                        entries: const [
-                          "Search",
-                          "Name",
-                          "Phone",
-                          "National ID",
-                          "Parcel No"
-                        ],
-                        value: searchItem),
-                    const SizedBox(
-                      width: 5,
+                        }
+                        setState(() {
+                          check = value;
+                          error = '';
+                        });
+                      },
+                      keyboardType: TextInputType.text,
+                      maxLines: 1,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(8),
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 26, 114, 186))),
+                          filled: false,
+                          labelText: checkLabel(),
+                          labelStyle: const TextStyle(
+                              color: Color.fromARGB(255, 26, 114, 186)),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto),
                     ),
-                    Flexible(
-                      flex: 2,
-                      fit: FlexFit.loose,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 24, 0),
-                        child: TextField(
-                          onChanged: (value) {
-                            if (value.characters.length >=
-                                check.characters.length) {
-                              searchParcel(value);
-                            } else {
-                              setState(() {
-                                entries.clear();
-                              });
-                            }
-                            setState(() {
-                              check = value;
-                              error = '';
-                            });
-                          },
-                          keyboardType: TextInputType.text,
-                          maxLines: 1,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(8),
-                              border: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color:
-                                          Color.fromARGB(255, 26, 114, 186))),
-                              filled: false,
-                              labelText: checkLabel(),
-                              labelStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 26, 114, 186)),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.auto),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                entries.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                        child: Card(
-                          elevation: 12,
-                          child: SizedBox(
-                            width: double.maxFinite,
-                            child: ListView.separated(
-                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: entries.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      storage.write(
-                                          key: "NationalID",
-                                          value: entries[index].OwnerName);
-                                      storage.write(
-                                          key: "EDITING", value: "TRUE");
-                                      entries.clear();
-                                    });
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ValuationForm()));
-                                  },
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('$searchItem: $si')),
-                                );
+                  ),
+                )
+              ],
+            ),
+            entries.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Card(
+                      elevation: 12,
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        child: ListView.separated(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: entries.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  storage.write(
+                                      key: "NationalID",
+                                      value: entries[index].OwnerName);
+                                  storage.write(key: "EDITING", value: "TRUE");
+                                  entries.clear();
+                                });
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ValuationForm()));
                               },
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const Divider(
-                                height: 1,
-                              ),
-                            ),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('$searchItem: $si')),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(
+                            height: 1,
                           ),
                         ),
-                      )
-                    : const SizedBox(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                        value: isChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                        }),
-                    const Text(
-                      'No match found?',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black),
+                      ),
                     ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SubmitButton(
-                    label: "New Valuation Record",
-                    onButtonPressed: () {
-                      isChecked
-                          ? addAttribute()
-                          : () {
-                              Fluttertoast.showToast(
-                                msg: "Checkbox not checked!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                backgroundColor: Colors.black87,
-                                textColor: Colors.black,
-                              );
-                            };
-                    },
-                  ),
+                  )
+                : const SizedBox(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                    value: isChecked,
+                    onChanged: (value) {
+                      setState(() {
+                        isChecked = value!;
+                      });
+                    }),
+                const Text(
+                  'No match found?',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black),
                 ),
               ],
             ),
-          ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SubmitButton(
+                label: "New Valuation Record",
+                onButtonPressed: () {
+                  isChecked
+                      ? addAttribute()
+                      : () {
+                          Fluttertoast.showToast(
+                            msg: "Checkbox not checked!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.black87,
+                            textColor: Colors.black,
+                          );
+                        };
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

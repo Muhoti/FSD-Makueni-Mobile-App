@@ -59,6 +59,7 @@ class _MySelectInputState extends State<MySelectInput> {
   Widget build(BuildContext context) {
     return Flexible(
       fit: FlexFit.tight,
+      flex: 1,
       child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
           child: DropdownButtonFormField(
