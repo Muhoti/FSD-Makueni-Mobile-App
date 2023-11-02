@@ -32,6 +32,15 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
 
   List<SearchItem> entries = <SearchItem>[];
 
+  final _scrollController = ScrollController();
+  bool _isKeyboardVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _keyboardVisibility();
+  }
+
   searchParcel(v) async {
     setState(() {
       entries.clear();
@@ -125,6 +134,19 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
 
+  void _keyboardVisibility() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _scrollController.addListener(() {
+        final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+        if (isKeyboardOpen != _isKeyboardVisible) {
+          setState(() {
+            _isKeyboardVisible = isKeyboardOpen;
+          });
+        }
+      });
+    });
+  }
+
   checkLabel() {
     switch (searchItem) {
       case 'Name':
@@ -158,9 +180,11 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -184,7 +208,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
             const SizedBox(
               height: 10,
             ),
-           
             const Text(
               'Search Parcel',
               style: TextStyle(

@@ -42,6 +42,8 @@ class _MyMapState extends State<MyMap> {
     }
   }
 
+  
+
   void computePointCoordinates(Map<String, dynamic> pointCoords) {
     final storage = const FlutterSecureStorage();
     setState(() {
@@ -73,6 +75,7 @@ class _MyMapState extends State<MyMap> {
   void _searchPlotDetailsDialog() {
     showModalBottomSheet(
       context: context,
+       isScrollControlled: true, 
       builder: (BuildContext context) {
         return const SearchPlotDetails();
       },
@@ -92,6 +95,7 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      
       drawer: const MyDrawer(),
       body: Stack(
         children: [

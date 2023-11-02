@@ -73,7 +73,7 @@ class _ValuationFormState extends State<ValuationForm> {
 
         // Prefill Form
         final response = await get(
-          Uri.parse("${getUrl()}valuation/search/$id"),
+          Uri.parse("${getUrl()}valuation/$id"),
         );
 
         print("current data is ${json.decode(response.body)}");
@@ -323,7 +323,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Tenure',
                   lines: 1,
                   value: tenure,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
                       tenure = value;
