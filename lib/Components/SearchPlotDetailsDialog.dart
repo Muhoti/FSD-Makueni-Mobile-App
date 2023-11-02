@@ -99,7 +99,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
       setState(() {
         entries.clear();
         for (var item in data) {
-          entries.add(SearchItem(item["NationalID"]));
+          entries.add(SearchItem(item["NationalID"], item["NewPlotNumber"]));
 
           switch (searchItem) {
             case 'Name':
@@ -294,8 +294,8 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                               onPressed: () {
                                 setState(() {
                                   storage.write(
-                                      key: "NationalID",
-                                      value: entries[index].OwnerName);
+                                      key: "NewPlotNumber",
+                                      value: entries[index].NewPlotNumber);
                                   storage.write(key: "EDITING", value: "TRUE");
                                   entries.clear();
                                 });

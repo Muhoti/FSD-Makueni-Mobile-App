@@ -68,7 +68,7 @@ class _ValuationFormState extends State<ValuationForm> {
 
     if (editing == "TRUE") {
       try {
-        var id = await storage.read(key: "ValuationID");
+        var id = await storage.read(key: "NewPlotNumber");
         print("valuation id is $id");
 
         // Prefill Form
@@ -546,7 +546,7 @@ Future<Message> submitData(
   try {
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
-    var id = await storage.read(key: "ValuationID");
+    var id = await storage.read(key: "NewPlotNumber");
     var long = await storage.read(key: "long");
     var lat = await storage.read(key: "lat");
 

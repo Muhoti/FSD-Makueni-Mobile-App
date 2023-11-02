@@ -1,6 +1,5 @@
 class SearchItem {
   final String OwnerName;
-  
-
-  SearchItem(this.OwnerName);
+  final String NewPlotNumber;
+  SearchItem(this.OwnerName, this.NewPlotNumber);
 }
