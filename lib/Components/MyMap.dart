@@ -36,13 +36,16 @@ class _MyMapState extends State<MyMap> {
     var dataSearch = data["LR_Number"];
 
     if (dataSearch != null) {
-      print("displayed data is $data[LR_Number]");
+      print("displayed values are $data");
+      print("VALUATION ID IS ${data["ValuationID"]}");
 
-      _displayPlotDetailsDialog(data);
+      if (data["NewPlotNumber"] != null) {
+        _displayPlotDetailsDialog(data);
+      } else {
+        _searchPlotDetailsDialog();
+      }
     }
   }
-
-  
 
   void computePointCoordinates(Map<String, dynamic> pointCoords) {
     final storage = const FlutterSecureStorage();
@@ -75,7 +78,7 @@ class _MyMapState extends State<MyMap> {
   void _searchPlotDetailsDialog() {
     showModalBottomSheet(
       context: context,
-       isScrollControlled: true, 
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return const SearchPlotDetails();
       },
@@ -95,7 +98,6 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      
       drawer: const MyDrawer(),
       body: Stack(
         children: [
@@ -135,9 +137,9 @@ class _MyMapState extends State<MyMap> {
             },
             onPageFinished: (v) {
               // After the page is loaded, call the JavaScript function again .....REMOVE THIS IF NOT NEEDED
-              controller.evaluateJavascript(
-                "adjustMarker('${widget.lon}','${widget.lat}')",
-              );
+              // controller.evaluateJavascript(
+              //   "adjustMarker('${widget.lon}','${widget.lat}')",
+              // );
             },
           ),
           Row(

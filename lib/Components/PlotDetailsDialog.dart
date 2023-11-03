@@ -20,7 +20,7 @@ class PlotDetails extends StatefulWidget {
 
 class _PlotDetailsState extends State<PlotDetails> {
   String id = '';
-  String plotNo = '';
+  String? plotNo = '';
   String nationalid = '';
   String ownername = '';
   String parcelno = '';
@@ -33,14 +33,15 @@ class _PlotDetailsState extends State<PlotDetails> {
   final storage = const FlutterSecureStorage();
 
   updateParcelDetails(data) {
-    storage.write(key: "EDITING", value: "TRUE");
-    storage.write(key: "ValuationID", value: id);
+    print("dialog plot no is $plotNo");
+    storage.write(key: "NewPlotNumber", value: plotNo);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
 
   @override
   void initState() {
+    print("dialog data is ${widget.data["NationalID"]}");
     setState(() {
       id = widget.data["ValuationID"];
       plotNo = widget.data["NewPlotNumber"];
@@ -71,7 +72,7 @@ class _PlotDetailsState extends State<PlotDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Text("PlotNo: $plotNo",
+              Text("New Plot No: $plotNo",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(
                 height: 20,

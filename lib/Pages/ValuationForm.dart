@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
@@ -23,6 +24,38 @@ class ValuationForm extends StatefulWidget {
 }
 
 class _ValuationFormState extends State<ValuationForm> {
+  var subc = {
+    "Kaiti": ["Ukia", "Kee", "Kilungu", "Ilima"],
+    "Kathonzweni": ["Manga", "Kemera", "Magombo"],
+    "Kibwezi East": [
+      "Masongaleni",
+      "Mtito Andei",
+      "Thange",
+      "Ivingoni/Nzambani"
+    ],
+    "Kibwezi West": [
+      "Emali",
+      "Kikumbulyu North",
+      "Kikumbulyu South",
+      "Makindu",
+      "Nguu",
+      "Nguumo"
+    ],
+    "Kilome": ["Ekerenyo", "Itibo", "Bokeira", "Bomwagamo", "Magwagwa"],
+    "Makueni": ["Bosamaro", "Township", "Bogichora", "Nyamaiya", "Bonyamatuta"],
+    "Mbooni": [
+      "Tulimani",
+      "Mbooni",
+      "Kithungo/Kitundu",
+      "Kiteta/Kisau",
+      "Waia/Kako",
+      "Kalawa"
+    ],
+    "Nzaui": ["Bosamaro", "Township", "Bogichora", "Nyamaiya", "Bonyamatuta"]
+  };
+
+  List<String> wrds = [];
+
   String id = '';
   String name = '';
   String phone = '';
@@ -32,7 +65,6 @@ class _ValuationFormState extends State<ValuationForm> {
   String ward = '';
   String market = '';
   String plotNo = '';
-  String lrNo = '';
   String tenure = '';
   String landuse = '';
   String length = '';
@@ -42,6 +74,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String rate = '';
   String sitevalue = '';
   String parcelNo = '';
+  String propertyId = '';
   String error = '';
   String? editing = '';
   var isLoading;
@@ -51,9 +84,23 @@ class _ValuationFormState extends State<ValuationForm> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  updateWards(v) {
+    setState(() {
+      ward = subc[v]!.toList()[0];
+      wrds = subc[v]!.toList();
+    });
+  }
+
   @override
   void initState() {
     getData();
+    setState(() {
+      var v = subc.keys.toList()[0];
+      subcounty = v;
+      wrds = subc[v]!.toList();
+      ward = subc[v]!.toList()[0];
+    });
+
     super.initState();
   }
 
@@ -62,51 +109,55 @@ class _ValuationFormState extends State<ValuationForm> {
   }
 
   getData() async {
-    editing = await storage.read(key: "EDITING");
+    try {
+      var plotNo = await storage.read(key: "NewPlotNumber");
+      print("valuation id is $plotNo");
 
-    print("editing is $editing");
-
-    if (editing == "TRUE") {
-      try {
-        var id = await storage.read(key: "NewPlotNumber");
-        print("valuation id is $id");
-
-        // Prefill Form
-        final response = await get(
-          Uri.parse("${getUrl()}valuation/$id"),
-        );
-
-        print("current data is ${json.decode(response.body)}");
-
-        var data = json.decode(response.body);
-        print("current valuation data is ${data[0]["OwnerName"]}");
-
-        setState(() {
-          nationalId = data[0]["NationalID"];
-          name = data[0]["OwnerName"];
-          phone = data[0]["Phone"];
-          email = data[0]["Email"];
-          plotNo = data[0]["NewPlotNumber"];
-          subcounty = data[0]["SubCounty"];
-          ward = data[0]["Ward"];
-          market = data[0]["Market"];
-          lrNo = data[0]["LR_Number"];
-          tenure = data[0]["Tenure"];
-          landuse = data[0]["LandUse"];
-          length = data[0]["Length"];
-          width = data[0]["Width"];
-          area = data[0]["Area"];
-          unit = data[0]["Unit_of_Area"];
-          rate = data[0]["Rate"];
-          sitevalue = data[0]["SiteValue"];
-          parcelNo = data[0]["ParcelNo"];
-        });
-
-        print("my datas is $data");
-      } catch (e) {
-        print(e);
+      if (plotNo != null) {
+        storage.write(key: "EDITING", value: "TRUE");
+      } else {
+        storage.write(key: "EDITING", value: "FALSE");
       }
-    } else {}
+
+      editing = await storage.read(key: "EDITING");
+
+      print("editing is $editing");
+
+      // Prefill Form
+      final response = await get(
+        Uri.parse("${getUrl()}valuation/$plotNo"),
+      );
+
+      print("current data is ${json.decode(response.body)}");
+
+      var data = json.decode(response.body);
+      print("current valuation data is ${data[0]["NewPlotNumber"]}");
+
+      setState(() {
+        nationalId = data[0]["NationalID"];
+        name = data[0]["OwnerName"];
+        phone = data[0]["Phone"];
+        email = data[0]["Email"];
+        plotNo = data[0]["NewPlotNumber"];
+        subcounty = data[0]["SubCounty"];
+        ward = data[0]["Ward"];
+        market = data[0]["Market"];
+        tenure = data[0]["Tenure"];
+        landuse = data[0]["LandUse"];
+        length = data[0]["Length"];
+        width = data[0]["Width"];
+        area = data[0]["Area"];
+        unit = data[0]["Unit_of_Area"];
+        rate = data[0]["Rate"];
+        sitevalue = data[0]["SiteValue"];
+        parcelNo = data[0]["ParcelNo"];
+        propertyId = data[0]["PropertyID"];
+      });
+
+      print("my datas is $data");
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -249,31 +300,28 @@ class _ValuationFormState extends State<ValuationForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'SubCounty',
-                  lines: 1,
-                  value: subcounty,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      subcounty = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: "Sub County",
+                    onSubmit: (value) {
+                      setState(() {
+                        subcounty = value;
+                      });
+                      updateWards(value);
+                    },
+                    entries: subc.keys.toList(),
+                    value: data == null ? subcounty : data["SubCounty"]),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Ward',
-                  lines: 1,
-                  value: ward,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      ward = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: "Ward",
+                    onSubmit: (value) {
+                      setState(() {
+                        ward = value;
+                      });
+                    },
+                    entries: wrds,
+                    value: data == null ? ward : data["Ward"]),
                 const SizedBox(
                   height: 10,
                 ),
@@ -299,20 +347,6 @@ class _ValuationFormState extends State<ValuationForm> {
                   onSubmit: (value) {
                     setState(() {
                       plotNo = value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Plot No',
-                  lines: 1,
-                  value: lrNo,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      lrNo = value;
                     });
                   },
                 ),
@@ -389,30 +423,15 @@ class _ValuationFormState extends State<ValuationForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: MySelectInput(
-                      label: 'Unit of Acreage',
-                      onSubmit: (value) {
-                        setState(() {
-                          unit = value;
-                        });
-                      },
-                      entries: const ["--Select--", "Ha", "Acres", "m²"],
-                      value: unit),
-                ),
-
-                // MyTextInput(
-                //   title: 'Unit of Acreage',
-                //   lines: 1,
-                //   value: unit,
-                //   type: TextInputType.text,
-                //   onSubmit: (value) {
-                //     setState(() {
-                //       unit = value;
-                //     });
-                //   },
-                // ),
+                MySelectInput(
+                    label: 'Unit of Acreage',
+                    onSubmit: (value) {
+                      setState(() {
+                        unit = value;
+                      });
+                    },
+                    entries: const ["--Select--", "Ha", "Acres", "m²"],
+                    value: unit),
                 const SizedBox(
                   height: 10,
                 ),
@@ -455,6 +474,17 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
+                MyTextInput(
+                  title: 'Property ID',
+                  lines: 1,
+                  value: propertyId,
+                  type: TextInputType.text,
+                  onSubmit: (value) {
+                    setState(() {
+                      propertyId = value;
+                    });
+                  },
+                ),
                 Center(
                   child: isLoading ?? const SizedBox(),
                 ),
@@ -468,21 +498,20 @@ class _ValuationFormState extends State<ValuationForm> {
                         storage.write(key: "EDITING", value: "FALSE");
                         error = "";
                         isLoading = LoadingAnimationWidget.staggeredDotsWave(
-                          color: const Color.fromRGBO(0, 128, 0, 1),
+                          color: const Color.fromARGB(255, 26, 114, 186),
                           size: 100,
                         );
                       });
 
                       var res = await submitData(
-                          subcounty,
-                          ward,
-                          market,
                           name,
                           phone,
                           nationalId,
                           email,
+                          subcounty,
+                          ward,
+                          market,
                           plotNo,
-                          lrNo,
                           tenure,
                           landuse,
                           length,
@@ -491,7 +520,8 @@ class _ValuationFormState extends State<ValuationForm> {
                           unit,
                           rate,
                           sitevalue,
-                          parcelNo);
+                          parcelNo,
+                          propertyId);
                       setState(() {
                         isLoading = null;
                         if (res.error == null) {
@@ -517,28 +547,39 @@ class _ValuationFormState extends State<ValuationForm> {
 }
 
 Future<Message> submitData(
-  String subcounty,
-  String ward,
-  String market,
-  String name,
-  String phone,
-  String nationalId,
-  String email,
-  String plotNo,
-  String lrNo,
-  String tenure,
-  String landuse,
-  String length,
-  String width,
-  String area,
-  String unit,
-  String rate,
-  String sitevalue,
-  String parcelNo,
-) async {
-  if (name.isEmpty || nationalId.isEmpty || email.isEmpty || phone.isEmpty) {
+    String name,
+    String phone,
+    String nationalId,
+    String email,
+    String subcounty,
+    String ward,
+    String market,
+    String plotNo,
+    String tenure,
+    String landuse,
+    String length,
+    String width,
+    String area,
+    String unit,
+    String rate,
+    String sitevalue,
+    String parcelNo,
+    String propertyId) async {
+  if (name.isEmpty ||
+      nationalId.isEmpty ||
+      phone.isEmpty ||
+      parcelNo.isEmpty ||
+      plotNo.isEmpty) {
     return Message(
         token: null, success: null, error: "All Fields Must Be Filled!");
+  }
+
+  if (email.isEmpty || !EmailValidator.validate(email)) {
+    return Message(
+      token: null,
+      success: null,
+      error: "Email is invalid!",
+    );
   }
 
   print("All fields are required");
@@ -553,8 +594,9 @@ Future<Message> submitData(
     var response;
 
     print("submitting id is $id");
+    var editing = await storage.read(key: "EDITING");
 
-    if (id != null) {
+    if (editing == 'TRUE') {
       response = await put(
         Uri.parse("${getUrl()}valuation/update/$id"),
         headers: <String, String>{
@@ -570,7 +612,6 @@ Future<Message> submitData(
           'NationalID': nationalId,
           'Email': email,
           'NewPlotNumber': plotNo,
-          'LR_Number': lrNo,
           'Tenure': tenure,
           'Longitude': long,
           'Latitude': lat,
@@ -581,7 +622,8 @@ Future<Message> submitData(
           'Unit_of_Area': unit,
           'Rate': rate,
           'SiteValue': sitevalue,
-          'ParcelNo': parcelNo
+          'ParcelNo': parcelNo,
+          'PropertyID': propertyId
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {
@@ -601,26 +643,26 @@ Future<Message> submitData(
           'token': token!
         },
         body: jsonEncode(<String, dynamic>{
-          'SubCounty': subcounty,
-          'Ward': ward,
-          'Market': market,
           'OwnerName': name,
           'Phone': phone,
           'NationalID': nationalId,
           'Email': email,
+          'SubCounty': subcounty,
+          'Ward': ward,
+          'Market': market,
           'NewPlotNumber': plotNo,
-          'LR_Number': lrNo,
           'Tenure': tenure,
           'LandUse': landuse,
           'Length': length,
-          'Longitude': long,
-          'Latitude': lat,
           'Width': width,
           'Area': area,
+          'Longitude': long,
+          'Latitude': lat,
           'Unit_of_Area': unit,
           'Rate': rate,
           'SiteValue': sitevalue,
-          'ParcelNo': parcelNo
+          'ParcelNo': parcelNo,
+          'PropertyID': propertyId
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {

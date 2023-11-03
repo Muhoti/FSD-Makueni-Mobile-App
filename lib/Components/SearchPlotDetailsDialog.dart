@@ -220,21 +220,25 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
             ),
             Row(
               children: [
-                MySelectInput(
-                    label: 'Select Field',
-                    onSubmit: (searchParameter) {
-                      setState(() {
-                        searchItem = searchParameter;
-                      });
-                    },
-                    entries: const [
-                      "Search",
-                      "Name",
-                      "Phone",
-                      "National ID",
-                      "Parcel No"
-                    ],
-                    value: searchItem),
+                Flexible(
+                   flex: 1,
+                  fit: FlexFit.tight,
+                  child: MySelectInput(
+                      label: 'Select Field',
+                      onSubmit: (searchParameter) {
+                        setState(() {
+                          searchItem = searchParameter;
+                        });
+                      },
+                      entries: const [
+                        "Search",
+                        "Name",
+                        "Phone",
+                        "National ID",
+                        "Parcel No"
+                      ],
+                      value: searchItem),
+                ),
                 const SizedBox(
                   width: 5,
                 ),
