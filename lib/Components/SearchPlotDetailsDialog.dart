@@ -77,9 +77,9 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
               });
 
           break;
-        case 'Plot No':
+        case 'Parcel No':
           response = await http.get(
-              Uri.parse("${getUrl()}powerbase/searchparcel/$v"),
+              Uri.parse("${getUrl()}valuation/searchparcel/$v"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8'
               });
@@ -130,6 +130,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
 
   addAttribute() {
     storage.write(key: "EDITING", value: "FALSE");
+    storage.write(key: "NewPlotNumber", value: "");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
@@ -221,7 +222,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
             Row(
               children: [
                 Flexible(
-                   flex: 1,
+                  flex: 1,
                   fit: FlexFit.tight,
                   child: MySelectInput(
                       label: 'Select Field',

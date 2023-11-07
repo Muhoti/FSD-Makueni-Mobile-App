@@ -25,6 +25,7 @@ class ValuationForm extends StatefulWidget {
 
 class _ValuationFormState extends State<ValuationForm> {
   var subc = {
+    "-Select SubCounty-": [""],
     "Kaiti": ["Ukia", "Kee", "Kilungu", "Ilima"],
     "Kathonzweni": ["Manga", "Kemera", "Magombo"],
     "Kibwezi East": [
@@ -65,6 +66,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String ward = '';
   String market = '';
   String newPlotNo = '';
+  String lrno = '';
   String tenure = '';
   String landuse = '';
   String length = '';
@@ -77,6 +79,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String propertyId = '';
   String error = '';
   String? editing = '';
+  String username = 'username';
   var isLoading;
 
   final storage = const FlutterSecureStorage();
@@ -93,7 +96,8 @@ class _ValuationFormState extends State<ValuationForm> {
 
   @override
   void initState() {
-    getData();
+    isEditing();
+
     setState(() {
       var v = subc.keys.toList()[0];
       subcounty = v;
@@ -108,18 +112,28 @@ class _ValuationFormState extends State<ValuationForm> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  isEditing() async {
+    editing = await storage.read(key: "EDITING");
+    if (editing == "TRUE") {
+      getData();
+    } else {}
+  }
+
   getData() async {
+    var username1 = await storage.read(key: "UserName");
+    username = username1.toString();
+    print("user is $username");
+    setState(() {
+      isLoading = LoadingAnimationWidget.staggeredDotsWave(
+        color: const Color.fromARGB(255, 26, 114, 186),
+        size: 100,
+      );
+    });
+
     try {
       var plotNo = await storage.read(key: "NewPlotNumber");
+
       print("valuation id is $plotNo");
-
-      if (plotNo != null) {
-        storage.write(key: "EDITING", value: "TRUE");
-      } else {
-        storage.write(key: "EDITING", value: "FALSE");
-      }
-
-      editing = await storage.read(key: "EDITING");
 
       print("editing is $editing");
 
@@ -142,6 +156,7 @@ class _ValuationFormState extends State<ValuationForm> {
         subcounty = data[0]["SubCounty"];
         ward = data[0]["Ward"];
         market = data[0]["Market"];
+        lrno = data[0]["LR_Number"]!;
         tenure = data[0]["Tenure"];
         landuse = data[0]["LandUse"];
         length = data[0]["Length"];
@@ -152,6 +167,7 @@ class _ValuationFormState extends State<ValuationForm> {
         sitevalue = data[0]["SiteValue"];
         parcelNo = data[0]["ParcelNo"];
         propertyId = data[0]["PropertyID"];
+        isLoading = null;
       });
 
       print("my datas is $data");
@@ -272,6 +288,9 @@ class _ValuationFormState extends State<ValuationForm> {
                 const SizedBox(
                   height: 10,
                 ),
+                Center(
+                  child: isLoading ?? const SizedBox(),
+                ),
                 MyTextInput(
                   title: 'National ID',
                   lines: 1,
@@ -354,16 +373,28 @@ class _ValuationFormState extends State<ValuationForm> {
                   height: 10,
                 ),
                 MyTextInput(
-                  title: 'Tenure',
+                  title: 'LR Number',
                   lines: 1,
-                  value: tenure,
-                  type: TextInputType.number,
+                  value: lrno,
+                  type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      tenure = value;
+                      lrno = value;
                     });
                   },
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MySelectInput(
+                    label: "Tenure",
+                    onSubmit: (value) {
+                      setState(() {
+                        tenure = value;
+                      });
+                    },
+                    entries: const ["--Select--", "Free Hold", "Lease Hold"],
+                    value: tenure),
                 const SizedBox(
                   height: 10,
                 ),
@@ -511,6 +542,7 @@ class _ValuationFormState extends State<ValuationForm> {
                           subcounty,
                           ward,
                           market,
+                          lrno,
                           newPlotNo,
                           tenure,
                           landuse,
@@ -521,7 +553,8 @@ class _ValuationFormState extends State<ValuationForm> {
                           rate,
                           sitevalue,
                           parcelNo,
-                          propertyId);
+                          propertyId,
+                          username!);
                       setState(() {
                         isLoading = null;
                         if (res.error == null) {
@@ -555,6 +588,7 @@ Future<Message> submitData(
     String ward,
     String market,
     String plotNo,
+    String lrno,
     String tenure,
     String landuse,
     String length,
@@ -564,7 +598,8 @@ Future<Message> submitData(
     String rate,
     String sitevalue,
     String parcelNo,
-    String propertyId) async {
+    String propertyId,
+    String username) async {
   if (name.isEmpty ||
       nationalId.isEmpty ||
       phone.isEmpty ||
@@ -611,6 +646,7 @@ Future<Message> submitData(
           'Phone': phone,
           'NationalID': nationalId,
           'Email': email,
+          'LR_Number': lrno,
           'NewPlotNumber': plotNo,
           'Tenure': tenure,
           'Longitude': long,
@@ -623,7 +659,8 @@ Future<Message> submitData(
           'Rate': rate,
           'SiteValue': sitevalue,
           'ParcelNo': parcelNo,
-          'PropertyID': propertyId
+          'PropertyID': propertyId,
+          'FieldOfficer': username
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {

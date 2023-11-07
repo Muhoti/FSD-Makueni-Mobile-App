@@ -53,6 +53,7 @@ class _HomeState extends State<Home> {
 
     setState(() {
       username = decoded["Name"];
+      storage.write(key: "UserName", value: username);
     });
 
     getStats(username);

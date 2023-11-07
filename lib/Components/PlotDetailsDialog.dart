@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
@@ -9,11 +11,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PlotDetails extends StatefulWidget {
-  final dynamic data;
+  final dynamic newPlotNo;
 
-  const PlotDetails({super.key, required this.data});
+  const PlotDetails({super.key, required this.newPlotNo});
 
   @override
   State<PlotDetails> createState() => _PlotDetailsState();
@@ -26,26 +29,33 @@ class _PlotDetailsState extends State<PlotDetails> {
   String ownername = '';
   String parcelno = '';
   String phone = '';
-
   String error = '';
   bool isChecked = false;
   String searchbox = '';
+  var isLoading;
 
   final storage = const FlutterSecureStorage();
 
   updateParcelDetails(data) {
     print("dialog plot no is $newPlotNo");
     storage.write(key: "NewPlotNumber", value: newPlotNo);
+        storage.write(key: "EDITING", value: "TRUE");
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
 
   comparePowerBaseData() async {
-    setState(() {});
+    setState(() {
+      isLoading = LoadingAnimationWidget.staggeredDotsWave(
+        color: const Color.fromARGB(255, 26, 114, 186),
+        size: 100,
+      );
+    });
     try {
-      var plotNo = widget.data["NewPlotNumber"];
+      var nwPlotNo = widget.newPlotNo;
       final response = await get(
-        Uri.parse("${getUrl()}powerbase/$plotNo"),
+        Uri.parse("${getUrl()}powerbase/$nwPlotNo"),
       );
 
       var data = json.decode(response.body);
@@ -55,6 +65,7 @@ class _PlotDetailsState extends State<PlotDetails> {
         id = data[0]["NewPlotNumber"];
         parcelno = data[0]["ParcelNo"];
         ownername = data[0]["OwnerName"];
+        isLoading = null;
       });
     } catch (e) {}
   }
@@ -111,12 +122,15 @@ class _PlotDetailsState extends State<PlotDetails> {
               ),
               Text("Approved Parcel No: $parcelno",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
+              Center(
+                child: isLoading ?? const SizedBox(),
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: SubmitButton(
                   label: "Update Details",
                   onButtonPressed: () {
-                    updateParcelDetails(widget.data);
+                    updateParcelDetails(widget.newPlotNo);
                   },
                 ),
               ),

@@ -26,8 +26,8 @@ class MyMap extends StatefulWidget {
 class _MyMapState extends State<MyMap> {
   late WebViewController controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late Map<String, dynamic> data;
-  late Map<String, dynamic> model;
+  // late Map<String, dynamic> coords;
+  // late Map<String, dynamic> data;
 
   // Modify the below code
 
@@ -54,43 +54,38 @@ class _MyMapState extends State<MyMap> {
       Map<String, dynamic> pointCoords, Map<String, dynamic> receivedData) {
     const storage = FlutterSecureStorage();
 
-    setState(() {
-      data = pointCoords;
-      model = receivedData;
-    });
+    print("compute coordinates: coords is: ${receivedData["NewPlotNumber"]}");
 
-    print("compute coordinates: data is: ${receivedData["Market"]}");
-
-    var dataSearch = model["LR_Number"];
-
-    if (dataSearch != null) {
-      print("displayed values are $model");
-      print("VALUATION ID IS ${model["ValuationID"]}");
-
-      if (data["NewPlotNumber"] != null) {
-        _displayPlotDetailsDialog(model);
-      } else {
-        _searchPlotDetailsDialog();
-      }
-    }
+    // setState(() {
+    //   coords = pointCoords;
+    //   data = receivedData;
+    // });
 
     storage.write(key: "long", value: pointCoords["coordinate"][0].toString());
     storage.write(key: "lat", value: pointCoords["coordinate"][1].toString());
-    // _searchPlotDetailsDialog();
+
+    var newPlotNo = receivedData["NewPlotNumber"];
+
+    print("plot number is $newPlotNo");
+
+    if (newPlotNo != null) {
+      _displayPlotDetailsDialog(newPlotNo);
+    } else {
+      _searchPlotDetailsDialog();
+    }
   }
 
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
 
-// This function is called when the marker is placed into a land parcel.
 // It displays the details of the parcel selected.
-  _displayPlotDetailsDialog(model) {
+  _displayPlotDetailsDialog(newPlotNo) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return PlotDetails(
-          data: model,
+          newPlotNo: newPlotNo,
         );
       },
     );
