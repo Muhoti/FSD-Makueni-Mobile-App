@@ -64,7 +64,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String subcounty = '';
   String ward = '';
   String market = '';
-  String plotNo = '';
+  String newPlotNo = '';
   String tenure = '';
   String landuse = '';
   String length = '';
@@ -138,7 +138,7 @@ class _ValuationFormState extends State<ValuationForm> {
         name = data[0]["OwnerName"];
         phone = data[0]["Phone"];
         email = data[0]["Email"];
-        plotNo = data[0]["NewPlotNumber"];
+        newPlotNo = data[0]["NewPlotNumber"];
         subcounty = data[0]["SubCounty"];
         ward = data[0]["Ward"];
         market = data[0]["Market"];
@@ -236,7 +236,7 @@ class _ValuationFormState extends State<ValuationForm> {
                       ),
                       editing == "TRUE"
                           ? Text(
-                              'Plot No: $plotNo',
+                              'Plot No: $newPlotNo',
                               style: const TextStyle(
                                   fontSize: 16, color: Colors.black),
                             )
@@ -342,11 +342,11 @@ class _ValuationFormState extends State<ValuationForm> {
                 MyTextInput(
                   title: 'New Plot Number',
                   lines: 1,
-                  value: plotNo,
+                  value: newPlotNo,
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      plotNo = value;
+                      newPlotNo = value;
                     });
                   },
                 ),
@@ -511,7 +511,7 @@ class _ValuationFormState extends State<ValuationForm> {
                           subcounty,
                           ward,
                           market,
-                          plotNo,
+                          newPlotNo,
                           tenure,
                           landuse,
                           length,

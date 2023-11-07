@@ -27,35 +27,56 @@ class _MyMapState extends State<MyMap> {
   late WebViewController controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Map<String, dynamic> data;
+  late Map<String, dynamic> model;
 
-  void setDataFromJavaScript(Map<String, dynamic> newData) {
+  // Modify the below code
+
+  // void setDataFromJavaScript(Map<String, dynamic> newData) {
+  //   setState(() {
+  //     data = newData;
+  //   });
+
+  //   var dataSearch = data["LR_Number"];
+
+  //   if (dataSearch != null) {
+  //     print("displayed values are $data");
+  //     print("VALUATION ID IS ${data["ValuationID"]}");
+
+  //     if (data["NewPlotNumber"] != null) {
+  //       _displayPlotDetailsDialog(data);
+  //     } else {
+  //       _searchPlotDetailsDialog();
+  //     }
+  //   }
+  // }
+
+  void computePointCoordinates(
+      Map<String, dynamic> pointCoords, Map<String, dynamic> receivedData) {
+    const storage = FlutterSecureStorage();
+
     setState(() {
-      data = newData;
+      data = pointCoords;
+      model = receivedData;
     });
 
-    var dataSearch = data["LR_Number"];
+    print("compute coordinates: data is: ${receivedData["Market"]}");
+
+    var dataSearch = model["LR_Number"];
 
     if (dataSearch != null) {
-      print("displayed values are $data");
-      print("VALUATION ID IS ${data["ValuationID"]}");
+      print("displayed values are $model");
+      print("VALUATION ID IS ${model["ValuationID"]}");
 
       if (data["NewPlotNumber"] != null) {
-        _displayPlotDetailsDialog(data);
+        _displayPlotDetailsDialog(model);
       } else {
         _searchPlotDetailsDialog();
       }
     }
-  }
-
-  void computePointCoordinates(Map<String, dynamic> pointCoords) {
-    final storage = const FlutterSecureStorage();
-    setState(() {
-      data = pointCoords;
-    });
 
     storage.write(key: "long", value: pointCoords["coordinate"][0].toString());
     storage.write(key: "lat", value: pointCoords["coordinate"][1].toString());
-    _searchPlotDetailsDialog();
+    // _searchPlotDetailsDialog();
   }
 
   void _openDrawer() {
@@ -64,12 +85,12 @@ class _MyMapState extends State<MyMap> {
 
 // This function is called when the marker is placed into a land parcel.
 // It displays the details of the parcel selected.
-  _displayPlotDetailsDialog(data) {
+  _displayPlotDetailsDialog(model) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return PlotDetails(
-          data: data,
+          data: model,
         );
       },
     );
@@ -105,26 +126,30 @@ class _MyMapState extends State<MyMap> {
             initialUrl: "${getUrl()}map",
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: {
-              JavascriptChannel(
-                name: 'setDataFromJavaScript',
-                onMessageReceived: (JavascriptMessage message) {
-                  // Parse the JSON data received from JavaScript
-                  final Map<String, dynamic> receivedData =
-                      jsonDecode(message.message);
-                  print("received data: $receivedData");
-                  // Call the Flutter method to set 'data'
-                  setDataFromJavaScript(receivedData);
-                },
-              ),
+              // JavascriptChannel(
+              //   name: 'setDataFromJavaScript',
+              //   onMessageReceived: (JavascriptMessage message) {
+              //     // Parse the JSON data received from JavaScript
+              //     final Map<String, dynamic> receivedData =
+              //         jsonDecode(message.message);
+              //     print("received data: $receivedData");
+              //     // Call the Flutter method to set 'data'
+              //     setDataFromJavaScript(receivedData);
+              //   },
+              // ),
               JavascriptChannel(
                 name: 'computePointCoordinates',
                 onMessageReceived: (JavascriptMessage message) {
                   // Parse the JSON data received from JavaScript
                   final Map<String, dynamic> computedCoordinate =
                       jsonDecode(message.message);
-                  print("current data: $computedCoordinate");
+
+                  final Map<String, dynamic> receivedData =
+                      jsonDecode(message.message);
+
+                  print("current data: $computedCoordinate, $receivedData");
                   // Call the Flutter method to set 'data'
-                  computePointCoordinates(computedCoordinate);
+                  computePointCoordinates(computedCoordinate, receivedData);
                 },
               ),
             },

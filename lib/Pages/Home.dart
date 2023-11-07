@@ -41,18 +41,29 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    getStats();
-
     fetchUser();
-    loadChartData();
     super.initState();
   }
 
-  Future<void> loadChartData() async {
+  fetchUser() async {
+    var token = await storage.read(key: "mljwt");
+    var decoded = parseJwt(token.toString());
+
+    print("decoded $decoded");
+
+    setState(() {
+      username = decoded["Name"];
+    });
+
+    getStats(username);
+    loadChartData(username);
+  }
+
+  Future<void> loadChartData(String username) async {
     try {
       try {
         final response = await get(
-          Uri.parse("${getUrl()}valuation/stats"),
+          Uri.parse("${getUrl()}valuation/stats/$username"),
         );
 
         var data = await json.decode(response.body);
@@ -91,25 +102,13 @@ class _HomeState extends State<Home> {
     } catch (e) {}
   }
 
-  fetchUser() async {
-    var token = await storage.read(key: "mljwt");
-    var decoded = parseJwt(token.toString());
-
-    print("decoded $decoded");
-
-    setState(() {
-      username = decoded["Name"];
-    });
-  }
-
-  getStats() async {
+  getStats(String username) async {
     try {
-      var id = await storage.read(key: "NationalID");
-
       // Prefill Form
       try {
+        print("the name is $username");
         final response = await get(
-          Uri.parse("${getUrl()}valuation/topstats"),
+          Uri.parse("${getUrl()}valuation/topstats/$username"),
         );
 
         var data = await json.decode(response.body);
@@ -118,7 +117,7 @@ class _HomeState extends State<Home> {
         setState(() {
           total = data["Allplots"];
           markets = data["Markets"];
-          wards = data["Wards"]; 
+          wards = data["Wards"];
           subcounties = data["Subcounties"];
         });
       } catch (e) {

@@ -77,9 +77,9 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
               });
 
           break;
-        case 'Parcel No':
+        case 'Plot No':
           response = await http.get(
-              Uri.parse("${getUrl()}valuation/searchparcel/$v"),
+              Uri.parse("${getUrl()}powerbase/searchparcel/$v"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8'
               });

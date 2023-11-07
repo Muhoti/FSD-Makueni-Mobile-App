@@ -8,6 +8,7 @@ import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
 
 class PlotDetails extends StatefulWidget {
   final dynamic data;
@@ -20,8 +21,8 @@ class PlotDetails extends StatefulWidget {
 
 class _PlotDetailsState extends State<PlotDetails> {
   String id = '';
-  String? plotNo = '';
-  String nationalid = '';
+  String? newPlotNo = '';
+  String? nationalid = '';
   String ownername = '';
   String parcelno = '';
   String phone = '';
@@ -33,22 +34,35 @@ class _PlotDetailsState extends State<PlotDetails> {
   final storage = const FlutterSecureStorage();
 
   updateParcelDetails(data) {
-    print("dialog plot no is $plotNo");
-    storage.write(key: "NewPlotNumber", value: plotNo);
+    print("dialog plot no is $newPlotNo");
+    storage.write(key: "NewPlotNumber", value: newPlotNo);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
 
+  comparePowerBaseData() async {
+    setState(() {});
+    try {
+      var plotNo = widget.data["NewPlotNumber"];
+      final response = await get(
+        Uri.parse("${getUrl()}powerbase/$plotNo"),
+      );
+
+      var data = json.decode(response.body);
+      print("powerbase data: ${data} ");
+      setState(() {
+        newPlotNo = data[0]["NewPlotNumber"];
+        id = data[0]["NewPlotNumber"];
+        parcelno = data[0]["ParcelNo"];
+        ownername = data[0]["OwnerName"];
+      });
+    } catch (e) {}
+  }
+
   @override
   void initState() {
-    print("dialog data is ${widget.data["NationalID"]}");
-    setState(() {
-      id = widget.data["ValuationID"];
-      plotNo = widget.data["NewPlotNumber"];
-      parcelno = widget.data["ParcelNo"];
-      nationalid = widget.data["NationalID"];
-      ownername = widget.data["OwnerName"];
-    });
+    comparePowerBaseData();
+
     super.initState();
   }
 
@@ -72,7 +86,7 @@ class _PlotDetailsState extends State<PlotDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Text("New Plot No: $plotNo",
+              Text("New Plot No: $newPlotNo",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(
                 height: 20,
@@ -87,7 +101,7 @@ class _PlotDetailsState extends State<PlotDetails> {
               const SizedBox(
                 height: 20,
               ),
-              Text("NationalID: $nationalid",
+              Text("NationalID: $id",
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(
                 height: 10,
