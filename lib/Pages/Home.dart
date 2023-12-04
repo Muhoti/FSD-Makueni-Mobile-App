@@ -361,7 +361,6 @@ class _HomeState extends State<Home> {
                       minX: 0,
                       minY: 0,
                       maxY: 10,
-                      maxX: 4,
                       lineBarsData: [
                         LineChartBarData(
                           spots: subcountyData,

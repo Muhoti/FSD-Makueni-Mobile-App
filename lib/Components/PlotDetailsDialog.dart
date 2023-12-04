@@ -52,6 +52,7 @@ class _PlotDetailsState extends State<PlotDetails> {
         size: 100,
       );
     });
+    
     try {
       var nwPlotNo = widget.newPlotNo;
       final response = await get(

@@ -118,9 +118,9 @@ class _MyDrawerState extends State<MyDrawer> {
                                             lon: 36.8219,
                                           )));
                             },
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Icon(Icons.map,
                                     color: Colors.white), // Home Icon
                                 SizedBox(
@@ -147,9 +147,9 @@ class _MyDrawerState extends State<MyDrawer> {
                                     const ChangePasswordDialog(), // Create an instance of the dialog
                               );
                             },
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Icon(Icons.vpn_key,
                                     color: Colors.white), // Home Icon
                                 SizedBox(
@@ -177,9 +177,9 @@ class _MyDrawerState extends State<MyDrawer> {
                                   MaterialPageRoute(
                                       builder: (_) => const Login()));
                             },
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Icon(Icons.home,
                                     color: Colors.white), // Home Icon
                                 SizedBox(
