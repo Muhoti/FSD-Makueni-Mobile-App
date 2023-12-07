@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
@@ -22,17 +24,17 @@ class ValuationForm extends StatefulWidget {
 }
 
 class _ValuationFormState extends State<ValuationForm> {
-  int propertyId = 0;
-  int marketId = 0;
-  int? newPlotNo = 0;
+  String propertyId = '';
+  String marketId = '';
+  String? newPlotNo = '';
   String tenure = '';
   String ownername = '';
   String idnumber = '';
-  double length = 0.0;
-  double width = 0.0;
+  String length = '';
+  String width = '';
   String lr_no = '';
   String pinnumber = '';
-  double landrates = 0.0;
+  String landrates = '';
   String idtype = '';
   String nextofkin = '';
   String physicallocation = '';
@@ -45,13 +47,13 @@ class _ValuationFormState extends State<ValuationForm> {
   String coowners = '';
   String physicaladdress = '';
   String zone = '';
-  double rateablevalue = 0.0;
-  double landratesarrears = 0.0;
-  double rentpayable = 0.0;
-  double rentareas = 0.0;
-  double penalty = 0.0;
-  double accumulatedpenalty = 0.0;
-  int status = 0;
+  String rateablevalue = '';
+  String landratesarrears = '';
+  String rentpayable = '';
+  String rentareas = '';
+  String penalty = '';
+  String accumulatedpenalty = '';
+  String status = '';
   String use = '';
   String blocknumber = '';
   String latitude = '';
@@ -89,10 +91,10 @@ class _ValuationFormState extends State<ValuationForm> {
 
   isEditing() async {
     var edit = await storage.read(key: "EDITING");
-    var newplotno = ((await storage.read(key: "NewPlotNumber")));
+    var newplotno = (await storage.read(key: "NewPlotNumber"));
     setState(() {
       editing = edit;
-      newPlotNo = int.parse(newplotno!);
+      newPlotNo = newplotno;
     });
 
     print("editing is $editing, new plot no is $newPlotNo");
@@ -101,7 +103,7 @@ class _ValuationFormState extends State<ValuationForm> {
     } else {}
   }
 
-  getData(int? newPlotNo) async {
+  getData(String? newPlotNo) async {
     print("valuation id is : $newPlotNo");
     try {
       final response = await get(
@@ -258,24 +260,26 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      marketId = value as int;
+                      marketId = value;
                     });
                   },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Tenure',
-                  lines: 1,
-                  value: tenure,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      tenure = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'Tenure',
+                    onSubmit: (value) {
+                      setState(() {
+                        tenure = value;
+                      });
+                    },
+                    entries: const [
+                      '--Select Tenure--',
+                      'Private Land',
+                      'Public Land'
+                    ],
+                    value: tenure),
                 const SizedBox(
                   height: 10,
                 ),
@@ -297,7 +301,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'ID Number',
                   lines: 1,
                   value: idnumber,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
                       idnumber = value;
@@ -314,7 +318,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      length = value as double;
+                      length = value;
                     });
                   },
                 ),
@@ -328,7 +332,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      width = value as double;
+                      width = value;
                     });
                   },
                 ),
@@ -370,24 +374,22 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      landrates = value as double;
+                      landrates = value;
                     });
                   },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'ID Type',
-                  lines: 1,
-                  value: idtype,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      idtype = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'ID Type',
+                    onSubmit: (value) {
+                      setState(() {
+                        idtype = value;
+                      });
+                    },
+                    entries: const ['National ID', 'Passport'],
+                    value: idtype),
                 const SizedBox(
                   height: 10,
                 ),
@@ -465,7 +467,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Mobile Number',
                   lines: 1,
                   value: mobile,
-                  type: TextInputType.text,
+                  type: TextInputType.phone,
                   onSubmit: (value) {
                     setState(() {
                       mobile = value;
@@ -479,7 +481,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Email',
                   lines: 1,
                   value: email,
-                  type: TextInputType.text,
+                  type: TextInputType.emailAddress,
                   onSubmit: (value) {
                     setState(() {
                       email = value;
@@ -489,17 +491,15 @@ class _ValuationFormState extends State<ValuationForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Gender',
-                  lines: 1,
-                  value: gender,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      gender = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'Gender',
+                    onSubmit: (value) {
+                      setState(() {
+                        gender = value;
+                      });
+                    },
+                    entries: ['--Select Gender--', 'Male', 'Female'],
+                    value: gender),
                 const SizedBox(
                   height: 10,
                 ),
@@ -549,10 +549,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Rateable Value',
                   lines: 1,
                   value: rateablevalue,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      rateablevalue = value as double;
+                      rateablevalue = value;
                     });
                   },
                 ),
@@ -563,10 +563,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Land Rate Arrears',
                   lines: 1,
                   value: landratesarrears,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      landratesarrears = value as double;
+                      landratesarrears = value;
                     });
                   },
                 ),
@@ -577,10 +577,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Rent Payable',
                   lines: 1,
                   value: rentpayable,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      rentpayable = value as double;
+                      rentpayable = value;
                     });
                   },
                 ),
@@ -591,10 +591,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Rent Areas',
                   lines: 1,
                   value: rentareas,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      rentareas = value as double;
+                      rentareas = value;
                     });
                   },
                 ),
@@ -605,10 +605,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Penalty',
                   lines: 1,
                   value: penalty,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      penalty = value as double;
+                      penalty = value;
                     });
                   },
                 ),
@@ -619,27 +619,25 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Accumulated Penalty',
                   lines: 1,
                   value: accumulatedpenalty,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      accumulatedpenalty = value as double;
+                      accumulatedpenalty = value;
                     });
                   },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Status',
-                  lines: 1,
-                  value: status,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      status = value as int;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'Status',
+                    onSubmit: (value) {
+                      setState(() {
+                        status = value;
+                      });
+                    },
+                    entries: const ['1', '0'],
+                    value: status),
                 const SizedBox(
                   height: 10,
                 ),
@@ -699,45 +697,48 @@ class _ValuationFormState extends State<ValuationForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Type of Ownership',
-                  lines: 1,
-                  value: ownership,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      ownership = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'Type of Ownership',
+                    onSubmit: (value) {
+                      setState(() {
+                        ownership = value;
+                      });
+                    },
+                    entries: const [
+                      '--Type of Ownership--',
+                      'Individual',
+                      'Group',
+                      'Private Institution'
+                    ],
+                    value: ownership),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Mode of Acquisition',
-                  lines: 1,
-                  value: mode,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      mode = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'Mode of Acquisition',
+                    onSubmit: (value) {
+                      setState(() {
+                        mode = value;
+                      });
+                    },
+                    entries: const [
+                      '--Mode of Acquisition--',
+                      'Purchased',
+                      'Allotment'
+                    ],
+                    value: mode),
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextInput(
-                  title: 'Disputed',
-                  lines: 1,
-                  value: disputed,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      disputed = value;
-                    });
-                  },
-                ),
+                MySelectInput(
+                    label: 'Disputed',
+                    onSubmit: (value) {
+                      setState(() {
+                        disputed = value;
+                      });
+                    },
+                    entries: ['--Select Option--', 'Yes', 'No'],
+                    value: disputed),
                 const SizedBox(
                   height: 10,
                 ),
@@ -759,7 +760,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Site Value',
                   lines: 1,
                   value: sitevalue,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
                       sitevalue = value;
@@ -829,7 +830,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Area in Ha',
                   lines: 1,
                   value: areainha,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
                       areainha = value;
@@ -843,7 +844,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Accumulated Rates',
                   lines: 1,
                   value: accumulatedrates,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
                       accumulatedrates = value;
@@ -872,17 +873,17 @@ class _ValuationFormState extends State<ValuationForm> {
                       });
 
                       var res = await submitData(
-                          propertyId,
-                          marketId,
-                          newPlotNo!,
+                          int.parse(propertyId),
+                          int.parse(marketId),
+                          int.parse(newPlotNo!),
                           tenure,
                           ownername,
                           idnumber,
-                          length,
-                          width,
+                          double.parse(length),
+                          double.parse(width),
                           lr_no,
                           pinnumber,
-                          landrates,
+                          double.parse(landrates),
                           idtype,
                           nextofkin,
                           physicallocation,
@@ -895,13 +896,13 @@ class _ValuationFormState extends State<ValuationForm> {
                           coowners,
                           physicaladdress,
                           zone,
-                          rateablevalue,
-                          landratesarrears,
-                          rentpayable,
-                          rentareas,
-                          penalty,
-                          accumulatedpenalty,
-                          status,
+                          double.parse(rateablevalue),
+                          double.parse(landratesarrears),
+                          double.parse(rentpayable),
+                          double.parse(rentareas),
+                          double.parse(penalty),
+                          double.parse(accumulatedpenalty),
+                          int.parse(status),
                           use,
                           blocknumber,
                           latitude,
@@ -910,13 +911,13 @@ class _ValuationFormState extends State<ValuationForm> {
                           mode,
                           disputed,
                           naturedisputed,
-                          sitevalue,
+                          double.parse(sitevalue),
                           developed,
                           developmnetapproved,
                           mainstructure,
                           remarks,
-                          areainha,
-                          accumulatedrates);
+                          double.parse(areainha),
+                          double.parse(accumulatedrates));
                       setState(() {
                         isLoading = null;
                         if (res.error == null) {
@@ -980,14 +981,23 @@ Future<Message> submitData(
     String mode,
     String disputed,
     String naturedisputed,
-    String sitevalue,
+    double sitevalue,
     String developed,
     String developmnetapproved,
     String mainstructure,
     String remarks,
-    String areainha,
-    String accumulatedrates) async {
-  if (marketId == 0 || newPlotNo == 0 || tenure.isEmpty || ownername.isEmpty) {
+    double areainha,
+    double accumulatedrates) async {
+  if (marketId == 0 ||
+      newPlotNo == 0 ||
+      tenure.isEmpty ||
+      ownername.isEmpty ||
+      idnumber.isEmpty ||
+      length == 0.0 ||
+      width == 0.0 ||
+      lrno.isEmpty ||
+      pinnumber.isEmpty ||
+      landrates == 0.0) {
     return Message(
         token: null, success: null, error: "All Fields Must Be Filled!");
   }
@@ -1058,8 +1068,8 @@ Future<Message> submitData(
           'Longitude': longitude,
           'TypeOfOwnership': ownership,
           'ModeOfAcquisition': mode,
-          'NatureOfDisputed': disputed,
-          'Width': naturedisputed,
+          'Disputed': disputed,
+          'NatureOfDisputed': naturedisputed,
           'SiteValue': sitevalue,
           'Developed': developed,
           'DevelopmentApproved': developmnetapproved,
@@ -1110,7 +1120,7 @@ Future<Message> submitData(
           'PhysicalAddress': physicaladdress,
           'Zone': zone,
           'RateableValue': rateablevalue,
-          'LandRatesArrears': landrates,
+          'LandRatesArrears': landratesarrears,
           'RentPayable': rentpayable,
           'RentAreas': rentareas,
           'Penalty': penalty,
@@ -1122,8 +1132,8 @@ Future<Message> submitData(
           'Longitude': longitude,
           'TypeOfOwnership': ownership,
           'ModeOfAcquisition': mode,
-          'NatureOfDisputed': disputed,
-          'Width': naturedisputed,
+          'Disputed': disputed,
+          'NatureOfDisputed': naturedisputed,
           'SiteValue': sitevalue,
           'Developed': developed,
           'DevelopmentApproved': developmnetapproved,
