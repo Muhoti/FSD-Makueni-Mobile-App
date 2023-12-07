@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
@@ -24,16 +22,17 @@ class ValuationForm extends StatefulWidget {
 }
 
 class _ValuationFormState extends State<ValuationForm> {
-  String propertyId = '';
-  String marketId = '';
+  int propertyId = 0;
+  int marketId = 0;
+  int? newPlotNo = 0;
   String tenure = '';
   String ownername = '';
   String idnumber = '';
-  String length = '';
-  String width = '';
+  double length = 0.0;
+  double width = 0.0;
   String lr_no = '';
   String pinnumber = '';
-  String landrates = '';
+  double landrates = 0.0;
   String idtype = '';
   String nextofkin = '';
   String physicallocation = '';
@@ -46,13 +45,13 @@ class _ValuationFormState extends State<ValuationForm> {
   String coowners = '';
   String physicaladdress = '';
   String zone = '';
-  String rateablevalue = '';
-  String rates = '';
-  String rentpayable = '';
-  String rentareas = '';
-  String penalty = '';
-  String accumulatedpenalty = '';
-  String status = '';
+  double rateablevalue = 0.0;
+  double landratesarrears = 0.0;
+  double rentpayable = 0.0;
+  double rentareas = 0.0;
+  double penalty = 0.0;
+  double accumulatedpenalty = 0.0;
+  int status = 0;
   String use = '';
   String blocknumber = '';
   String latitude = '';
@@ -89,8 +88,12 @@ class _ValuationFormState extends State<ValuationForm> {
   }
 
   isEditing() async {
-    editing = await storage.read(key: "EDITING");
-    var newPlotNo = await storage.read(key: "NewPlotNumber");
+    var edit = await storage.read(key: "EDITING");
+    var newplotno = ((await storage.read(key: "NewPlotNumber")));
+    setState(() {
+      editing = edit;
+      newPlotNo = int.parse(newplotno!);
+    });
 
     print("editing is $editing, new plot no is $newPlotNo");
     if (editing == "TRUE") {
@@ -98,7 +101,7 @@ class _ValuationFormState extends State<ValuationForm> {
     } else {}
   }
 
-  getData(String? newPlotNo) async {
+  getData(int? newPlotNo) async {
     print("valuation id is : $newPlotNo");
     try {
       final response = await get(
@@ -252,10 +255,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'MarketID',
                   lines: 1,
                   value: marketId,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      marketId = value;
+                      marketId = value as int;
                     });
                   },
                 ),
@@ -308,10 +311,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Length in Ft',
                   lines: 1,
                   value: length,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      length = value;
+                      length = value as double;
                     });
                   },
                 ),
@@ -322,10 +325,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Width in Ft',
                   lines: 1,
                   value: width,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      width = value;
+                      width = value as double;
                     });
                   },
                 ),
@@ -364,10 +367,10 @@ class _ValuationFormState extends State<ValuationForm> {
                   title: 'Land Rates',
                   lines: 1,
                   value: landrates,
-                  type: TextInputType.text,
+                  type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      landrates = value;
+                      landrates = value as double;
                     });
                   },
                 ),
@@ -549,7 +552,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      rateablevalue = value;
+                      rateablevalue = value as double;
                     });
                   },
                 ),
@@ -559,11 +562,11 @@ class _ValuationFormState extends State<ValuationForm> {
                 MyTextInput(
                   title: 'Land Rate Arrears',
                   lines: 1,
-                  value: landrates,
+                  value: landratesarrears,
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      landrates = value;
+                      landratesarrears = value as double;
                     });
                   },
                 ),
@@ -577,7 +580,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      rentpayable = value;
+                      rentpayable = value as double;
                     });
                   },
                 ),
@@ -591,7 +594,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      rentareas = value;
+                      rentareas = value as double;
                     });
                   },
                 ),
@@ -605,7 +608,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      penalty = value;
+                      penalty = value as double;
                     });
                   },
                 ),
@@ -619,7 +622,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      accumulatedpenalty = value;
+                      accumulatedpenalty = value as double;
                     });
                   },
                 ),
@@ -633,7 +636,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.text,
                   onSubmit: (value) {
                     setState(() {
-                      status = value;
+                      status = value as int;
                     });
                   },
                 ),
@@ -860,7 +863,7 @@ class _ValuationFormState extends State<ValuationForm> {
                     label: "Submit",
                     onButtonPressed: () async {
                       setState(() {
-                        storage.write(key: "EDITING", value: "FALSE");
+                        // storage.write(key: "EDITING", value: "FALSE");
                         error = "";
                         isLoading = LoadingAnimationWidget.staggeredDotsWave(
                           color: const Color.fromARGB(255, 26, 114, 186),
@@ -871,6 +874,7 @@ class _ValuationFormState extends State<ValuationForm> {
                       var res = await submitData(
                           propertyId,
                           marketId,
+                          newPlotNo!,
                           tenure,
                           ownername,
                           idnumber,
@@ -892,7 +896,7 @@ class _ValuationFormState extends State<ValuationForm> {
                           physicaladdress,
                           zone,
                           rateablevalue,
-                          landrates,
+                          landratesarrears,
                           rentpayable,
                           rentareas,
                           penalty,
@@ -938,17 +942,17 @@ class _ValuationFormState extends State<ValuationForm> {
 }
 
 Future<Message> submitData(
-    String propertyId,
-    String marketId,
-    String newplotnumber,
+    int propertyId,
+    int marketId,
+    int newPlotNo,
     String tenure,
     String ownername,
     String idnumber,
-    String length,
-    String width,
-    String lr_no,
+    double length,
+    double width,
+    String lrno,
     String pinnumber,
-    String landrates,
+    double landrates,
     String idtype,
     String nextofkin,
     String physicallocation,
@@ -961,12 +965,13 @@ Future<Message> submitData(
     String coowners,
     String physicaladdress,
     String zone,
-    String rateablevalue,
-    String rentpayable,
-    String rentareas,
-    String penalty,
-    String accumulatedpenalty,
-    String status,
+    double rateablevalue,
+    double landratesarrears,
+    double rentpayable,
+    double rentareas,
+    double penalty,
+    double accumulatedpenalty,
+    int status,
     String use,
     String blocknumber,
     String latitude,
@@ -982,11 +987,7 @@ Future<Message> submitData(
     String remarks,
     String areainha,
     String accumulatedrates) async {
-  if (marketId.isEmpty ||
-      newplotnumber.isEmpty ||
-      tenure.isEmpty ||
-      ownername.isEmpty ||
-      idnumber.isEmpty) {
+  if (marketId == 0 || newPlotNo == 0 || tenure.isEmpty || ownername.isEmpty) {
     return Message(
         token: null, success: null, error: "All Fields Must Be Filled!");
   }
@@ -999,19 +1000,19 @@ Future<Message> submitData(
     );
   }
 
-  print("All fields are required");
-
   try {
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
     var id = await storage.read(key: "NewPlotNumber");
-    var long = await storage.read(key: "long");
-    var lat = await storage.read(key: "lat");
+    // var long = await storage.read(key: "long");
+    // var lat = await storage.read(key: "lat");
 
     var response;
 
     print("submitting id is $id");
     var editing = await storage.read(key: "EDITING");
+
+    print('editing form is $editing');
 
     if (editing == 'TRUE') {
       response = await put(
@@ -1023,13 +1024,13 @@ Future<Message> submitData(
         body: jsonEncode(<String, dynamic>{
           'PropertyID': propertyId,
           'MarketID': marketId,
-          'NewPlotNumber': newplotnumber,
+          'NewPlotNumber': newPlotNo,
           'Tenure': tenure,
           'OwnerName': ownername,
           'IDNumber': idnumber,
           'LengthInFt': length,
           'WidthInFt': width,
-          'LRNo': lr_no,
+          'LRNo': lrno,
           'PINNumber': pinnumber,
           'LandRates': landrates,
           'IDType': idtype,
@@ -1045,7 +1046,7 @@ Future<Message> submitData(
           'PhysicalAddress': physicaladdress,
           'Zone': zone,
           'RateableValue': rateablevalue,
-          'LandRatesArrears': landrates,
+          'LandRatesArrears': landratesarrears,
           'RentPayable': rentpayable,
           'RentAreas': rentareas,
           'Penalty': penalty,
@@ -1074,7 +1075,7 @@ Future<Message> submitData(
         return Message(
           token: null,
           success: null,
-          error: "Connection to server failed!",
+          error: "Connection to server failed",
         );
       }
     } else {
@@ -1087,13 +1088,13 @@ Future<Message> submitData(
         body: jsonEncode(<String, dynamic>{
           'PropertyID': propertyId,
           'MarketID': marketId,
-          'NewPlotNumber': newplotnumber,
+          'NewPlotNumber': newPlotNo,
           'Tenure': tenure,
           'OwnerName': ownername,
           'IDNumber': idnumber,
           'LengthInFt': length,
           'WidthInFt': width,
-          'LRNo': lr_no,
+          'LRNo': lrno,
           'PINNumber': pinnumber,
           'LandRates': landrates,
           'IDType': idtype,
@@ -1143,6 +1144,7 @@ Future<Message> submitData(
       }
     }
   } catch (e) {
+    print('the error is $e');
     return Message(
       token: null,
       success: null,

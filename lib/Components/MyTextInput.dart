@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class MyTextInput extends StatefulWidget {
   String title;
-  String value;
+  var value;
   int lines;
   var type;
   Function(String) onSubmit;
