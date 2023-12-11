@@ -26,6 +26,8 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
   String error = '';
   bool isChecked = false;
   String searchbox = '';
+  String owner = '';
+  String plotNo = '';
   var si = '';
 
   final storage = const FlutterSecureStorage();
@@ -46,81 +48,90 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
       entries.clear();
     });
     try {
-      dynamic response;
+      // switch (searchbox) {
+      //   case 'National ID':
+      //     response = await http.get(
+      //         Uri.parse("${getUrl()}valuation/searchid/$v"),
+      //         headers: <String, String>{
+      //           'Content-Type': 'application/json; charset=UTF-8'
+      //         });
 
-      switch (searchbox) {
-        case 'National ID':
-          response = await http.get(
-              Uri.parse("${getUrl()}valuation/searchid/$v"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8'
-              });
+      //     print("searching id: $v");
 
-          print("searching id: $v");
+      //     break;
+      //   case 'Name':
+      //     response = await http.get(
+      //         Uri.parse("${getUrl()}valuation/searchname/$v"),
+      //         headers: <String, String>{
+      //           'Content-Type': 'application/json; charset=UTF-8'
+      //         });
 
-          break;
-        case 'Name':
-          response = await http.get(
-              Uri.parse("${getUrl()}valuation/searchname/$v"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8'
-              });
+      //     print("searching Name: $v");
 
-          print("searching Name: $v");
+      //     break;
+      //   case 'Phone':
+      //     response = await http.get(
+      //         Uri.parse("${getUrl()}valuation/searchphone/$v"),
+      //         headers: <String, String>{
+      //           'Content-Type': 'application/json; charset=UTF-8'
+      //         });
 
-          break;
-        case 'Phone':
-          response = await http.get(
-              Uri.parse("${getUrl()}valuation/searchphone/$v"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8'
-              });
+      //     break;
+      //   case 'Parcel No':
+      //     response = await http.get(
+      //         Uri.parse("${getUrl()}valuation/searchparcel/$v"),
+      //         headers: <String, String>{
+      //           'Content-Type': 'application/json; charset=UTF-8'
+      //         });
 
-          break;
-        case 'Parcel No':
-          response = await http.get(
-              Uri.parse("${getUrl()}valuation/searchparcel/$v"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8'
-              });
+      //     break;
+      //   default:
+      //     'National ID';
+      //     return response;
+      // }
 
-          break;
-        default:
-          'National ID';
-          return response;
-      }
+      final response = await http.get(
+          Uri.parse("${getUrl()}valuation/searchname/$v"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          });
+
+      print("searching Name: $v");
 
       var data = json.decode(response.body);
+
       print("data is $data[0]");
-      plotNumber = data[0]["NewPlotNumber"];
-      plotName = data[0]["OwnerName"];
-      parcelNo = data[0]["ParcelNo"];
+
+      // plotNumber = data[0]["NewPlotNumber"];
+      // plotName = data[0]["OwnerName"];
+      // parcelNo = data[0]["ParcelNo"];
 
       setState(() {
         entries.clear();
         for (var item in data) {
-          entries.add(SearchItem(item["NationalID"], item["NewPlotNumber"]));
+          print("test item is ${item["OwnerName"]}, ${item["NewPlotNumber"]}");
+          entries.add(SearchItem(item["OwnerName"], item["NewPlotNumber"]));
 
-          switch (searchItem) {
-            case 'Name':
-              si = item["OwnerName"];
+          // switch (searchItem) {
+          //   case 'Name':
+          //     si = item["OwnerName"];
 
-              break;
-            case 'National ID':
-              si = item["NationalID"];
+          //     break;
+          //   case 'National ID':
+          //     si = item["NationalID"];
 
-              break;
-            case 'Parcel No':
-              si = item["ParcelNo"];
+          //     break;
+          //   case 'Parcel No':
+          //     si = item["ParcelNo"];
 
-              break;
-            case 'Phone':
-              si = item["Phone"];
+          //     break;
+          //   case 'Phone':
+          //     si = item["Phone"];
 
-              break;
-            default:
-          }
-          print("THE SEARCH ITEM IS: $si");
+          //     break;
+          //   default:
+          // }
+          // print("THE SEARCH ITEM IS: $si");
         }
       });
     } catch (e) {
@@ -217,32 +228,32 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                   color: Color.fromARGB(255, 0, 85, 165)),
             ),
             const SizedBox(
-              height: 0,
+              height: 20,
             ),
             Row(
               children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: MySelectInput(
-                      label: 'Select Field',
-                      onSubmit: (searchParameter) {
-                        setState(() {
-                          searchItem = searchParameter;
-                        });
-                      },
-                      entries: const [
-                        "Search",
-                        "Name",
-                        "Phone",
-                        "National ID",
-                        "Parcel No"
-                      ],
-                      value: searchItem),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
+                // Flexible(
+                //   flex: 1,
+                //   fit: FlexFit.tight,
+                //   child: MySelectInput(
+                //       label: 'Select Field',
+                //       onSubmit: (searchParameter) {
+                //         setState(() {
+                //           searchItem = searchParameter;
+                //         });
+                //       },
+                //       entries: const [
+                //         "Search",
+                //         "Name",
+                //         "Phone",
+                //         "National ID",
+                //         "Parcel No"
+                //       ],
+                //       value: searchItem),
+                // ),
+                // const SizedBox(
+                //   width: 5,
+                // ),
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
@@ -267,14 +278,14 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                       maxLines: 1,
                       enableSuggestions: false,
                       autocorrect: false,
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(8),
-                          border: const OutlineInputBorder(
+                      decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(8),
+                          border: OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: Color.fromARGB(255, 26, 114, 186))),
                           filled: false,
-                          labelText: checkLabel(),
-                          labelStyle: const TextStyle(
+                          labelText: 'Search Owner Name',
+                          labelStyle: TextStyle(
                               color: Color.fromARGB(255, 26, 114, 186)),
                           floatingLabelBehavior: FloatingLabelBehavior.auto),
                     ),
@@ -312,7 +323,8 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                               },
                               child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text('$searchItem: $si')),
+                                  child: Text(
+                                      'Owner: ${entries[index].OwnerName}, PlotNo: ${entries[index].NewPlotNumber}')),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
@@ -323,7 +335,9 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                       ),
                     ),
                   )
-                : const SizedBox(),
+                :  const SizedBox(
+                    height: 10,
+                  ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

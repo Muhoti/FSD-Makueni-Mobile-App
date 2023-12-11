@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, non_constant_identifier_names
 
 import 'dart:convert';
 import 'dart:ffi';
@@ -16,25 +16,25 @@ import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class ValuationForm extends StatefulWidget {
-  const ValuationForm({super.key});
+class ValuationFormCopy extends StatefulWidget {
+  const ValuationFormCopy({super.key});
 
   @override
-  State<ValuationForm> createState() => _ValuationFormState();
+  State<ValuationFormCopy> createState() => _ValuationFormState();
 }
 
-class _ValuationFormState extends State<ValuationForm> {
-  String propertyId = '';
-  String marketId = '';
-  String? newPlotNo = '';
+class _ValuationFormState extends State<ValuationFormCopy> {
+  int propertyId = 0;
+  int marketId = 0;
+  int? newPlotNo = 0;
   String tenure = '';
   String ownername = '';
   String idnumber = '';
-  String length = '';
-  String width = '';
+  double length = 0.0;
+  double width = 0.0;
   String lr_no = '';
   String pinnumber = '';
-  String landrates = '';
+  double? landrates = 0.0;
   String idtype = '';
   String nextofkin = '';
   String physicallocation = '';
@@ -47,13 +47,13 @@ class _ValuationFormState extends State<ValuationForm> {
   String coowners = '';
   String physicaladdress = '';
   String zone = '';
-  String rateablevalue = '';
+  double rateablevalue = 0.0;
   String landratesarrears = '';
-  String rentpayable = '';
-  String rentareas = '';
-  String penalty = '';
-  String accumulatedpenalty = '';
-  String status = '';
+  double rentpayable = 0.0;
+  double rentareas = 0.0;
+  double penalty = 0.0;
+  double accumulatedpenalty = 0.0;
+  int status = 1;
   String use = '';
   String blocknumber = '';
   String latitude = '';
@@ -68,7 +68,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String mainstructure = '';
   String remarks = '';
   String areainha = '';
-  String accumulatedrates = '';
+  double accumulatedrates = 0.0;
 
   String? editing = '';
   var isLoading;
@@ -91,7 +91,7 @@ class _ValuationFormState extends State<ValuationForm> {
 
   isEditing() async {
     var edit = await storage.read(key: "EDITING");
-    var newplotno = (await storage.read(key: "NewPlotNumber"));
+    var newplotno = int.parse((await storage.read(key: "NewPlotNumber"))!);
     setState(() {
       editing = edit;
       newPlotNo = newplotno;
@@ -103,7 +103,7 @@ class _ValuationFormState extends State<ValuationForm> {
     } else {}
   }
 
-  getData(String? newPlotNo) async {
+  getData(int? newPlotNo) async {
     print("valuation id is : $newPlotNo");
     try {
       final response = await get(
@@ -116,53 +116,140 @@ class _ValuationFormState extends State<ValuationForm> {
 
       var data = json.decode(response.body);
       print("valuation prefilling values: $data value");
-      print("One Item: ${data["property"]["property_id"]}");
+      print("propertyId Item: ${data["property"]["property_id"]}");
 
       setState(() {
-        propertyId = data["property"]["property_id"] ?? '';
-        marketId = data["property"]["market_id"] ?? '';
+        propertyId = int.parse(data["property"]["property_id"] ?? 0);
+        print("property id: $propertyId");
+        marketId = int.parse(data["property"]["market_id"] ?? 0);
+        print("marketId id: $marketId");
+
         tenure = data["property"]["tenure"] ?? '';
+        print("tenure id: $tenure");
+
         ownername = data["property"]["owner_name"] ?? '';
-        idnumber = data["property"]["national_id"] ?? '';
-        length = data["property"]["length"] ?? '';
-        width = data["property"]["width"] ?? '';
+        print("ownername id: $ownername");
+        // idnumber = data["property"]["national_id"] ?? '';
+        // print("idnumber id: $idnumber");
+
+        length = double.parse(data["property"]["length"] ?? 0.0);
+        print("length id: $length");
+
+        width = double.parse(data["property"]["width"] ?? 0.0);
+        print("width: $width");
+
         lr_no = data["property"]["LR_number"] ?? '';
-        pinnumber = data["property"]["pin_number"] ?? '';
-        landrates = data["property"]["land_rates"] ?? '';
-        idtype = data["property"]["id_type"] ?? '';
-        nextofkin = data["property"]["next_of_kin"] ?? '';
-        physicallocation = data["property"]["physical_location"] ?? '';
-        postaladdress = data["property"]["postal_address"] ?? '';
-        postalcode = data["property"]["postal_code"] ?? '';
-        town = data["property"]["postal_address_town"] ?? '';
-        mobile = data["property"]["mobile_number"] ?? '';
-        email = data["property"]["email"] ?? '';
-        gender = data["property"]["gender"] ?? '';
-        coowners = data["property"]["co_owners"] ?? '';
-        physicaladdress = data["property"]["physical_address"] ?? '';
-        zone = data["property"]["zone"] ?? '';
-        rateablevalue = data["property"]["rateable_value"] ?? '';
-        landrates = data["property"]["rate"] ?? '';
-        rentpayable = data["property"]["rent_payable"] ?? '';
-        rentareas = data["property"]["rent_areas"] ?? '';
-        penalty = data["property"]["penalty"] ?? '';
-        accumulatedpenalty = data["property"]["accumulated_penalty"] ?? '';
-        status = data["property"]["status"] ?? '';
-        use = data["property"]["PropertyUseDescription"] ?? '';
-        blocknumber = data["property"]["BlockNumber"] ?? '';
+        print("lr_no: $lr_no");
+
+        // pinnumber = data["property"]["pin_number"] ?? 'PN008';
+        // print("pinnumber: $pinnumber");
+
+        // landrates = double.tryParse(data["property"]["land_rates"] ?? 0.0);
+        // print("landrates: $landrates");
+
+        // idtype = data["property"]["id_type"] ?? '';
+        // print("idtype: $idtype");
+
+        // nextofkin = data["property"]["next_of_kin"] ?? '';
+        // print("nextofkin: $nextofkin");
+
+        // physicallocation = data["property"]["physical_location"] ?? '';
+        // print("physicallocation: $physicallocation");
+
+        // postaladdress = data["property"]["postal_address"] ?? '';
+        // print("postaladdress: $postaladdress");
+
+        // postalcode = data["property"]["postal_code"] ?? '';
+        // print("postalcode: $postalcode");
+
+        // town = data["property"]["postal_address_town"] ?? '';
+        // print("town: $town");
+
+        // mobile = data["property"]["mobile_number"] ?? '';
+        // print("mobile: $mobile");
+
+        // email = data["property"]["email"] ?? '';
+        // print("widemailth: $email");
+
+        // gender = data["property"]["gender"] ?? '';
+        // print("gender: $gender");
+
+        // coowners = data["property"]["co_owners"] ?? '';
+        // print("coowners: $coowners");
+
+        // physicaladdress = data["property"]["physical_address"] ?? '';
+        // print("physicaladdress: $physicaladdress");
+
+        // zone = data["property"]["zone"] ?? '';
+        // print("zone: $zone");
+
+        // rateablevalue = double.parse(data["property"]["rateable_value"] ?? 0.0);
+        // print("rateablevalue: $rateablevalue");
+
+        landratesarrears = data["property"]["rate"] ?? '';
+        print("landratesarrears: $landratesarrears");
+
+        // rentpayable = double.parse(data["property"]["rent_payable"] ?? 0.0);
+        // print("rentpayable: $rentpayable");
+
+        // rentareas = double.parse(data["property"]["rent_areas"] ?? 0.0);
+        // print("rentareas: $rentareas");
+
+        // penalty = double.parse(data["property"]["penalty"] ?? 0.0);
+        // print("penalty: $penalty");
+
+        // accumulatedpenalty =
+        //     double.parse(data["property"]["accumulated_penalty"] ?? 0.0);
+        // print("accumulatedpenalty: $accumulatedpenalty");
+
+        // status = data["property"]["status"] ?? '';
+        // print("status: $status");
+
+        // use = data["property"]["PropertyUseDescription"] ?? '';
+        // print("use: $use");
+
+        // blocknumber = data["property"]["BlockNumber"] ?? '';
+        // print("blocknumber: $blocknumber");
+
         latitude = data["property"]["latitude"] ?? '';
+        print("latitude: $latitude");
+
         longitude = data["property"]["longitude"] ?? '';
-        ownership = data["property"]["TypeOfOwnership"] ?? '';
-        mode = data["property"]["ModeOfAcquisition"] ?? '';
-        disputed = data["property"]["Disputed"] ?? '';
-        naturedisputed = data["property"]["NatureOfDisputed"] ?? '';
+        print("longitude: $longitude");
+
+        // ownership = data["property"]["TypeOfOwnership"] ?? '';
+        // print("ownership: $ownership");
+
+        // mode = data["property"]["ModeOfAcquisition"] ?? '';
+        // print("mode: $mode");
+
+        // disputed = data["property"]["Disputed"] ?? '';
+        // print("disputed: $disputed");
+
+        // naturedisputed = data["property"]["NatureOfDisputed"] ?? '';
+        // print("naturedisputed: $naturedisputed");
+
         sitevalue = data["property"]["site_value"] ?? '';
-        developed = data["property"]["Developed"] ?? '';
-        developmnetapproved = data["property"]["DevelopmentApproved"] ?? '';
-        mainstructure = data["property"]["MainStructure"] ?? '';
-        remarks = data["property"]["Remarks"] ?? '';
+        print("sitevalue: $sitevalue");
+
+        // developed = data["property"]["Developed"] ?? '';
+        // print("developed: $developed");
+
+        // developmnetapproved = data["property"]["DevelopmentApproved"] ?? '';
+        // print("developmnetapproved: $developmnetapproved");
+
+        // mainstructure = data["property"]["MainStructure"] ?? '';
+        // print("mainstructure: $mainstructure");
+
+        // remarks = data["property"]["Remarks"] ?? '';
+        // print("remarks: $remarks");
+
         areainha = data["property"]["area"] ?? '';
-        accumulatedrates = data["property"]["AccumulatedRates"] ?? '';
+        print("areainha: $areainha");
+
+        // accumulatedrates =
+        //     double.parse(data["property"]["AccumulatedRates"] ?? 0.0);
+        // print("accumulatedrates: $accumulatedrates");
       });
     } catch (e) {
       print('the error is $e');
@@ -260,7 +347,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      marketId = value;
+                      marketId = int.parse(value);
                     });
                   },
                 ),
@@ -330,7 +417,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      length = value;
+                      length = double.parse(value);
                     });
                   },
                 ),
@@ -344,7 +431,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      width = value;
+                      width = double.parse(value);
                     });
                   },
                 ),
@@ -386,7 +473,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      landrates = value;
+                      landrates = double.parse(value);
                     });
                   },
                 ),
@@ -552,7 +639,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      rateablevalue = value;
+                      rateablevalue = double.parse(value);
                     });
                   },
                 ),
@@ -580,7 +667,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      rentpayable = value;
+                      rentpayable = double.parse(value);
                     });
                   },
                 ),
@@ -594,7 +681,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      rentareas = value;
+                      rentareas = double.parse(value);
                     });
                   },
                 ),
@@ -608,7 +695,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      penalty = value;
+                      penalty = double.parse(value);
                     });
                   },
                 ),
@@ -622,7 +709,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      accumulatedpenalty = value;
+                      accumulatedpenalty = double.parse(value);
                     });
                   },
                 ),
@@ -633,11 +720,11 @@ class _ValuationFormState extends State<ValuationForm> {
                     label: 'Status',
                     onSubmit: (value) {
                       setState(() {
-                        status = value;
+                        status = int.parse(value);
                       });
                     },
-                    entries: const ['Select Status', '1', '0'],
-                    value: status),
+                    entries: const ['1', '0'],
+                    value: status.toString()),
                 const SizedBox(
                   height: 10,
                 ),
@@ -847,7 +934,7 @@ class _ValuationFormState extends State<ValuationForm> {
                   type: TextInputType.number,
                   onSubmit: (value) {
                     setState(() {
-                      accumulatedrates = value;
+                      accumulatedrates = double.parse(value);
                     });
                   },
                 ),
@@ -863,9 +950,9 @@ class _ValuationFormState extends State<ValuationForm> {
                   child: SubmitButton(
                     label: "Submit",
                     onButtonPressed: () async {
-                      print(
-                          "submitting: $marketId, $tenure, $ownername, $idtype, $idnumber, $length, $width, $lr_no, $pinnumber, $landrates, $nextofkin, $physicallocation, $postaladdress, $town, $mobile, $email, $coowners, $physicaladdress, $zone, $rateablevalue, $landratesarrears, $rentpayable, $rentareas, $penalty, $accumulatedpenalty, $status, $use, $blocknumber, $latitude, $longitude, $ownership, $mode, $disputed, $naturedisputed, $sitevalue, $developed, $developmnetapproved, $mainstructure, $remarks, $areainha, $accumulatedrates");
                       setState(() {
+                        // storage.write(key: "EDITING", value: "FALSE");
+                        error = "";
                         isLoading = LoadingAnimationWidget.staggeredDotsWave(
                           color: const Color.fromARGB(255, 26, 114, 186),
                           size: 100,
@@ -875,7 +962,7 @@ class _ValuationFormState extends State<ValuationForm> {
                       var res = await submitData(
                           propertyId,
                           marketId,
-                          newPlotNo!,
+                          newPlotNo,
                           tenure,
                           ownername,
                           idnumber,
@@ -883,7 +970,7 @@ class _ValuationFormState extends State<ValuationForm> {
                           width,
                           lr_no,
                           pinnumber,
-                          landrates,
+                          landrates!,
                           idtype,
                           nextofkin,
                           physicallocation,
@@ -918,7 +1005,6 @@ class _ValuationFormState extends State<ValuationForm> {
                           remarks,
                           areainha,
                           accumulatedrates);
-
                       setState(() {
                         isLoading = null;
                         if (res.error == null) {
@@ -944,17 +1030,17 @@ class _ValuationFormState extends State<ValuationForm> {
 }
 
 Future<Message> submitData(
-    String propertyId,
-    String marketId,
-    String newPlotNo,
+    int propertyId,
+    int marketId,
+    int? newPlotNo,
     String tenure,
     String ownername,
     String idnumber,
-    String length,
-    String width,
+    double length,
+    double width,
     String lrno,
     String pinnumber,
-    String landrates,
+    double landrates,
     String idtype,
     String nextofkin,
     String physicallocation,
@@ -967,13 +1053,13 @@ Future<Message> submitData(
     String coowners,
     String physicaladdress,
     String zone,
-    String rateablevalue,
+    double rateablevalue,
     String landratesarrears,
-    String rentpayable,
-    String rentareas,
-    String penalty,
-    String accumulatedpenalty,
-    String status,
+    double rentpayable,
+    double rentareas,
+    double penalty,
+    double accumulatedpenalty,
+    int status,
     String use,
     String blocknumber,
     String latitude,
@@ -988,7 +1074,7 @@ Future<Message> submitData(
     String mainstructure,
     String remarks,
     String areainha,
-    String accumulatedrates) async {
+    double accumulatedrates) async {
   if (marketId == 0 ||
       newPlotNo == 0 ||
       tenure.isEmpty ||
@@ -997,8 +1083,7 @@ Future<Message> submitData(
       length == 0.0 ||
       width == 0.0 ||
       lrno.isEmpty ||
-      pinnumber.isEmpty ||
-      landrates == 0.0) {
+      pinnumber.isEmpty) {
     return Message(
         token: null, success: null, error: "All Fields Must Be Filled!");
   }
@@ -1025,7 +1110,6 @@ Future<Message> submitData(
 
     print('editing form is $editing');
 
-
     if (editing == 'TRUE') {
       response = await put(
         Uri.parse("${getUrl()}valuation/update/$id"),
@@ -1034,17 +1118,17 @@ Future<Message> submitData(
           'token': token!
         },
         body: jsonEncode(<String, dynamic>{
-          'PropertyID': int.parse(propertyId),
-          'MarketID': int.parse(marketId),
-          'NewPlotNumber': int.parse(newPlotNo),
+          'PropertyID': propertyId,
+          'MarketID': marketId,
+          'NewPlotNumber': newPlotNo,
           'Tenure': tenure,
           'OwnerName': ownername,
-          'IDNumber': int.parse(idnumber),
-          'LengthInFt': double.parse(length),
-          'WidthInFt': double.parse(width),
+          'IDNumber': idnumber,
+          'LengthInFt': length,
+          'WidthInFt': width,
           'LRNo': lrno,
           'PINNumber': pinnumber,
-          'LandRates': double.parse(landrates),
+          'LandRates': landrates,
           'IDType': idtype,
           'NextOfKin': nextofkin,
           'PhysicalLocation': physicallocation,
@@ -1057,13 +1141,13 @@ Future<Message> submitData(
           'CoOwners': coowners,
           'PhysicalAddress': physicaladdress,
           'Zone': zone,
-          'RateableValue': double.parse(rateablevalue),
-          'LandRatesArrears': double.parse(landratesarrears),
-          'RentPayable': double.parse(rentpayable),
-          'RentAreas': double.parse(rentareas),
-          'Penalty': double.parse(penalty),
-          'AccumulatedPenalty': double.parse(accumulatedpenalty),
-          'Status': int.parse(status),
+          'RateableValue': rateablevalue,
+          'LandRatesArrears': landratesarrears,
+          'RentPayable': rentpayable,
+          'RentAreas': rentareas,
+          'Penalty': penalty,
+          'AccumulatedPenalty': accumulatedpenalty,
+          'Status': status,
           'PropertyUseDescription': use,
           'BlockNumber': blocknumber,
           'Latitude': latitude,
@@ -1072,13 +1156,13 @@ Future<Message> submitData(
           'ModeOfAcquisition': mode,
           'Disputed': disputed,
           'NatureOfDisputed': naturedisputed,
-          'SiteValue': double.parse(sitevalue),
+          'SiteValue': sitevalue,
           'Developed': developed,
           'DevelopmentApproved': developmnetapproved,
           'MainStructure': mainstructure,
           'Remarks': remarks,
-          'AreaInHa': double.parse(areainha),
-          'AccumulatedRates': double.parse(accumulatedrates)
+          'AreaInHa': areainha,
+          'AccumulatedRates': accumulatedrates
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {

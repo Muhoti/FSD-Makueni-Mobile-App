@@ -28,16 +28,14 @@ class _HomeState extends State<Home> {
 
   String total = '';
   String markets = '';
-  String subcounties = '';
-  String wards = '';
   dynamic data;
   String username = '';
-  List<dynamic> subcountyList = [];
+  List<dynamic> marketList = [];
 
-  List<dynamic> wardList = [];
+  List<dynamic> plotList = [];
 
-  List<FlSpot> subcountyData = [];
-  List<FlSpot> wardData = [];
+  List<FlSpot> marketData = [];
+  List<FlSpot> plotData = [];
 
   @override
   void initState() {
@@ -71,13 +69,13 @@ class _HomeState extends State<Home> {
         print("graph data is $data");
 
         setState(() {
-          subcountyList = data["subcounties"];
-          wardList = data["wards"];
-          print("subcounties are $subcountyList and wards are $wardList");
+          marketList = data["market"];
+          plotList = data["plots"];
+          print("Graph data set are $marketList and wards are $plotList");
         });
 
         // Populate subcounty data
-        subcountyData = subcountyList.asMap().entries.map((entry) {
+        marketData = marketList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
           final subcounty = entry.value["SubCounty"];
@@ -88,7 +86,7 @@ class _HomeState extends State<Home> {
         }).toList();
 
         // Populate ward data
-        wardData = wardList.asMap().entries.map((entry) {
+        plotData = plotList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
           final ward = entry.value["Ward"];
@@ -118,8 +116,7 @@ class _HomeState extends State<Home> {
         setState(() {
           total = data["Allplots"];
           markets = data["Markets"];
-          wards = data["Wards"];
-          subcounties = data["Subcounties"];
+         
         });
       } catch (e) {
         print(e);
@@ -219,31 +216,12 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: BlueBox(total: wards, name: "Wards"),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: BlueBox(total: subcounties, name: "Sub Counties"),
-                  ),
-                ],
-              ),
+             
               const SizedBox(
                 height: 24,
               ),
               const Text(
-                'SubCounties',
+                'Markets',
                 style: TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(255, 26, 114, 186),
@@ -266,13 +244,13 @@ class _HomeState extends State<Home> {
                           showTitles: true,
                           interval: 1,
                           getTitlesWidget: (value, meta) {
-                            if (subcountyList.isNotEmpty) {
+                            if (marketList.isNotEmpty) {
                               final index = value
                                   .toInt()
-                                  .clamp(0, subcountyList.length - 1);
+                                  .clamp(0, marketList.length - 1);
 
-                              return Text(subcountyList[index.toInt()]
-                                      ["SubCounty"] ??
+                              return Text(marketList[index.toInt()]
+                                      ["MarketID"] ??
                                   "");
                             } else
                               return Text("");
@@ -296,7 +274,7 @@ class _HomeState extends State<Home> {
                       maxY: 10,
                       lineBarsData: [
                         LineChartBarData(
-                          spots: subcountyData,
+                          spots: marketData,
                           isCurved: true,
                           color: Colors.blue,
                           dotData: FlDotData(show: true),
@@ -311,7 +289,7 @@ class _HomeState extends State<Home> {
                 height: 24,
               ),
               const Text(
-                'Wards',
+                'Plots',
                 style: TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(255, 26, 114, 186),
@@ -334,12 +312,12 @@ class _HomeState extends State<Home> {
                           showTitles: true,
                           interval: 1,
                           getTitlesWidget: (value, meta) {
-                            if (wardList.isNotEmpty) {
+                            if (plotList.isNotEmpty) {
                               final index =
-                                  value.toInt().clamp(0, wardList.length - 1);
+                                  value.toInt().clamp(0, plotList.length - 1);
 
                               return Text(
-                                  wardList[index.toInt()]["Ward"] ?? "");
+                                  plotList[index.toInt()]["NewPlotNumber"] ?? "");
                             } else {
                               return const Text("");
                             }
@@ -363,7 +341,7 @@ class _HomeState extends State<Home> {
                       maxY: 10,
                       lineBarsData: [
                         LineChartBarData(
-                          spots: subcountyData,
+                          spots: marketData,
                           isCurved: true,
                           color: Colors.blue,
                           dotData: FlDotData(show: true),
