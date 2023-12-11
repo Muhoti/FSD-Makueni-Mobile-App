@@ -1027,6 +1027,9 @@ Future<Message> submitData(
 
 
     if (editing == 'TRUE') {
+          var fieldOfficer = await storage.read(key: "Username");
+      print('field officer valuation: $fieldOfficer');
+
       response = await put(
         Uri.parse("${getUrl()}valuation/update/$id"),
         headers: <String, String>{
@@ -1078,7 +1081,10 @@ Future<Message> submitData(
           'MainStructure': mainstructure,
           'Remarks': remarks,
           'AreaInHa': double.parse(areainha),
-          'AccumulatedRates': double.parse(accumulatedrates)
+          'AccumulatedRates': double.parse(accumulatedrates),
+          'FirstApprover': '',
+          'SecondApprover': '',
+          'FieldOfficer': fieldOfficer
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {

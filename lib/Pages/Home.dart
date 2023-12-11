@@ -110,13 +110,15 @@ class _HomeState extends State<Home> {
           Uri.parse("${getUrl()}valuation/topstats/$username"),
         );
 
+        await storage.write(key: "Username", value: username);
+        var fo = await storage.read(key: 'Username');
+        print('field officer: $fo');
         var data = await json.decode(response.body);
         print("stats data is $data");
 
         setState(() {
           total = data["Allplots"];
           markets = data["Markets"];
-         
         });
       } catch (e) {
         print(e);
@@ -216,7 +218,6 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-             
               const SizedBox(
                 height: 24,
               ),
@@ -245,13 +246,11 @@ class _HomeState extends State<Home> {
                           interval: 1,
                           getTitlesWidget: (value, meta) {
                             if (marketList.isNotEmpty) {
-                              final index = value
-                                  .toInt()
-                                  .clamp(0, marketList.length - 1);
+                              final index =
+                                  value.toInt().clamp(0, marketList.length - 1);
 
-                              return Text(marketList[index.toInt()]
-                                      ["MarketID"] ??
-                                  "");
+                              return Text(
+                                  marketList[index.toInt()]["MarketID"] ?? "");
                             } else
                               return Text("");
                           },
@@ -316,8 +315,9 @@ class _HomeState extends State<Home> {
                               final index =
                                   value.toInt().clamp(0, plotList.length - 1);
 
-                              return Text(
-                                  plotList[index.toInt()]["NewPlotNumber"] ?? "");
+                              return Text(plotList[index.toInt()]
+                                      ["NewPlotNumber"] ??
+                                  "");
                             } else {
                               return const Text("");
                             }
