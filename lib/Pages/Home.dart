@@ -74,24 +74,24 @@ class _HomeState extends State<Home> {
           print("Graph data set are $marketList and wards are $plotList");
         });
 
-        // Populate subcounty data
+        // Populate market data
         marketData = marketList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
-          final subcounty = entry.value["SubCounty"];
+          final market = entry.value["MarketID"];
 
-          print('Subcounty values are:$index, $count, $subcounty');
+          print('Market values are:$index, $count, $market');
 
           return FlSpot(index, count);
         }).toList();
 
-        // Populate ward data
+        // Populate plot data
         plotData = plotList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
-          final ward = entry.value["Ward"];
+          final plot = entry.value["NewPlotNumber"];
 
-          print('Wards values are:$index, $count, $ward');
+          print('Plots values are:$index, $count, $plot');
 
           return FlSpot(index, count);
         }).toList();
@@ -249,8 +249,9 @@ class _HomeState extends State<Home> {
                               final index =
                                   value.toInt().clamp(0, marketList.length - 1);
 
-                              return Text(
-                                  marketList[index.toInt()]["MarketID"] ?? "");
+                              return Text(marketList[index.toInt()]["MarketID"]
+                                      .toString() ??
+                                  "");
                             } else
                               return Text("");
                           },
