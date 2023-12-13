@@ -1025,9 +1025,8 @@ Future<Message> submitData(
 
     print('editing form is $editing');
 
-
     if (editing == 'TRUE') {
-          var fieldOfficer = await storage.read(key: "Username");
+      var fieldOfficer = await storage.read(key: "Username");
       print('field officer valuation: $fieldOfficer');
 
       response = await put(
@@ -1097,6 +1096,11 @@ Future<Message> submitData(
         );
       }
     } else {
+      var propId = '0';
+
+      print(
+          "posted data $propId, $marketId, $newPlotNo, $tenure, $ownername, $idnumber, $length, $width, $lrno, $pinnumber, $landrates, $idtype, $nextofkin, $physicallocation, $postaladdress, $postalcode, $town, $mobile, $email, $gender, $coowners, $physicaladdress, $zone, $rateablevalue, $landratesarrears, $rentpayable, $rentareas, $penalty, $accumulatedpenalty, $status, $use, $blocknumber, $latitude, $longitude, $ownership, $mode, $disputed, $naturedisputed, $sitevalue, $developed, $developmnetapproved, $mainstructure, $remarks, $areainha, $accumulatedrates");
+
       response = await post(
         Uri.parse("${getUrl()}valuation/create"),
         headers: <String, String>{
@@ -1104,17 +1108,17 @@ Future<Message> submitData(
           'token': token!
         },
         body: jsonEncode(<String, dynamic>{
-          'PropertyID': propertyId,
-          'MarketID': marketId,
-          'NewPlotNumber': newPlotNo,
+          'PropertyID': int.parse(propId),
+          'MarketID': int.parse(marketId),
+          'NewPlotNumber': int.parse(newPlotNo),
           'Tenure': tenure,
           'OwnerName': ownername,
-          'IDNumber': idnumber,
-          'LengthInFt': length,
-          'WidthInFt': width,
+          'IDNumber': int.parse(idnumber),
+          'LengthInFt': double.parse(length),
+          'WidthInFt': double.parse(width),
           'LRNo': lrno,
           'PINNumber': pinnumber,
-          'LandRates': landrates,
+          'LandRates': double.parse(landrates),
           'IDType': idtype,
           'NextOfKin': nextofkin,
           'PhysicalLocation': physicallocation,
@@ -1127,13 +1131,13 @@ Future<Message> submitData(
           'CoOwners': coowners,
           'PhysicalAddress': physicaladdress,
           'Zone': zone,
-          'RateableValue': rateablevalue,
-          'LandRatesArrears': landratesarrears,
-          'RentPayable': rentpayable,
-          'RentAreas': rentareas,
-          'Penalty': penalty,
-          'AccumulatedPenalty': accumulatedpenalty,
-          'Status': status,
+          'RateableValue': double.parse(rateablevalue),
+          'LandRatesArrears': double.parse(landratesarrears),
+          'RentPayable': double.parse(rentpayable),
+          'RentAreas': double.parse(rentareas),
+          'Penalty': double.parse(penalty),
+          'AccumulatedPenalty': double.parse(accumulatedpenalty),
+          'Status': int.parse(status),
           'PropertyUseDescription': use,
           'BlockNumber': blocknumber,
           'Latitude': latitude,
@@ -1142,13 +1146,16 @@ Future<Message> submitData(
           'ModeOfAcquisition': mode,
           'Disputed': disputed,
           'NatureOfDisputed': naturedisputed,
-          'SiteValue': sitevalue,
+          'SiteValue': double.parse(sitevalue),
           'Developed': developed,
           'DevelopmentApproved': developmnetapproved,
           'MainStructure': mainstructure,
           'Remarks': remarks,
-          'AreaInHa': areainha,
-          'AccumulatedRates': accumulatedrates
+          'AreaInHa': double.parse(areainha),
+          'AccumulatedRates': double.parse(accumulatedrates),
+          'FirstApprover': '',
+          'SecondApprover': '',
+          'FieldOfficer': ''
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {
@@ -1166,7 +1173,7 @@ Future<Message> submitData(
     return Message(
       token: null,
       success: null,
-      error: "Connection to server failed!",
+      error: "Connection to server failed!!",
     );
   }
 }

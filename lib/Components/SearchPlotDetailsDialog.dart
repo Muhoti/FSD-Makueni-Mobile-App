@@ -141,7 +141,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
 
   addAttribute() {
     storage.write(key: "EDITING", value: "FALSE");
-    storage.write(key: "NewPlotNumber", value: "");
+    storage.write(key: "NewPlotNumber", value: "0");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
