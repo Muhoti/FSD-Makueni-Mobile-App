@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -118,7 +120,7 @@ class _RegisterState extends State<Register> {
                                 setState(() {
                                   isLoading =
                                       LoadingAnimationWidget.staggeredDotsWave(
-                                    color: Color.fromRGBO(0, 128, 0, 1),
+                                    color: const Color.fromRGBO(0, 128, 0, 1),
                                     size: 100,
                                   );
                                 });

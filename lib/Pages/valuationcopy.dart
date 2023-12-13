@@ -1,7 +1,6 @@
-// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, non_constant_identifier_names
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, non_constant_identifier_names, prefer_typing_uninitialized_variables, empty_catches
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -85,9 +84,6 @@ class _ValuationFormState extends State<ValuationFormCopy> {
     super.initState();
   }
 
-  void _openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
 
   isEditing() async {
     var edit = await storage.read(key: "EDITING");
@@ -97,14 +93,12 @@ class _ValuationFormState extends State<ValuationFormCopy> {
       newPlotNo = newplotno;
     });
 
-    print("editing is $editing, new plot no is $newPlotNo");
     if (editing == "TRUE") {
       getData(newPlotNo);
     } else {}
   }
 
   getData(int? newPlotNo) async {
-    print("valuation id is : $newPlotNo");
     try {
       final response = await get(
           Uri.parse(
@@ -115,31 +109,22 @@ class _ValuationFormState extends State<ValuationFormCopy> {
           });
 
       var data = json.decode(response.body);
-      print("valuation prefilling values: $data value");
-      print("propertyId Item: ${data["property"]["property_id"]}");
 
       setState(() {
         propertyId = int.parse(data["property"]["property_id"] ?? 0);
-        print("property id: $propertyId");
         marketId = int.parse(data["property"]["market_id"] ?? 0);
-        print("marketId id: $marketId");
 
         tenure = data["property"]["tenure"] ?? '';
-        print("tenure id: $tenure");
 
         ownername = data["property"]["owner_name"] ?? '';
-        print("ownername id: $ownername");
         // idnumber = data["property"]["national_id"] ?? '';
         // print("idnumber id: $idnumber");
 
         length = double.parse(data["property"]["length"] ?? 0.0);
-        print("length id: $length");
 
         width = double.parse(data["property"]["width"] ?? 0.0);
-        print("width: $width");
 
         lr_no = data["property"]["LR_number"] ?? '';
-        print("lr_no: $lr_no");
 
         // pinnumber = data["property"]["pin_number"] ?? 'PN008';
         // print("pinnumber: $pinnumber");
@@ -187,7 +172,6 @@ class _ValuationFormState extends State<ValuationFormCopy> {
         // print("rateablevalue: $rateablevalue");
 
         landratesarrears = data["property"]["rate"] ?? '';
-        print("landratesarrears: $landratesarrears");
 
         // rentpayable = double.parse(data["property"]["rent_payable"] ?? 0.0);
         // print("rentpayable: $rentpayable");
@@ -212,10 +196,8 @@ class _ValuationFormState extends State<ValuationFormCopy> {
         // print("blocknumber: $blocknumber");
 
         latitude = data["property"]["latitude"] ?? '';
-        print("latitude: $latitude");
 
         longitude = data["property"]["longitude"] ?? '';
-        print("longitude: $longitude");
 
         // ownership = data["property"]["TypeOfOwnership"] ?? '';
         // print("ownership: $ownership");
@@ -230,7 +212,6 @@ class _ValuationFormState extends State<ValuationFormCopy> {
         // print("naturedisputed: $naturedisputed");
 
         sitevalue = data["property"]["site_value"] ?? '';
-        print("sitevalue: $sitevalue");
 
         // developed = data["property"]["Developed"] ?? '';
         // print("developed: $developed");
@@ -245,14 +226,12 @@ class _ValuationFormState extends State<ValuationFormCopy> {
         // print("remarks: $remarks");
 
         areainha = data["property"]["area"] ?? '';
-        print("areainha: $areainha");
 
         // accumulatedrates =
         //     double.parse(data["property"]["AccumulatedRates"] ?? 0.0);
         // print("accumulatedrates: $accumulatedrates");
       });
     } catch (e) {
-      print('the error is $e');
     }
   }
 
@@ -319,7 +298,7 @@ class _ValuationFormState extends State<ValuationFormCopy> {
                                 ),
                               ),
                             ),
-                            UserContainer(),
+                            const UserContainer(),
                           ],
                         ),
                       ),
@@ -585,7 +564,7 @@ class _ValuationFormState extends State<ValuationFormCopy> {
                         gender = value;
                       });
                     },
-                    entries: ['--Select Gender--', 'Male', 'Female'],
+                    entries: const ['--Select Gender--', 'Male', 'Female'],
                     value: gender),
                 const SizedBox(
                   height: 10,
@@ -824,7 +803,7 @@ class _ValuationFormState extends State<ValuationFormCopy> {
                         disputed = value;
                       });
                     },
-                    entries: ['--Select Option--', 'Yes', 'No'],
+                    entries: const ['--Select Option--', 'Yes', 'No'],
                     value: disputed),
                 const SizedBox(
                   height: 10,
@@ -1105,10 +1084,8 @@ Future<Message> submitData(
 
     var response;
 
-    print("submitting id is $id");
     var editing = await storage.read(key: "EDITING");
 
-    print('editing form is $editing');
 
     if (editing == 'TRUE') {
       response = await put(
@@ -1240,7 +1217,6 @@ Future<Message> submitData(
       }
     }
   } catch (e) {
-    print('the error is $e');
     return Message(
       token: null,
       success: null,

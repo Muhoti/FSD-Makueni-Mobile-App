@@ -1,14 +1,16 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class UserContainer extends StatelessWidget {
-  UserContainer();
+  const UserContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 24, 24),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         height: 80,
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 233, 238, 240),
@@ -20,7 +22,7 @@ class UserContainer extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Spacer(),
+            const Spacer(),
             Image.asset(
               'assets/images/user.png',
               height: 40, // Adjust the image size as needed

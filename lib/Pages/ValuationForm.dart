@@ -1,7 +1,6 @@
-// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, file_names, non_constant_identifier_names, prefer_typing_uninitialized_variables, empty_catches
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -85,9 +84,6 @@ class _ValuationFormState extends State<ValuationForm> {
     super.initState();
   }
 
-  void _openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
 
   isEditing() async {
     var edit = await storage.read(key: "EDITING");
@@ -97,14 +93,12 @@ class _ValuationFormState extends State<ValuationForm> {
       newPlotNo = newplotno;
     });
 
-    print("editing is $editing, new plot no is $newPlotNo");
     if (editing == "TRUE") {
       getData(newPlotNo);
     } else {}
   }
 
   getData(String? newPlotNo) async {
-    print("valuation id is : $newPlotNo");
     try {
       final response = await get(
           Uri.parse(
@@ -115,8 +109,6 @@ class _ValuationFormState extends State<ValuationForm> {
           });
 
       var data = json.decode(response.body);
-      print("valuation prefilling values: $data value");
-      print("One Item: ${data["property"]["property_id"]}");
 
       setState(() {
         propertyId = data["property"]["property_id"] ?? '';
@@ -165,7 +157,6 @@ class _ValuationFormState extends State<ValuationForm> {
         accumulatedrates = data["property"]["AccumulatedRates"] ?? '';
       });
     } catch (e) {
-      print('the error is $e');
     }
   }
 
@@ -232,7 +223,7 @@ class _ValuationFormState extends State<ValuationForm> {
                                 ),
                               ),
                             ),
-                            UserContainer(),
+                            const UserContainer(),
                           ],
                         ),
                       ),
@@ -498,7 +489,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         gender = value;
                       });
                     },
-                    entries: ['--Select Gender--', 'Male', 'Female'],
+                    entries: const ['--Select Gender--', 'Male', 'Female'],
                     value: gender),
                 const SizedBox(
                   height: 10,
@@ -737,7 +728,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         disputed = value;
                       });
                     },
-                    entries: ['--Select Option--', 'Yes', 'No'],
+                    entries: const ['--Select Option--', 'Yes', 'No'],
                     value: disputed),
                 const SizedBox(
                   height: 10,
@@ -863,8 +854,6 @@ class _ValuationFormState extends State<ValuationForm> {
                   child: SubmitButton(
                     label: "Submit",
                     onButtonPressed: () async {
-                      print(
-                          "submitting: $marketId, $tenure, $ownername, $idtype, $idnumber, $length, $width, $lr_no, $pinnumber, $landrates, $nextofkin, $physicallocation, $postaladdress, $town, $mobile, $email, $coowners, $physicaladdress, $zone, $rateablevalue, $landratesarrears, $rentpayable, $rentareas, $penalty, $accumulatedpenalty, $status, $use, $blocknumber, $latitude, $longitude, $ownership, $mode, $disputed, $naturedisputed, $sitevalue, $developed, $developmnetapproved, $mainstructure, $remarks, $areainha, $accumulatedrates");
                       setState(() {
                         isLoading = LoadingAnimationWidget.staggeredDotsWave(
                           color: const Color.fromARGB(255, 26, 114, 186),
@@ -1020,14 +1009,11 @@ Future<Message> submitData(
 
     var response;
 
-    print("submitting id is $id");
     var editing = await storage.read(key: "EDITING");
 
-    print('editing form is $editing');
 
     if (editing == 'TRUE') {
       var fieldOfficer = await storage.read(key: "Username");
-      print('field officer valuation: $fieldOfficer');
 
       response = await put(
         Uri.parse("${getUrl()}valuation/update/$id"),
@@ -1098,8 +1084,6 @@ Future<Message> submitData(
     } else {
       var propId = '0';
 
-      print(
-          "posted data $propId, $marketId, $newPlotNo, $tenure, $ownername, $idnumber, $length, $width, $lrno, $pinnumber, $landrates, $idtype, $nextofkin, $physicallocation, $postaladdress, $postalcode, $town, $mobile, $email, $gender, $coowners, $physicaladdress, $zone, $rateablevalue, $landratesarrears, $rentpayable, $rentareas, $penalty, $accumulatedpenalty, $status, $use, $blocknumber, $latitude, $longitude, $ownership, $mode, $disputed, $naturedisputed, $sitevalue, $developed, $developmnetapproved, $mainstructure, $remarks, $areainha, $accumulatedrates");
 
       response = await post(
         Uri.parse("${getUrl()}valuation/create"),
@@ -1169,7 +1153,6 @@ Future<Message> submitData(
       }
     }
   } catch (e) {
-    print('the error is $e');
     return Message(
       token: null,
       success: null,

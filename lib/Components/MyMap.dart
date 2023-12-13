@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,9 +8,7 @@ import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/SearchPlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
-import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
-import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'Utils.dart';
 import 'dart:io';
@@ -54,7 +54,6 @@ class _MyMapState extends State<MyMap> {
       Map<String, dynamic> pointCoords, Map<String, dynamic> receivedData) {
     const storage = FlutterSecureStorage();
 
-    print("compute coordinates: coords is: ${receivedData["NewPlotNumber"]}");
 
     // setState(() {
     //   coords = pointCoords;
@@ -66,7 +65,6 @@ class _MyMapState extends State<MyMap> {
 
     var newPlotNo = receivedData["NewPlotNumber"];
 
-    print("plot number is $newPlotNo");
 
     if (newPlotNo != null) {
       _displayPlotDetailsDialog(newPlotNo);
@@ -75,9 +73,6 @@ class _MyMapState extends State<MyMap> {
     }
   }
 
-  void _openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
 
 // It displays the details of the parcel selected.
   _displayPlotDetailsDialog(newPlotNo) {
@@ -142,7 +137,6 @@ class _MyMapState extends State<MyMap> {
                   final Map<String, dynamic> receivedData =
                       jsonDecode(message.message);
 
-                  print("current data: $computedCoordinate, $receivedData");
                   // Call the Flutter method to set 'data'
                   computePointCoordinates(computedCoordinate, receivedData);
                 },
@@ -179,7 +173,7 @@ class _MyMapState extends State<MyMap> {
                   ),
                 ),
               ),
-              UserContainer(),
+              const UserContainer(),
             ],
           ),
           // Padding(

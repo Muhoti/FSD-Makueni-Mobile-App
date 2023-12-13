@@ -1,6 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Models/SearchItem.dart';
@@ -96,11 +97,9 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
             'Content-Type': 'application/json; charset=UTF-8'
           });
 
-      print("searching Name: $v");
 
       var data = json.decode(response.body);
 
-      print("data is $data[0]");
 
       // plotNumber = data[0]["NewPlotNumber"];
       // plotName = data[0]["OwnerName"];
@@ -109,7 +108,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
       setState(() {
         entries.clear();
         for (var item in data) {
-          print("test item is ${item["OwnerName"]}, ${item["NewPlotNumber"]}");
           entries.add(SearchItem(item["OwnerName"], item["NewPlotNumber"]));
 
           // switch (searchItem) {
@@ -147,7 +145,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
   }
 
   void _keyboardVisibility() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.addListener(() {
         final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
         if (isKeyboardOpen != _isKeyboardVisible) {

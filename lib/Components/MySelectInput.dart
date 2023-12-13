@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class MySelectInput extends StatefulWidget {
@@ -23,14 +25,15 @@ class _MySelectInputState extends State<MySelectInput> {
 
   @override
   void initState() {
-    if (widget.entries.length > 0) {
+    if (widget.entries.isNotEmpty) {
       setState(() {
         if (widget.entries.contains(widget.value)) {
           selected = widget.value;
-        } else
+        } else {
           selected = widget.entries[0];
+        }
         menuItems = widget.entries
-            .map((item) => DropdownMenuItem(child: Text(item), value: item))
+            .map((item) => DropdownMenuItem(value: item, child: Text(item)))
             .toList();
       });
     }
@@ -39,17 +42,17 @@ class _MySelectInputState extends State<MySelectInput> {
 
   @override
   void didUpdateWidget(covariant MySelectInput oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (widget.entries.isNotEmpty) {
       setState(() {
         if (widget.entries.contains(widget.value)) {
           selected = widget.value;
-        } else
+        } else {
           selected = widget.entries[0];
+        }
         menuItems = widget.entries
-            .map((item) => DropdownMenuItem(child: Text(item), value: item))
+            .map((item) => DropdownMenuItem(value: item, child: Text(item)))
             .toList();
       });
     }
@@ -59,7 +62,7 @@ class _MySelectInputState extends State<MySelectInput> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: DropdownButtonFormField(
             items: menuItems,

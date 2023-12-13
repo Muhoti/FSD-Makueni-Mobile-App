@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/ChangePasswordDialog.dart';
@@ -202,7 +204,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ],
               ),
             ),
-            Align(alignment: Alignment.bottomLeft, child: FootNote())
+            const Align(alignment: Alignment.bottomLeft, child: FootNote())
           ],
         ),
       ),

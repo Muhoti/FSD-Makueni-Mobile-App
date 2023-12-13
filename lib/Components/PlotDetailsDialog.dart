@@ -1,15 +1,11 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, empty_catches, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
-import 'package:fsd_makueni_mobile_app/Models/SearchItem.dart';
 import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -37,7 +33,6 @@ class _PlotDetailsState extends State<PlotDetails> {
   final storage = const FlutterSecureStorage();
 
   updateParcelDetails(data) {
-    print("dialog plot no is $newPlotNo");
     storage.write(key: "NewPlotNumber", value: newPlotNo);
         storage.write(key: "EDITING", value: "TRUE");
 
@@ -60,7 +55,6 @@ class _PlotDetailsState extends State<PlotDetails> {
       );
 
       var data = json.decode(response.body);
-      print("powerbase data: ${data} ");
       setState(() {
         newPlotNo = data[0]["NewPlotNumber"];
         id = data[0]["NewPlotNumber"];

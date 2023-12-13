@@ -1,4 +1,4 @@
-import 'dart:async';
+// ignore_for_file: prefer_typing_uninitialized_variables, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -18,30 +18,29 @@ class _MapPageState extends State<MapPage> {
   late LocationPermission permission;
   bool haspermission = false;
   late Position position;
-  var long = null, lat = null;
+  var long;
+  var lat;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   getUserLocation() async {
     LocationPermission perm = await Geolocator.checkPermission();
-    print(perm);
-    if (perm == LocationPermission.always || perm == LocationPermission.whileInUse) {
+    if (perm == LocationPermission.always ||
+        perm == LocationPermission.whileInUse) {
       position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       setState(() {
         long = position.longitude;
         lat = position.latitude;
       });
-      
-      print("the latitude and long are $lat, $long");
+
 
       LocationSettings locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 1,
       );
-      
-      StreamSubscription<Position> positionStream =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position position) {
+
+      Geolocator.getPositionStream(locationSettings: locationSettings)
+          .listen((Position position) {
         setState(() {
           long = position.longitude;
           lat = position.latitude;
@@ -89,7 +88,7 @@ class _MapPageState extends State<MapPage> {
       home: Scaffold(
         key: _scaffoldKey,
         body: Container(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           child: Column(
             children: [
               Expanded(
@@ -99,7 +98,7 @@ class _MapPageState extends State<MapPage> {
                           lat: lat,
                           lon: long,
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                 ),
               ),
             ],

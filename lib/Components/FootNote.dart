@@ -1,16 +1,16 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextOakar.dart';
-import 'package:fsd_makueni_mobile_app/Components/TextSmall.dart';
 
 class FootNote extends StatelessWidget {
-  FootNote();
+  const FootNote({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 24, 24),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.blue,
           borderRadius: const BorderRadius.only(
@@ -26,9 +26,9 @@ class FootNote extends StatelessWidget {
             ),
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Column(
-            children: const [
+            children: [
               Text(
                 'Powered By',
                 style: TextStyle(

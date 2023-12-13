@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:fsd_makueni_mobile_app/Components/ChangePasswordDialog.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
@@ -39,7 +41,7 @@ class MLDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) =>  Home()));
+                    context, MaterialPageRoute(builder: (_) =>  const Home()));
               },
             ),
             ListTile(
@@ -82,7 +84,7 @@ class MLDrawer extends StatelessWidget {
                 style: style,
               ),
               onTap: () {
-                final store = new FlutterSecureStorage();
+                const store = FlutterSecureStorage();
                 store.deleteAll();
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (_) => const Login()));

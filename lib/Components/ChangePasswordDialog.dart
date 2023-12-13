@@ -1,7 +1,7 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, file_names
+
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
@@ -76,7 +76,7 @@ class _ForgetPasswordDialogState extends State<ChangePasswordDialog> {
                 onButtonPressed: () async {
                   setState(() {
                     isLoading = LoadingAnimationWidget.staggeredDotsWave(
-                      color: Color.fromRGBO(0, 128, 0, 1),
+                      color: const Color.fromRGBO(0, 128, 0, 1),
                       size: 100,
                     );
                   });
@@ -126,7 +126,6 @@ Future<Message> changePassword(FlutterSecureStorage storage, String oldpassword,
     var decoded = parseJwt(token.toString());
 
     var id = decoded["UserID"];
-    print("change password id is $id");
 
     final response = await http.put(
       Uri.parse("${getUrl()}mobile/$id"),

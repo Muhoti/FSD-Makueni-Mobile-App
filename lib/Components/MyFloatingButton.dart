@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 
 class MyFloatingButton extends StatefulWidget {
@@ -22,7 +24,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
         ),
         elevation: 6, // Shadow elevation
         onPressed: widget.onButtonPressed,
-        child: Icon(Icons.map, color: Colors.white),
+        child: const Icon(Icons.map, color: Colors.white),
         // child: Text(
         //   widget.label,
         //   style: const TextStyle(

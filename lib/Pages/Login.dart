@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, file_names, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -189,8 +189,6 @@ class _LoginState extends State<Login> {
                                               size: 100,
                                             );
                                           });
-                                          print("login beginning");
-                                          print("the error is $error");
                                           var res =
                                               await login(email, password);
                                           setState(() {
@@ -202,7 +200,6 @@ class _LoginState extends State<Login> {
                                             }
                                           });
                                           if (res.error == null) {
-                                            print("token stored");
                                             await storage.write(
                                                 key: 'mljwt', value: res.token);
                                             // PROCEED TO NEXT PAGE
@@ -218,7 +215,7 @@ class _LoginState extends State<Login> {
                       )
                     ],
                   ),
-                  Align(alignment: Alignment.bottomLeft, child: FootNote())
+                  const Align(alignment: Alignment.bottomLeft, child: FootNote())
                 ],
               ),
             ),

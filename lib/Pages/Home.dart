@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, empty_catches
 
 import 'dart:convert';
 
@@ -7,7 +7,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
-import 'package:fsd_makueni_mobile_app/Components/MyFloatingButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserProfileDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
@@ -47,7 +46,6 @@ class _HomeState extends State<Home> {
     var token = await storage.read(key: "mljwt");
     var decoded = parseJwt(token.toString());
 
-    print("decoded $decoded");
 
     setState(() {
       username = decoded["Name"];
@@ -66,21 +64,17 @@ class _HomeState extends State<Home> {
         );
 
         var data = await json.decode(response.body);
-        print("graph data is $data");
 
         setState(() {
           marketList = data["market"];
           plotList = data["plots"];
-          print("Graph data set are $marketList and wards are $plotList");
         });
 
         // Populate market data
         marketData = marketList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
-          final market = entry.value["MarketID"];
 
-          print('Market values are:$index, $count, $market');
 
           return FlSpot(index, count);
         }).toList();
@@ -89,14 +83,11 @@ class _HomeState extends State<Home> {
         plotData = plotList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
-          final plot = entry.value["NewPlotNumber"];
 
-          print('Plots values are:$index, $count, $plot');
 
           return FlSpot(index, count);
         }).toList();
       } catch (e) {
-        print(e);
       }
     } catch (e) {}
   }
@@ -105,23 +96,18 @@ class _HomeState extends State<Home> {
     try {
       // Prefill Form
       try {
-        print("the name is $username");
         final response = await get(
           Uri.parse("${getUrl()}valuation/topstats/$username"),
         );
 
         await storage.write(key: "Username", value: username);
-        var fo = await storage.read(key: 'Username');
-        print('field officer: $fo');
         var data = await json.decode(response.body);
-        print("stats data is $data");
 
         setState(() {
           total = data["Allplots"];
           markets = data["Markets"];
         });
       } catch (e) {
-        print(e);
       }
     } catch (e) {}
   }
@@ -171,7 +157,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     GestureDetector(
-                        onTap: _openUserProfileDialog, child: UserContainer()),
+                        onTap: _openUserProfileDialog, child: const UserContainer()),
                   ],
                 ),
               ),
@@ -250,10 +236,10 @@ class _HomeState extends State<Home> {
                                   value.toInt().clamp(0, marketList.length - 1);
 
                               return Text(marketList[index.toInt()]["MarketID"]
-                                      .toString() ??
-                                  "");
-                            } else
-                              return Text("");
+                                      .toString());
+                            } else {
+                              return const Text("");
+                            }
                           },
                         )),
                         topTitles: AxisTitles(

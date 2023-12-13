@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
 
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-         if (permission == LocationPermission.deniedForever) {
+        if (permission == LocationPermission.deniedForever) {
           permission = await Geolocator.requestPermission();
         } else {
           haspermission = true;
@@ -67,7 +67,6 @@ class _MyAppState extends State<MyApp> {
         content: Text(
             "Location is required! You will be logged out. Please turn on your location"),
       ));
-     
     }
   }
 
@@ -83,9 +82,9 @@ class _MyAppState extends State<MyApp> {
       accuracy: LocationAccuracy.high,
       distanceFilter: 1,
     );
-    StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position position) {
+
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
       setState(() {
         long = position.longitude;
         lat = position.latitude;
@@ -152,7 +151,7 @@ class _MyAppState extends State<MyApp> {
                   ],
                 )),
               ),
-              Align(alignment: Alignment.bottomLeft, child: FootNote())
+              const Align(alignment: Alignment.bottomLeft, child: FootNote())
             ],
           ),
         ),
