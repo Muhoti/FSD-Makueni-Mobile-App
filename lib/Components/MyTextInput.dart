@@ -9,7 +9,7 @@ class MyTextInput extends StatefulWidget {
   final TextInputType type;
   final Function(String) onSubmit;
 
-  MyTextInput({
+  const MyTextInput({
     Key? key,
     required this.title,
     required this.lines,
