@@ -84,7 +84,6 @@ class _ValuationFormState extends State<ValuationForm> {
     super.initState();
   }
 
-
   isEditing() async {
     var edit = await storage.read(key: "EDITING");
     var newplotno = (await storage.read(key: "NewPlotNumber"));
@@ -156,8 +155,7 @@ class _ValuationFormState extends State<ValuationForm> {
         areainha = data["property"]["area"] ?? '';
         accumulatedrates = data["property"]["AccumulatedRates"] ?? '';
       });
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   @override
@@ -1011,7 +1009,6 @@ Future<Message> submitData(
 
     var editing = await storage.read(key: "EDITING");
 
-
     if (editing == 'TRUE') {
       var fieldOfficer = await storage.read(key: "Username");
 
@@ -1082,8 +1079,8 @@ Future<Message> submitData(
         );
       }
     } else {
-      var propId = '0';
-
+      // print(
+      //     "$marketId, $newPlotNo, $tenure, $ownername, $idnumber, $length, $width, $lrno, $pin");
 
       response = await post(
         Uri.parse("${getUrl()}valuation/create"),
@@ -1092,7 +1089,7 @@ Future<Message> submitData(
           'token': token!
         },
         body: jsonEncode(<String, dynamic>{
-          'PropertyID': int.parse(propId),
+          'PropertyID': null,
           'MarketID': int.parse(marketId),
           'NewPlotNumber': int.parse(newPlotNo),
           'Tenure': tenure,

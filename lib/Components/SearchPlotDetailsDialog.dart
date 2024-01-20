@@ -97,9 +97,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
             'Content-Type': 'application/json; charset=UTF-8'
           });
 
-
       var data = json.decode(response.body);
-
 
       // plotNumber = data[0]["NewPlotNumber"];
       // plotName = data[0]["OwnerName"];
@@ -333,7 +331,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                       ),
                     ),
                   )
-                :  const SizedBox(
+                : const SizedBox(
                     height: 10,
                   ),
             Row(
@@ -360,17 +358,17 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
               child: SubmitButton(
                 label: "New Valuation Record",
                 onButtonPressed: () {
-                  isChecked
-                      ? addAttribute()
-                      : () {
-                          Fluttertoast.showToast(
-                            msg: "Checkbox not checked!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.black87,
-                            textColor: Colors.black,
-                          );
-                        };
+                  if (isChecked) {
+                    addAttribute();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Checkbox not checked!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM, // Set gravity to TOP
+                      backgroundColor: Colors.black87,
+                      textColor: Colors.white,
+                    );
+                  }
                 },
               ),
             ),
