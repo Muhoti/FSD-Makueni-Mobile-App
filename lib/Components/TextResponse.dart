@@ -15,12 +15,14 @@ class _TextResponseState extends State<TextResponse> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
-      child: Text(widget.label,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.deepOrange,
-      ),),
+      child: Text(
+        widget.label,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.yellowAccent,
+        ),
+      ),
     );
   }
 }

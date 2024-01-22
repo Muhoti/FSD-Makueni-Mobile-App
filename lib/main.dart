@@ -8,6 +8,7 @@ import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -27,19 +28,6 @@ class _MyAppState extends State<MyApp> {
   bool servicestatus = false;
   late LocationPermission permission;
   bool haspermission = false;
-  late Position position;
-  var long = 0.0, lat = 0.0;
-
-  Future<void> authenticateUser() async {
-    var token = await storage.read(key: 'mljwt');
-    if (token != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const Home()));
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const Login()));
-    }
-  }
 
   promptUserForLocation() async {
     servicestatus = await Geolocator.isLocationServiceEnabled();
@@ -59,8 +47,6 @@ class _MyAppState extends State<MyApp> {
 
       if (haspermission) {
         storage.write(key: 'haspermission', value: "true");
-        // Call getLocation Function on Home page
-        //getLocation();
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -70,34 +56,13 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  getLocation() async {
-    position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      long = position.longitude;
-      lat = position.latitude;
-    });
-
-    LocationSettings locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 1,
-    );
-
-    Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position position) {
-      setState(() {
-        long = position.longitude;
-        lat = position.latitude;
-      });
-    });
-  }
-
   @override
   void initState() {
     promptUserForLocation();
 
-    Timer(const Duration(seconds: 3), () {
-      authenticateUser();
+    Timer(const Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const Login()));
     });
     super.initState();
   }
@@ -110,50 +75,62 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/bg.png'), // Replace with your image path
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(48, 24, 48, 0),
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        width: 200, // Set the desired width
-                      ),
-                    ),
-                    const Text(
-                      'MLIMS',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 28,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const Text(
-                      'Mapping App',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                  ],
-                )),
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(26, 114, 186, 1),
+                  Color.fromRGBO(49, 161, 254, 1)
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              )),
+              padding: const EdgeInsets.fromLTRB(0, 50, 24, 0),
+              child: Column(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(48, 24, 48, 0),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            width: 200, // Set the desired width
+                          ),
+                        ),
+                        const Text(
+                          'MLIMS',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 28,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const Text(
+                          'Mapping App',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ],
+                    )),
+                  ),
+                  const Align(
+                      alignment: Alignment.bottomLeft, child: FootNote())
+                ],
               ),
-              const Align(alignment: Alignment.bottomLeft, child: FootNote())
-            ],
-          ),
+            ),
+            Center(
+              child: LoadingAnimationWidget.horizontalRotatingDots(
+                  color: Colors.yellow, size: 100),
+            )
+          ],
         ),
       ),
     );

@@ -18,7 +18,8 @@ class _SubmitButtonState extends State<SubmitButton> {
       padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 49, 162, 255),
+              elevation: 10,
+              backgroundColor: Colors.yellow,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0), // Rounded corners
               ),
@@ -26,7 +27,7 @@ class _SubmitButtonState extends State<SubmitButton> {
           onPressed: widget.onButtonPressed,
           child: Text(
             widget.label,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16, color: Colors.blue),
           )),
     );
   }

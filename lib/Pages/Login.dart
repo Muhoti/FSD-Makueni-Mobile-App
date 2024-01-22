@@ -44,184 +44,153 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/bg.png'), // Replace with your image path
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          width: 200, // Set the desired width
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(26, 114, 186, 1),
+                Color.fromRGBO(49, 161, 254, 1)
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            )),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 50,
                         ),
-                      ),
-                      const Text(
-                        'MLIMS',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        'Haven of Opportunities',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(48),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            width: 200, // Set the desired width
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
-                            child: Column(
-                              children: [
-                                Form(
-                                    child: Center(
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                      const Text(
-                                        'Login',
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        const Text(
+                          'Data Collection App',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 36,
+                              color: Colors.yellowAccent,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 40, 24, 0),
+                          child: Column(
+                            children: [
+                              Form(
+                                  child: Center(
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                    const Text(
+                                      'Staff Login',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 28,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    TextResponse(label: error),
+                                    MyTextInput(
+                                      title: 'Email Address',
+                                      lines: 1,
+                                      value: '',
+                                      type: TextInputType.emailAddress,
+                                      onSubmit: (value) {
+                                        setState(() {
+                                          email = value;
+                                        });
+                                      },
+                                    ),
+                                    MyTextInput(
+                                      title: 'Password',
+                                      lines: 1,
+                                      value: '',
+                                      type: TextInputType.visiblePassword,
+                                      onSubmit: (value) {
+                                        setState(() {
+                                          password = value;
+                                        });
+                                      },
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              const ForgetPasswordDialog(),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Forgot Password?',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: 28,
-                                            color: Color.fromARGB(
-                                                255, 26, 114, 186),
+                                            fontSize: 18,
+                                            color: Colors.white70,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      TextResponse(label: error),
-                                      MyTextInput(
-                                        title: 'Email Address',
-                                        lines: 1,
-                                        value: '',
-                                        type: TextInputType.emailAddress,
-                                        onSubmit: (value) {
-                                          setState(() {
-                                            email = value;
-                                          });
-                                        },
-                                      ),
-                                      MyTextInput(
-                                        title: 'Password',
-                                        lines: 1,
-                                        value: '',
-                                        type: TextInputType.visiblePassword,
-                                        onSubmit: (value) {
-                                          setState(() {
-                                            password = value;
-                                          });
-                                        },
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Text(
-                                            'Forgot Password?',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Show the ForgetPasswordDialog when the "Forget Password" link is clicked.
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    const ForgetPasswordDialog(),
-                                              );
-                                            },
-                                            child: const Text(
-                                              'Click Here',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.blue,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SubmitButton(
-                                        label: "Submit",
-                                        onButtonPressed: () async {
-                                          setState(() {
-                                            isLoading = LoadingAnimationWidget
-                                                .staggeredDotsWave(
-                                              color: const Color.fromARGB(
-                                                  255, 26, 114, 186),
-                                              size: 100,
-                                            );
-                                          });
-                                          var res =
-                                              await login(email, password);
-                                          setState(() {
-                                            isLoading = null;
-                                            if (res.error == null) {
-                                              error = res.success;
-                                            } else {
-                                              error = res.error;
-                                            }
-                                          });
+                                    ),
+                                    SubmitButton(
+                                      label: "Submit",
+                                      onButtonPressed: () async {
+                                        setState(() {
+                                          error = "";
+                                          isLoading = LoadingAnimationWidget
+                                              .horizontalRotatingDots(
+                                                  color: Colors.yellow,
+                                                  size: 100);
+                                        });
+                                        var res = await login(email, password);
+                                        setState(() {
+                                          isLoading = null;
                                           if (res.error == null) {
-                                            await storage.write(
-                                                key: 'mljwt', value: res.token);
-                                            // PROCEED TO NEXT PAGE
-                                            verifyUser(res.token);
+                                            error = res.success;
+                                          } else {
+                                            error = res.error;
                                           }
-                                        },
-                                      ),
-                                    ]))),
-                              ],
-                            ),
+                                        });
+                                        if (res.error == null) {
+                                          await storage.write(
+                                              key: 'mljwt', value: res.token);
+                                          verifyUser(res.token);
+                                        }
+                                      },
+                                    ),
+                                  ]))),
+                            ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const Align(alignment: Alignment.bottomLeft, child: FootNote())
-                ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
+          Center(
+            child: isLoading,
+          )
+        ],
+      ),
+    );
   }
 }
 

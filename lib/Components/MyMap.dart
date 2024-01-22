@@ -99,7 +99,7 @@ class _MyMapState extends State<MyMap> {
   @override
   void initState() {
     if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
+      // WebView.platform = SurfaceAndroidWebView();
     }
 
     super.initState();
@@ -112,50 +112,50 @@ class _MyMapState extends State<MyMap> {
       drawer: const MyDrawer(),
       body: Stack(
         children: [
-          WebView(
-            initialUrl: "${getUrl()}map",
-            javascriptMode: JavascriptMode.unrestricted,
-            javascriptChannels: {
-              // JavascriptChannel(
-              //   name: 'setDataFromJavaScript',
-              //   onMessageReceived: (JavascriptMessage message) {
-              //     // Parse the JSON data received from JavaScript
-              //     final Map<String, dynamic> receivedData =
-              //         jsonDecode(message.message);
-              //     print("received data: $receivedData");
-              //     // Call the Flutter method to set 'data'
-              //     setDataFromJavaScript(receivedData);
-              //   },
-              // ),
-              JavascriptChannel(
-                name: 'computePointCoordinates',
-                onMessageReceived: (JavascriptMessage message) {
-                  // Parse the JSON data received from JavaScript
-                  final Map<String, dynamic> computedCoordinate =
-                      jsonDecode(message.message);
+          // WebView(
+          //   initialUrl: "${getUrl()}map",
+          //   javascriptMode: JavascriptMode.unrestricted,
+          //   javascriptChannels: {
+          //     // JavascriptChannel(
+          //     //   name: 'setDataFromJavaScript',
+          //     //   onMessageReceived: (JavascriptMessage message) {
+          //     //     // Parse the JSON data received from JavaScript
+          //     //     final Map<String, dynamic> receivedData =
+          //     //         jsonDecode(message.message);
+          //     //     print("received data: $receivedData");
+          //     //     // Call the Flutter method to set 'data'
+          //     //     setDataFromJavaScript(receivedData);
+          //     //   },
+          //     // ),
+          //     JavascriptChannel(
+          //       name: 'computePointCoordinates',
+          //       onMessageReceived: (JavascriptMessage message) {
+          //         // Parse the JSON data received from JavaScript
+          //         final Map<String, dynamic> computedCoordinate =
+          //             jsonDecode(message.message);
 
-                  final Map<String, dynamic> receivedData =
-                      jsonDecode(message.message);
+          //         final Map<String, dynamic> receivedData =
+          //             jsonDecode(message.message);
 
-                  // Call the Flutter method to set 'data'
-                  computePointCoordinates(computedCoordinate, receivedData);
-                },
-              ),
-            },
-            onWebViewCreated: (WebViewController webViewController) {
-              controller = webViewController;
+          //         // Call the Flutter method to set 'data'
+          //         computePointCoordinates(computedCoordinate, receivedData);
+          //       },
+          //     ),
+          //   },
+          //   onWebViewCreated: (WebViewController webViewController) {
+          //     controller = webViewController;
 
-              // Call the JavaScript function to adjust the marker.....REMOVE THIS IF NOT NEEDED
-              // webViewController.evaluateJavascript(
-              //     "adjustMarker('${widget.lon}','${widget.lat}')");
-            },
-            onPageFinished: (v) {
-              // After the page is loaded, call the JavaScript function again .....REMOVE THIS IF NOT NEEDED
-              // controller.evaluateJavascript(
-              //   "adjustMarker('${widget.lon}','${widget.lat}')",
-              // );
-            },
-          ),
+          //     // Call the JavaScript function to adjust the marker.....REMOVE THIS IF NOT NEEDED
+          //     // webViewController.evaluateJavascript(
+          //     //     "adjustMarker('${widget.lon}','${widget.lat}')");
+          //   },
+          //   onPageFinished: (v) {
+          //     // After the page is loaded, call the JavaScript function again .....REMOVE THIS IF NOT NEEDED
+          //     // controller.evaluateJavascript(
+          //     //   "adjustMarker('${widget.lon}','${widget.lat}')",
+          //     // );
+          //   },
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

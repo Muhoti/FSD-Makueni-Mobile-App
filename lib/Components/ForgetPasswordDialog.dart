@@ -26,50 +26,56 @@ class _ForgetPasswordDialogState extends State<ForgetPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text("Enter Email",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                    fontSize: 24, color: Color.fromARGB(255, 26, 114, 186))),
-            TextResponse(label: error),
-            MyTextInput(
-              title: 'Email',
-              lines: 1,
-              value: '',
-              type: TextInputType.emailAddress,
-              onSubmit: (value) {
-                setState(() {
-                  email = value;
-                });
-              },
-            ),
-            SubmitButton(
-              label: "Submit",
-              onButtonPressed: () async {
-                setState(() {
-                  isLoading = LoadingAnimationWidget.staggeredDotsWave(
-                    color: const Color.fromRGBO(0, 128, 0, 1),
-                    size: 100,
-                  );
-                });
-                var res = await recoverPassword(email);
-                setState(() {
-                  isLoading = null;
-                  if (res.error == null) {
-                    error = res.success;
-                  } else {
-                    error = res.error;
-                  }
-                });
-              },
-            ),
-          ],
+    return Stack(
+      children: [
+        AlertDialog(
+          backgroundColor: const Color.fromRGBO(49, 161, 254, 1),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Reset Password",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                      color: Colors.white)),
+              if (error != '') TextResponse(label: error),
+              MyTextInput(
+                title: 'Email',
+                lines: 1,
+                value: '',
+                type: TextInputType.emailAddress,
+                onSubmit: (value) {
+                  setState(() {
+                    email = value;
+                  });
+                },
+              ),
+              SubmitButton(
+                label: "Submit",
+                onButtonPressed: () async {
+                  setState(() {
+                    error = "";
+                    isLoading = LoadingAnimationWidget.horizontalRotatingDots(
+                        color: Colors.yellow, size: 100);
+                  });
+                  var res = await recoverPassword(email);
+                  setState(() {
+                    isLoading = null;
+                    if (res.error == null) {
+                      error = res.success;
+                    } else {
+                      error = res.error;
+                    }
+                  });
+                },
+              ),
+            ],
+          ),
         ),
-      ),
+        Center(
+          child: isLoading,
+        )
+      ],
     );
   }
 }
