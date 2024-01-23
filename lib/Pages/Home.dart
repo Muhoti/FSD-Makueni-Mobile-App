@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/BlueBox.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fsd_makueni_mobile_app/Components/HomeItem.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/UserProfileDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
+import 'package:fsd_makueni_mobile_app/Models/StatItem.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 
@@ -140,61 +142,62 @@ class _HomeState extends State<Home> {
         )),
         constraints: const BoxConstraints.tightForFinite(),
         padding: const EdgeInsets.fromLTRB(24, 44, 24, 24),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-                child: GestureDetector(
-                  onTap: _openDrawer,
-                  child: const Icon(
-                    Icons.menu,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+              child: GestureDetector(
+                onTap: _openDrawer,
+                child: const Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Welcome',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 36,
                     color: Colors.white,
-                  ),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                username,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 24, color: Colors.white70),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: BlueBox(total: total, name: "Today"),
                 ),
-              ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Welcome',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 36,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                const SizedBox(
+                  width: 12,
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  username,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 24, color: Colors.white70),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: BlueBox(total: markets, name: "Total"),
                 ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: BlueBox(total: total, name: "Today"),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: BlueBox(total: markets, name: "Total"),
-                  ),
-                ],
-              ),
-            ],
-          ),
+              ],
+            ),
+            HomeItem(
+              list: [],
+            ),
+          ],
         ),
       ),
     );
