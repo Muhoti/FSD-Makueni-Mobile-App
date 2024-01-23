@@ -230,6 +230,7 @@ Future<Message> login(String email, String password) async {
       );
     }
   } catch (e) {
+    print("error $e");
     return Message(
       token: null,
       success: null,

@@ -19,8 +19,7 @@ class _YellowButtonState extends State<YellowButton> {
       padding: const EdgeInsets.only(top: 8),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  const Color.fromARGB(255, 255, 193, 7), // Yellow color
+              backgroundColor: Colors.yellow, // Yellow color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0), // Rounded corners
               ),
@@ -30,10 +29,8 @@ class _YellowButtonState extends State<YellowButton> {
           onPressed: widget.onButtonPressed,
           child: Text(
             widget.label,
-            style: const TextStyle(
-                fontSize: 16, color: Color.fromARGB(255, 26, 114, 186)),
+            style: const TextStyle(fontSize: 20, color: Colors.blue),
           )),
     );
   }
 }
-

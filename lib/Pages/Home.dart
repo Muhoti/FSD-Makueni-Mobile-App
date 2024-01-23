@@ -25,10 +25,11 @@ class _HomeState extends State<Home> {
   final storage = const FlutterSecureStorage();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String total = '';
-  String markets = '';
+  int total = 0;
+  int markets = 0;
   dynamic data;
   String username = '';
+  String id = '';
   List<dynamic> marketList = [];
 
   List<dynamic> plotList = [];
@@ -46,13 +47,14 @@ class _HomeState extends State<Home> {
     var token = await storage.read(key: "mljwt");
     var decoded = parseJwt(token.toString());
 
-
     setState(() {
       username = decoded["Name"];
+      id = decoded["UserID"];
       storage.write(key: "UserName", value: username);
+      storage.write(key: "id", value: decoded["UserID"]);
     });
 
-    getStats(username);
+    getStats(id);
     loadChartData(username);
   }
 
@@ -66,7 +68,7 @@ class _HomeState extends State<Home> {
         var data = await json.decode(response.body);
 
         setState(() {
-          marketList = data["market"];
+          marketList = (data["market"]);
           plotList = data["plots"];
         });
 
@@ -74,7 +76,6 @@ class _HomeState extends State<Home> {
         marketData = marketList.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
-
 
           return FlSpot(index, count);
         }).toList();
@@ -84,31 +85,24 @@ class _HomeState extends State<Home> {
           final index = entry.key.toDouble();
           final count = double.parse(entry.value["count"]!);
 
-
           return FlSpot(index, count);
         }).toList();
-      } catch (e) {
-      }
+      } catch (e) {}
     } catch (e) {}
   }
 
-  getStats(String username) async {
+  getStats(String id) async {
     try {
-      // Prefill Form
       try {
         final response = await get(
-          Uri.parse("${getUrl()}valuation/topstats/$username"),
+          Uri.parse("${getUrl()}valuation/topstats/$id"),
         );
-
-        await storage.write(key: "Username", value: username);
         var data = await json.decode(response.body);
-
         setState(() {
           total = data["Allplots"];
           markets = data["Markets"];
         });
-      } catch (e) {
-      }
+      } catch (e) {}
     } catch (e) {}
   }
 
@@ -130,35 +124,34 @@ class _HomeState extends State<Home> {
       key: _scaffoldKey,
       drawer: const MyDrawer(),
       floatingActionButton: YellowButton(
-          label: 'Start Mapping',
+          label: 'NEW',
           onButtonPressed: () => Navigator.push(
               context, MaterialPageRoute(builder: (_) => const MapPage()))),
       body: Container(
+        height: double.infinity,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          colors: [
+            Color.fromRGBO(26, 114, 186, 1),
+            Color.fromRGBO(49, 161, 254, 1)
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        )),
         constraints: const BoxConstraints.tightForFinite(),
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.fromLTRB(24, 44, 24, 24),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: GestureDetector(
-                        onTap: _openDrawer,
-                        child: Image.asset(
-                          'assets/images/menuicon.png', // Replace with your image asset
-                          width: 24,
-                          height: 24,
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                        onTap: _openUserProfileDialog, child: const UserContainer()),
-                  ],
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+                child: GestureDetector(
+                  onTap: _openDrawer,
+                  child: const Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const Align(
@@ -167,21 +160,17 @@ class _HomeState extends State<Home> {
                   'Welcome',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 28,
-                      color: Color.fromARGB(255, 26, 114, 186),
+                      fontSize: 36,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   username,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Color.fromARGB(255, 42, 45, 48),
-                  ),
+                  style: const TextStyle(fontSize: 24, color: Colors.white70),
                 ),
               ),
               const SizedBox(
@@ -192,7 +181,7 @@ class _HomeState extends State<Home> {
                   Flexible(
                     flex: 1,
                     fit: FlexFit.tight,
-                    child: BlueBox(total: total, name: "Mapped Plots"),
+                    child: BlueBox(total: total, name: "Today"),
                   ),
                   const SizedBox(
                     width: 12,
@@ -200,161 +189,13 @@ class _HomeState extends State<Home> {
                   Flexible(
                     flex: 1,
                     fit: FlexFit.tight,
-                    child: BlueBox(total: markets, name: "Markets"),
+                    child: BlueBox(total: markets, name: "Total"),
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const Text(
-                'Markets',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 26, 114, 186),
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 24.0),
-                child: SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: LineChart(
-                    LineChartData(
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: 1,
-                          getTitlesWidget: (value, meta) {
-                            if (marketList.isNotEmpty) {
-                              final index =
-                                  value.toInt().clamp(0, marketList.length - 1);
-
-                              return Text(marketList[index.toInt()]["MarketID"]
-                                      .toString());
-                            } else {
-                              return const Text("");
-                            }
-                          },
-                        )),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
-                          ),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
-                          ),
-                        ),
-                      ),
-                      borderData: FlBorderData(show: true),
-                      gridData: FlGridData(show: true),
-                      minX: 0,
-                      minY: 0,
-                      maxY: 10,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: marketData,
-                          isCurved: true,
-                          color: Colors.blue,
-                          dotData: FlDotData(show: true),
-                          belowBarData: BarAreaData(show: true),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const Text(
-                'Plots',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 26, 114, 186),
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 24.0),
-                child: SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: LineChart(
-                    LineChartData(
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: 1,
-                          getTitlesWidget: (value, meta) {
-                            if (plotList.isNotEmpty) {
-                              final index =
-                                  value.toInt().clamp(0, plotList.length - 1);
-
-                              return Text(plotList[index.toInt()]
-                                      ["NewPlotNumber"] ??
-                                  "");
-                            } else {
-                              return const Text("");
-                            }
-                          },
-                        )),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
-                          ),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
-                          ),
-                        ),
-                      ),
-                      borderData: FlBorderData(show: true),
-                      gridData: FlGridData(show: true),
-                      minX: 0,
-                      minY: 0,
-                      maxY: 10,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: marketData,
-                          isCurved: true,
-                          color: Colors.blue,
-                          dotData: FlDotData(show: true),
-                          belowBarData: BarAreaData(show: true),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
               ),
             ],
           ),
         ),
-        // Align(
-        //   alignment: Alignment.bottomRight,
-        //   child: MyFloatingButton(
-        //     label: "Start Mapping",
-        //     onButtonPressed: () {
-        //       Navigator.pushReplacement(context,
-        //           MaterialPageRoute(builder: (_) => const MapPage()));
-        //     },
-        //   ),
-        // ),
       ),
     );
   }
