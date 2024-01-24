@@ -4,14 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:fsd_makueni_mobile_app/Models/StatItem.dart';
 
 class HomeItem extends StatefulWidget {
-  final List<StatItem> list;
-  const HomeItem({super.key, required this.list});
+  final String label;
+  final List<dynamic> list;
+  const HomeItem({super.key, required this.list, required this.label});
 
   @override
   State<HomeItem> createState() => _HomeItemState();
 }
 
 class _HomeItemState extends State<HomeItem> {
+  @override
+  void initState() {
+    print("data ${widget.list}");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,14 +36,14 @@ class _HomeItemState extends State<HomeItem> {
         ),
         child: Row(
           children: [
-            const Flexible(
+            Flexible(
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Center(
                     child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text("Mbooni",
-                      style: TextStyle(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(widget.label,
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w600)),
@@ -51,7 +58,6 @@ class _HomeItemState extends State<HomeItem> {
                       alignment: Alignment.topLeft,
                       child: ListView.builder(
                         shrinkWrap: true,
-                        
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: widget.list.length,
                         itemBuilder: (context, index) {
@@ -63,14 +69,15 @@ class _HomeItemState extends State<HomeItem> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    widget.list[index].label,
+                                    widget.list[index]["Ward"],
                                     style: const TextStyle(
-                                        color: Colors.yellowAccent, fontSize: 18),
+                                        color: Colors.yellowAccent,
+                                        fontSize: 18),
                                   ),
                                 ),
                                 Text(
-                                  widget.list[index].total.toString(),
-                                  style: const TextStyle(
+                                  widget.list[index]["Count"].toString(),
+                                  style: TextStyle(
                                       color: Colors.yellow, fontSize: 18),
                                 ),
                               ],

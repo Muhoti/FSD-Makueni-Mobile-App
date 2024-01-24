@@ -110,6 +110,7 @@ class _ValuationFormState extends State<ValuationForm> {
       print("data ${data[0]["data"]}");
       getWards(data[0]["data"][0]);
       setState(() {
+        subcounty = data[0]["data"][0];
         subcounties = (data[0]["data"] as List<dynamic>)
             .map((dynamic item) => item.toString())
             .toList();
@@ -126,6 +127,7 @@ class _ValuationFormState extends State<ValuationForm> {
       var data = json.decode(response.body);
       print("data ${data[0]["data"]}");
       setState(() {
+        ward = data[0]["data"][0];
         wards = (data[0]["data"] as List<dynamic>)
             .map((dynamic item) => item.toString())
             .toList();

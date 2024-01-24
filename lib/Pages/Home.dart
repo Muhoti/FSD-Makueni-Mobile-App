@@ -27,22 +27,21 @@ class _HomeState extends State<Home> {
   final storage = const FlutterSecureStorage();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int total = 0;
-  int markets = 0;
+  String total = "0";
+  String today = "0";
   dynamic data;
   String username = '';
   String id = '';
-  List<dynamic> marketList = [];
-
-  List<dynamic> plotList = [];
-
-  List<FlSpot> marketData = [];
-  List<FlSpot> plotData = [];
+  List<dynamic> charts = [];
 
   @override
   void initState() {
     fetchUser();
     super.initState();
+  }
+
+  Future<void> _refreshData() async {
+    fetchUser();
   }
 
   fetchUser() async {
@@ -57,7 +56,7 @@ class _HomeState extends State<Home> {
     });
 
     getStats(id);
-    loadChartData(username);
+    loadChartData(id);
   }
 
   Future<void> loadChartData(String username) async {
@@ -68,27 +67,11 @@ class _HomeState extends State<Home> {
         );
 
         var data = await json.decode(response.body);
-
         setState(() {
-          marketList = (data["market"]);
-          plotList = data["plots"];
+          charts = (data as List<dynamic>).toList();
         });
 
-        // Populate market data
-        marketData = marketList.asMap().entries.map((entry) {
-          final index = entry.key.toDouble();
-          final count = double.parse(entry.value["count"]!);
-
-          return FlSpot(index, count);
-        }).toList();
-
-        // Populate plot data
-        plotData = plotList.asMap().entries.map((entry) {
-          final index = entry.key.toDouble();
-          final count = double.parse(entry.value["count"]!);
-
-          return FlSpot(index, count);
-        }).toList();
+        print("data $data");
       } catch (e) {}
     } catch (e) {}
   }
@@ -100,9 +83,10 @@ class _HomeState extends State<Home> {
           Uri.parse("${getUrl()}valuation/topstats/$id"),
         );
         var data = await json.decode(response.body);
+
         setState(() {
-          total = data["Allplots"];
-          markets = data["Markets"];
+          total = data["total"];
+          today = data["today"];
         });
       } catch (e) {}
     } catch (e) {}
@@ -129,84 +113,85 @@ class _HomeState extends State<Home> {
           label: 'NEW',
           onButtonPressed: () => Navigator.push(
               context, MaterialPageRoute(builder: (_) => const MapPage()))),
-      body: Container(
-        height: double.infinity,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(26, 114, 186, 1),
-            Color.fromRGBO(49, 161, 254, 1)
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        )),
-        constraints: const BoxConstraints.tightForFinite(),
-        padding: const EdgeInsets.fromLTRB(24, 44, 24, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-              child: GestureDetector(
-                onTap: _openDrawer,
-                child: const Icon(
-                  Icons.menu,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Welcome',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 36,
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: Container(
+          height: double.infinity,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(26, 114, 186, 1),
+              Color.fromRGBO(49, 161, 254, 1)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )),
+          constraints: const BoxConstraints.tightForFinite(),
+          padding: const EdgeInsets.fromLTRB(24, 44, 24, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+                child: GestureDetector(
+                  onTap: _openDrawer,
+                  child: const Icon(
+                    Icons.menu,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                username,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 24, color: Colors.white70),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Welcome',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 36,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: BlueBox(total: total, name: "Today"),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  username,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 24, color: Colors.white70),
                 ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: BlueBox(total: markets, name: "Total"),
-                ),
-              ],
-            ),
-            const Column(
-              children: [
-                HomeItem(
-                  list: [
-                    StatItem(label: "Kikima", total: 0),
-                    StatItem(label: "Kikima", total: 0),
-                    StatItem(label: "Kikima", total: 0),
-                    StatItem(label: "Kikima", total: 0)
-                  ],
-                ),
-              ],
-            )
-          ],
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: BlueBox(total: today, name: "Today"),
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: BlueBox(total: total, name: "Total"),
+                  ),
+                ],
+              ),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: charts.length,
+                  itemBuilder: (context, index) {
+                    return HomeItem(
+                      list: (charts[index]["data"] as List<dynamic>).toList() ,
+                      label: charts[index]["SubCounty"],
+                    );
+                  })
+            ],
+          ),
         ),
       ),
     );

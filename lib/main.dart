@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
+import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
 import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:geolocator/geolocator.dart';
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
 
     Timer(const Duration(seconds: 0), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const ValuationForm()));
+          context, MaterialPageRoute(builder: (_) => const Login()));
     });
     super.initState();
   }

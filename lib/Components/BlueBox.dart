@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class BlueBox extends StatelessWidget {
-  final int total;
+  final String total;
   final String name;
 
   const BlueBox({super.key, required this.total, required this.name});
@@ -48,7 +48,7 @@ class BlueBox extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    total.toString(),
+                    total,
                     style: const TextStyle(
                         color: Colors.yellowAccent,
                         fontWeight: FontWeight.w900,
