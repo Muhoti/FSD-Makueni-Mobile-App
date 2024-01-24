@@ -181,8 +181,6 @@ class _ValuationFormState extends State<ValuationForm> {
         status = data["property"]["status"] ?? '';
         use = data["property"]["PropertyUseDescription"] ?? '';
         blocknumber = data["property"]["BlockNumber"] ?? '';
-        latitude = data["property"]["latitude"] ?? '';
-        longitude = data["property"]["longitude"] ?? '';
         ownership = data["property"]["TypeOfOwnership"] ?? '';
         mode = data["property"]["ModeOfAcquisition"] ?? '';
         disputed = data["property"]["Disputed"] ?? '';
@@ -852,8 +850,7 @@ class _ValuationFormState extends State<ValuationForm> {
                           status,
                           use,
                           blocknumber,
-                          latitude,
-                          longitude,
+                         
                           ownership,
                           mode,
                           disputed,
@@ -924,8 +921,7 @@ Future<Message> submitData(
     String status,
     String use,
     String blocknumber,
-    String latitude,
-    String longitude,
+
     String ownership,
     String mode,
     String disputed,
@@ -1073,8 +1069,8 @@ Future<Message> submitData(
           'Status': status,
           'PropertyUseDescription': use,
           'BlockNumber': blocknumber,
-          'Latitude': latitude,
-          'Longitude': longitude,
+          'Latitude': lat,
+          'Longitude': long,
           'TypeOfOwnership': ownership,
           'ModeOfAcquisition': mode,
           'Disputed': disputed,

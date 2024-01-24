@@ -40,10 +40,6 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Future<void> _refreshData() async {
-    fetchUser();
-  }
-
   fetchUser() async {
     var token = await storage.read(key: "mljwt");
     var decoded = parseJwt(token.toString());
@@ -106,16 +102,19 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: const MyDrawer(),
-      floatingActionButton: YellowButton(
-          label: 'NEW',
-          onButtonPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (_) => const MapPage()))),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: Container(
+    return MaterialApp(
+      title: 'Makueni LIMS',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        key: _scaffoldKey,
+        drawer: const MyDrawer(),
+        floatingActionButton: YellowButton(
+            label: 'NEW',
+            onButtonPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const MapPage()))),
+        body: Container(
           height: double.infinity,
           decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -157,7 +156,8 @@ class _HomeState extends State<Home> {
                 child: Text(
                   username,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 24, color: Colors.white70),
+                  style: const TextStyle(
+                      fontSize: 24, color: Colors.white70),
                 ),
               ),
               const SizedBox(
@@ -186,7 +186,8 @@ class _HomeState extends State<Home> {
                   itemCount: charts.length,
                   itemBuilder: (context, index) {
                     return HomeItem(
-                      list: (charts[index]["data"] as List<dynamic>).toList() ,
+                      list: (charts[index]["data"] as List<dynamic>)
+                          .toList(),
                       label: charts[index]["SubCounty"],
                     );
                   })
