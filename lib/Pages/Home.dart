@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-            Column(
+            const Column(
               children: [
                 HomeItem(
                   list: [

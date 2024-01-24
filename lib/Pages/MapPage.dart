@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -32,7 +33,6 @@ class _MapPageState extends State<MapPage> {
         long = position.longitude;
         lat = position.latitude;
       });
-
 
       LocationSettings locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
@@ -78,6 +78,10 @@ class _MapPageState extends State<MapPage> {
     super.initState();
   }
 
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -87,10 +91,54 @@ class _MapPageState extends State<MapPage> {
       ),
       home: Scaffold(
         key: _scaffoldKey,
+        drawer: const MyDrawer(),
         body: Container(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(26, 114, 186, 1),
+              Color.fromRGBO(49, 161, 254, 1)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+                child: Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: GestureDetector(
+                        onTap: _openDrawer,
+                        child: const Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    const Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        child: Text(
+                          "Map",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        )),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: SizedBox(
                   child: long != null && lat != null
