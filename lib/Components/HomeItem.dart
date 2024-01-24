@@ -28,8 +28,6 @@ class _HomeItemState extends State<HomeItem> {
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Flexible(
                 flex: 1,
@@ -49,34 +47,38 @@ class _HomeItemState extends State<HomeItem> {
                 child: Container(
                     decoration: const BoxDecoration(color: Colors.white12),
                     padding: const EdgeInsets.all(8),
-                    child: ListView.builder(
-                      itemCount: widget.list.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "widget.list[index].label",
-                                  style: const TextStyle(
-                                      color: Colors.yellowAccent,
-                                      fontSize: 18),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: widget.list.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    widget.list[index].label,
+                                    style: const TextStyle(
+                                        color: Colors.yellowAccent, fontSize: 18),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                0.toString(),
-                                style: const TextStyle(
-                                    color: Colors.yellow, fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                                Text(
+                                  widget.list[index].total.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.yellow, fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     )))
-              
           ],
         ),
       ),

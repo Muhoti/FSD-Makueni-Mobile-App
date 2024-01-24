@@ -194,9 +194,18 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-            HomeItem(
-              list: [],
-            ),
+            Column(
+              children: [
+                HomeItem(
+                  list: [
+                    StatItem(label: "Kikima", total: 0),
+                    StatItem(label: "Kikima", total: 0),
+                    StatItem(label: "Kikima", total: 0),
+                    StatItem(label: "Kikima", total: 0)
+                  ],
+                ),
+              ],
+            )
           ],
         ),
       ),

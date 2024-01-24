@@ -60,9 +60,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     promptUserForLocation();
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 0), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const Login()));
+          context, MaterialPageRoute(builder: (_) => const Home()));
     });
     super.initState();
   }
