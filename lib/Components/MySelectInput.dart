@@ -81,6 +81,7 @@ class _MySelectInputState extends State<MySelectInput> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 0, 16, 0),
               child: DropdownButton<String>(
+                
                 icon: const Align(
                   alignment: Alignment.centerRight,
                   child: Icon(

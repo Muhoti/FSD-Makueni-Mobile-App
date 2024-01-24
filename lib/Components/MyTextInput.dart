@@ -22,18 +22,22 @@ class MyTextInput extends StatefulWidget {
 
 class _MyTextInputState extends State<MyTextInput> {
   TextEditingController _controller = TextEditingController();
+  String _value = "";
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.value);
+    setState(() {
+      _value = widget.value;
+    });
+    _controller = TextEditingController(text: _value);
   }
 
   @override
   void didUpdateWidget(covariant MyTextInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.value != "") {
-      _controller.text = widget.value;
+      _value = widget.value;
     }
   }
 
@@ -51,6 +55,9 @@ class _MyTextInputState extends State<MyTextInput> {
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
         child: TextField(
           onChanged: (value) {
+            setState(() {
+              _value = value;
+            });
             widget.onSubmit(value);
           },
           keyboardType: widget.type,
