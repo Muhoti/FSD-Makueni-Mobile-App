@@ -23,8 +23,18 @@ class _MySelectInputState extends State<MySelectInput> {
   void initState() {
     super.initState();
     setState(() {
-      _selectedOption = widget.list.first;
+      _selectedOption = widget.value != "" ? widget.value : widget.list.first;
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant MySelectInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.list != widget.list) {
+      setState(() {
+        _selectedOption = widget.list.first;
+      });
+    }
   }
 
   @override
@@ -37,7 +47,7 @@ class _MySelectInputState extends State<MySelectInput> {
               border: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white)),
               focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red)))),
+                  borderSide: BorderSide(color: Colors.yellow)))),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
         child: Stack(
@@ -58,9 +68,9 @@ class _MySelectInputState extends State<MySelectInput> {
                   disabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white, width: 0.0),
                   ),
-                  focusColor: Colors.red,
+                  focusColor: Colors.yellow,
                   border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2.0)),
+                      borderSide: BorderSide(color: Colors.yellow, width: 1.0)),
                   filled: false,
                   label: Text(
                     widget.label,
@@ -85,6 +95,7 @@ class _MySelectInputState extends State<MySelectInput> {
                   setState(() {
                     _selectedOption = newValue!;
                   });
+                  widget.onSubmit(newValue!);
                 },
                 items:
                     widget.list.map<DropdownMenuItem<String>>((String value) {

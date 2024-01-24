@@ -24,6 +24,10 @@ class ValuationForm extends StatefulWidget {
 }
 
 class _ValuationFormState extends State<ValuationForm> {
+  List<String> subcounties = [""];
+  List<String> wards = [""];
+  String subcounty = '';
+  String ward = '';
   String propertyId = '';
   String marketId = '';
   String? newPlotNo = '';
@@ -82,6 +86,7 @@ class _ValuationFormState extends State<ValuationForm> {
   @override
   void initState() {
     isEditing();
+    getSubcounties();
     super.initState();
   }
 
@@ -96,6 +101,38 @@ class _ValuationFormState extends State<ValuationForm> {
     if (editing == "TRUE") {
       getData(newPlotNo);
     } else {}
+  }
+
+  getSubcounties() async {
+    try {
+      final response = await get(Uri.parse("${getUrl()}wards/subcounties"));
+      var data = json.decode(response.body);
+      print("data ${data[0]["data"]}");
+      getWards(data[0]["data"][0]);
+      setState(() {
+        subcounties = (data[0]["data"] as List<dynamic>)
+            .map((dynamic item) => item.toString())
+            .toList();
+      });
+    } catch (e) {
+      print("data $e");
+    }
+  }
+
+  getWards(String subcounty) async {
+    try {
+      final response =
+          await get(Uri.parse("${getUrl()}wards/getwards/$subcounty"));
+      var data = json.decode(response.body);
+      print("data ${data[0]["data"]}");
+      setState(() {
+        wards = (data[0]["data"] as List<dynamic>)
+            .map((dynamic item) => item.toString())
+            .toList();
+      });
+    } catch (e) {
+      print("data $e");
+    }
   }
 
   getData(String? newPlotNo) async {
@@ -219,6 +256,25 @@ class _ValuationFormState extends State<ValuationForm> {
                     ],
                   ),
                 ),
+                MySelectInput(
+                    label: 'Sub County',
+                    onSubmit: (value) {
+                      getWards(value);
+                      setState(() {
+                        subcounty = value;
+                      });
+                    },
+                    list: subcounties,
+                    value: subcounty),
+                MySelectInput(
+                    label: 'Ward',
+                    onSubmit: (value) {
+                      setState(() {
+                        ward = value;
+                      });
+                    },
+                    list: wards,
+                    value: subcounty),
                 MyTextInput(
                   title: 'MarketID',
                   lines: 1,
@@ -230,9 +286,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MySelectInput(
                     label: 'Tenure',
                     onSubmit: (value) {
@@ -240,15 +293,8 @@ class _ValuationFormState extends State<ValuationForm> {
                         tenure = value;
                       });
                     },
-                    list: const [
-                      '--Select Tenure--',
-                      'Private Land',
-                      'Public Land'
-                    ],
+                    list: const ['', 'Private Land', 'Public Land'],
                     value: tenure),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Owner Name',
                   lines: 1,
@@ -260,9 +306,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MySelectInput(
                     label: 'ID Type',
                     onSubmit: (value) {
@@ -272,9 +315,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     },
                     list: const ['National ID', 'Passport'],
                     value: idtype),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'ID/Passport Number',
                   lines: 1,
@@ -285,9 +325,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       idnumber = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Length in Ft',
@@ -300,9 +337,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Width in Ft',
                   lines: 1,
@@ -313,9 +347,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       width = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'LR Number',
@@ -328,9 +359,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'PIN Number',
                   lines: 1,
@@ -341,9 +369,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       pinnumber = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Land Rates',
@@ -356,9 +381,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Next of Kin',
                   lines: 1,
@@ -369,9 +391,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       nextofkin = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Physical Location',
@@ -384,9 +403,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Postal Address',
                   lines: 1,
@@ -397,9 +413,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       postaladdress = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Postal Code',
@@ -412,9 +425,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Postal Address Town',
                   lines: 1,
@@ -425,9 +435,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       town = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Mobile Number',
@@ -440,9 +447,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Email',
                   lines: 1,
@@ -454,9 +458,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MySelectInput(
                     label: 'Gender',
                     onSubmit: (value) {
@@ -466,9 +467,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     },
                     list: const ['--Select Gender--', 'Male', 'Female'],
                     value: gender),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Co-Owners',
                   lines: 1,
@@ -479,9 +477,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       coowners = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Physical Address',
@@ -494,9 +489,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Zone',
                   lines: 1,
@@ -507,9 +499,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       zone = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Rateable Value',
@@ -522,9 +511,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Land Rate Arrears',
                   lines: 1,
@@ -535,9 +521,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       landratesarrears = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Rent Payable',
@@ -550,9 +533,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Rent Areas',
                   lines: 1,
@@ -563,9 +543,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       rentareas = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Penalty',
@@ -578,9 +555,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Accumulated Penalty',
                   lines: 1,
@@ -592,9 +566,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MySelectInput(
                     label: 'Status',
                     onSubmit: (value) {
@@ -604,9 +575,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     },
                     list: const ['Select Status', '1', '0'],
                     value: status),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Property Use Description',
                   lines: 1,
@@ -618,9 +586,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Block Number',
                   lines: 1,
@@ -631,37 +596,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       blocknumber = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Latitude',
-                  lines: 1,
-                  value: latitude,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      latitude = value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Longitude',
-                  lines: 1,
-                  value: longitude,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      longitude = value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MySelectInput(
                     label: 'Type of Ownership',
@@ -677,9 +611,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       'Private Institution'
                     ],
                     value: ownership),
-                const SizedBox(
-                  height: 10,
-                ),
                 MySelectInput(
                     label: 'Mode of Acquisition',
                     onSubmit: (value) {
@@ -693,9 +624,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       'Allotment'
                     ],
                     value: mode),
-                const SizedBox(
-                  height: 10,
-                ),
                 MySelectInput(
                     label: 'Disputed',
                     onSubmit: (value) {
@@ -705,9 +633,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     },
                     list: const ['--Select Option--', 'Yes', 'No'],
                     value: disputed),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Nature of Disputed',
                   lines: 1,
@@ -718,9 +643,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       naturedisputed = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Site Value',
@@ -733,9 +655,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Developed',
                   lines: 1,
@@ -746,9 +665,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       developed = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Development Approved',
@@ -761,9 +677,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Main Structure',
                   lines: 1,
@@ -774,9 +687,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       mainstructure = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 MyTextInput(
                   title: 'Remarks',
@@ -789,9 +699,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Area in Ha',
                   lines: 1,
@@ -803,9 +710,6 @@ class _ValuationFormState extends State<ValuationForm> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 MyTextInput(
                   title: 'Accumulated Rates',
                   lines: 1,
@@ -816,9 +720,6 @@ class _ValuationFormState extends State<ValuationForm> {
                       accumulatedrates = value;
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
                 ),
                 Center(
                   child: isLoading ?? const SizedBox(),
@@ -979,16 +880,13 @@ Future<Message> submitData(
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
     var id = await storage.read(key: "NewPlotNumber");
-    // var long = await storage.read(key: "long");
-    // var lat = await storage.read(key: "lat");
-
+    var long = await storage.read(key: "long");
+    var lat = await storage.read(key: "lat");
     var response;
-
     var editing = await storage.read(key: "EDITING");
+    var fieldOfficer = await storage.read(key: "id");
 
     if (editing == 'TRUE') {
-      var fieldOfficer = await storage.read(key: "Username");
-
       response = await put(
         Uri.parse("${getUrl()}valuation/update/$id"),
         headers: <String, String>{
@@ -996,17 +894,17 @@ Future<Message> submitData(
           'token': token!
         },
         body: jsonEncode(<String, dynamic>{
-          'PropertyID': int.parse(propertyId),
-          'MarketID': int.parse(marketId),
-          'NewPlotNumber': int.parse(newPlotNo),
+          'PropertyID': propertyId,
+          'MarketID': marketId,
+          'NewPlotNumber': newPlotNo,
           'Tenure': tenure,
           'OwnerName': ownername,
-          'IDNumber': int.parse(idnumber),
-          'LengthInFt': double.parse(length),
-          'WidthInFt': double.parse(width),
+          'IDNumber': idnumber,
+          'LengthInFt': (length),
+          'WidthInFt': (width),
           'LRNo': lrno,
           'PINNumber': pinnumber,
-          'LandRates': double.parse(landrates),
+          'LandRates': landrates,
           'IDType': idtype,
           'NextOfKin': nextofkin,
           'PhysicalLocation': physicallocation,
@@ -1019,28 +917,28 @@ Future<Message> submitData(
           'CoOwners': coowners,
           'PhysicalAddress': physicaladdress,
           'Zone': zone,
-          'RateableValue': double.parse(rateablevalue),
-          'LandRatesArrears': double.parse(landratesarrears),
-          'RentPayable': double.parse(rentpayable),
-          'RentAreas': double.parse(rentareas),
-          'Penalty': double.parse(penalty),
-          'AccumulatedPenalty': double.parse(accumulatedpenalty),
-          'Status': int.parse(status),
+          'RateableValue': rateablevalue,
+          'LandRatesArrears': landratesarrears,
+          'RentPayable': rentpayable,
+          'RentAreas': rentareas,
+          'Penalty': penalty,
+          'AccumulatedPenalty': accumulatedpenalty,
+          'Status': status,
           'PropertyUseDescription': use,
           'BlockNumber': blocknumber,
-          'Latitude': latitude,
-          'Longitude': longitude,
+          'Latitude': lat,
+          'Longitude': long,
           'TypeOfOwnership': ownership,
           'ModeOfAcquisition': mode,
           'Disputed': disputed,
           'NatureOfDisputed': naturedisputed,
-          'SiteValue': double.parse(sitevalue),
+          'SiteValue': sitevalue,
           'Developed': developed,
           'DevelopmentApproved': developmnetapproved,
           'MainStructure': mainstructure,
           'Remarks': remarks,
-          'AreaInHa': double.parse(areainha),
-          'AccumulatedRates': double.parse(accumulatedrates),
+          'AreaInHa': areainha,
+          'AccumulatedRates': accumulatedrates,
           'FirstApprover': '',
           'SecondApprover': '',
           'FieldOfficer': fieldOfficer
@@ -1056,9 +954,6 @@ Future<Message> submitData(
         );
       }
     } else {
-      // print(
-      //     "$marketId, $newPlotNo, $tenure, $ownername, $idnumber, $length, $width, $lrno, $pin");
-
       response = await post(
         Uri.parse("${getUrl()}valuation/create"),
         headers: <String, String>{
@@ -1067,16 +962,16 @@ Future<Message> submitData(
         },
         body: jsonEncode(<String, dynamic>{
           'PropertyID': null,
-          'MarketID': int.parse(marketId),
-          'NewPlotNumber': int.parse(newPlotNo),
+          'MarketID': marketId,
+          'NewPlotNumber': newPlotNo,
           'Tenure': tenure,
           'OwnerName': ownername,
-          'IDNumber': int.parse(idnumber),
-          'LengthInFt': double.parse(length),
-          'WidthInFt': double.parse(width),
+          'IDNumber': idnumber,
+          'LengthInFt': length,
+          'WidthInFt': width,
           'LRNo': lrno,
           'PINNumber': pinnumber,
-          'LandRates': double.parse(landrates),
+          'LandRates': landrates,
           'IDType': idtype,
           'NextOfKin': nextofkin,
           'PhysicalLocation': physicallocation,
@@ -1089,13 +984,13 @@ Future<Message> submitData(
           'CoOwners': coowners,
           'PhysicalAddress': physicaladdress,
           'Zone': zone,
-          'RateableValue': double.parse(rateablevalue),
-          'LandRatesArrears': double.parse(landratesarrears),
-          'RentPayable': double.parse(rentpayable),
-          'RentAreas': double.parse(rentareas),
-          'Penalty': double.parse(penalty),
-          'AccumulatedPenalty': double.parse(accumulatedpenalty),
-          'Status': int.parse(status),
+          'RateableValue': rateablevalue,
+          'LandRatesArrears': landratesarrears,
+          'RentPayable': rentpayable,
+          'RentAreas': rentareas,
+          'Penalty': penalty,
+          'AccumulatedPenalty': accumulatedpenalty,
+          'Status': status,
           'PropertyUseDescription': use,
           'BlockNumber': blocknumber,
           'Latitude': latitude,
@@ -1104,16 +999,16 @@ Future<Message> submitData(
           'ModeOfAcquisition': mode,
           'Disputed': disputed,
           'NatureOfDisputed': naturedisputed,
-          'SiteValue': double.parse(sitevalue),
+          'SiteValue': sitevalue,
           'Developed': developed,
           'DevelopmentApproved': developmnetapproved,
           'MainStructure': mainstructure,
           'Remarks': remarks,
-          'AreaInHa': double.parse(areainha),
-          'AccumulatedRates': double.parse(accumulatedrates),
+          'AreaInHa': areainha,
+          'AccumulatedRates': accumulatedrates,
           'FirstApprover': '',
           'SecondApprover': '',
-          'FieldOfficer': ''
+          'FieldOfficer': fieldOfficer
         }),
       );
       if (response.statusCode == 200 || response.statusCode == 203) {
@@ -1127,6 +1022,7 @@ Future<Message> submitData(
       }
     }
   } catch (e) {
+    print("data $e");
     return Message(
       token: null,
       success: null,
