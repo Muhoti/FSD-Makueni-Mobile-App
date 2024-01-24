@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
@@ -158,37 +159,26 @@ class _ValuationFormState extends State<ValuationForm> {
     } catch (e) {}
   }
 
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                // Handle drawer item 1 tap
-              },
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {
-                // Handle drawer item 2 tap
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: const MyDrawer(),
       body: Container(
-        constraints: const BoxConstraints.tightForFinite(),
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          colors: [
+            Color.fromRGBO(26, 114, 186, 1),
+            Color.fromRGBO(49, 161, 254, 1)
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        )),
+        padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
@@ -196,49 +186,36 @@ class _ValuationFormState extends State<ValuationForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                  child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.zero,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => const MapPage()));
-                                },
-                                child: Image.asset(
-                                  'assets/images/bluearrow.png', // Replace with your image asset
-                                  width: 24,
-                                  height: 24,
-                                ),
-                              ),
-                            ),
-                            const UserContainer(),
-                          ],
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                          onTap: _openDrawer,
+                          child: const Icon(
+                            Icons.menu,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      const Text(
-                        'Valuation Data',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 85, 165)),
+                      const SizedBox(
+                        width: 12,
                       ),
-                      editing == "TRUE"
-                          ? Text(
-                              'Property ID: $propertyId',
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.black),
-                            )
-                          : const SizedBox()
+                      const Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Text(
+                            "Valuation Form",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          )),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -263,7 +240,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         tenure = value;
                       });
                     },
-                    entries: const [
+                    list: const [
                       '--Select Tenure--',
                       'Private Land',
                       'Public Land'
@@ -293,7 +270,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         idtype = value;
                       });
                     },
-                    entries: const ['National ID', 'Passport'],
+                    list: const ['National ID', 'Passport'],
                     value: idtype),
                 const SizedBox(
                   height: 10,
@@ -487,7 +464,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         gender = value;
                       });
                     },
-                    entries: const ['--Select Gender--', 'Male', 'Female'],
+                    list: const ['--Select Gender--', 'Male', 'Female'],
                     value: gender),
                 const SizedBox(
                   height: 10,
@@ -625,7 +602,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         status = value;
                       });
                     },
-                    entries: const ['Select Status', '1', '0'],
+                    list: const ['Select Status', '1', '0'],
                     value: status),
                 const SizedBox(
                   height: 10,
@@ -693,7 +670,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         ownership = value;
                       });
                     },
-                    entries: const [
+                    list: const [
                       '--Type of Ownership--',
                       'Individual',
                       'Group',
@@ -710,7 +687,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         mode = value;
                       });
                     },
-                    entries: const [
+                    list: const [
                       '--Mode of Acquisition--',
                       'Purchased',
                       'Allotment'
@@ -726,7 +703,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         disputed = value;
                       });
                     },
-                    entries: const ['--Select Option--', 'Yes', 'No'],
+                    list: const ['--Select Option--', 'Yes', 'No'],
                     value: disputed),
                 const SizedBox(
                   height: 10,
