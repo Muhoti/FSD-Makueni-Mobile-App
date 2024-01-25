@@ -14,59 +14,21 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'Utils.dart';
 import 'dart:io';
 
-class MyMap extends StatefulWidget {
-  final double lat;
-  final double lon;
-  const MyMap({Key? key, required this.lat, required this.lon})
-      : super(key: key);
+class MappedMap extends StatefulWidget {
+  const MappedMap({Key? key}) : super(key: key);
 
   @override
-  State<MyMap> createState() => _MyMapState();
+  State<MappedMap> createState() => _MappedMapState();
 }
 
-class _MyMapState extends State<MyMap> {
+class _MappedMapState extends State<MappedMap> {
   late WebViewController controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var isLoading = null;
 
-  void computePointCoordinates(
-      Map<String, dynamic> pointCoords, Map<String, dynamic> receivedData) {
-    const storage = FlutterSecureStorage();
-
-    print("data ${pointCoords["coordinate"][0].toString()}");
-
-    storage.write(key: "long", value: pointCoords["coordinate"][0].toString());
-    storage.write(key: "lat", value: pointCoords["coordinate"][1].toString());
-
-    var newPlotNo = receivedData["NewPlotNumber"];
-
-    if (newPlotNo != null) {
-      _displayPlotDetailsDialog(newPlotNo);
-    } else {
-      _searchPlotDetailsDialog();
-    }
-  }
-
-// It displays the details of the parcel selected.
-  _displayPlotDetailsDialog(newPlotNo) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return PlotDetails(
-          newPlotNo: newPlotNo,
-        );
-      },
-    );
-  }
-
-  void _searchPlotDetailsDialog() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return const SearchPlotDetails();
-      },
-    );
+  void editMappedForm(Map<String, dynamic> receivedData) {
+    var valuationID = receivedData["ValuationID"];
+    print("data ${valuationID}");
   }
 
   @override
@@ -106,16 +68,12 @@ class _MyMapState extends State<MyMap> {
           },
         ),
       )
-      ..addJavaScriptChannel('computePointCoordinates',
+      ..addJavaScriptChannel('editMappedForm',
           onMessageReceived: (JavaScriptMessage message) {
-        // Parse the JSON data received from JavaScript
-        final Map<String, dynamic> computedCoordinate =
-            jsonDecode(message.message);
         final Map<String, dynamic> receivedData = jsonDecode(message.message);
-        // Call the Flutter method to set 'data'
-        computePointCoordinates(computedCoordinate, receivedData);
+        editMappedForm(receivedData);
       })
-      ..loadRequest(Uri.parse('${getUrl()}map'));
+      ..loadRequest(Uri.parse('${getUrl()}mapped'));
 
     super.initState();
   }

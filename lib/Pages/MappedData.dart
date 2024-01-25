@@ -2,19 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fsd_makueni_mobile_app/Components/MappedMap.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:geolocator/geolocator.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+class MappedData extends StatefulWidget {
+  const MappedData({super.key});
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<MappedData> createState() => _MappedDataState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _MappedDataState extends State<MappedData> {
   final storage = const FlutterSecureStorage();
   bool servicestatus = false;
   late LocationPermission permission;
@@ -86,7 +87,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MapPage',
+      title: 'MappedData',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -127,7 +128,7 @@ class _MapPageState extends State<MapPage> {
                         flex: 1,
                         fit: FlexFit.tight,
                         child: Text(
-                          "Map",
+                          "Mapped Data",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         )),
                     GestureDetector(
@@ -146,10 +147,7 @@ class _MapPageState extends State<MapPage> {
               Expanded(
                 child: SizedBox(
                   child: long != null && lat != null
-                      ? MyMap(
-                          lat: lat,
-                          lon: long,
-                        )
+                      ? const MappedMap()
                       : const SizedBox(),
                 ),
               ),

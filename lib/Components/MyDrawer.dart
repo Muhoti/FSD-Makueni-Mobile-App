@@ -7,6 +7,7 @@ import 'package:fsd_makueni_mobile_app/Components/FootNote.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyMap.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Login.dart';
+import 'package:fsd_makueni_mobile_app/Pages/MappedData.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -115,10 +116,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const MyMap(
-                                            lat: 1.2921,
-                                            lon: 36.8219,
-                                          )));
+                                      builder: (_) => const MappedData()));
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.start,

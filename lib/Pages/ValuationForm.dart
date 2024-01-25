@@ -247,7 +247,10 @@ class _ValuationFormState extends State<ValuationForm> {
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           )),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (_) => const Home()));
+                        },
                         child: const Icon(
                           Icons.arrow_back,
                           color: Colors.white,
