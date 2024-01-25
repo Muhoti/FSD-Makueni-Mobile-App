@@ -77,7 +77,7 @@ class _HomeItemState extends State<HomeItem> {
                                 ),
                                 Text(
                                   widget.list[index]["Count"].toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.yellow, fontSize: 18),
                                 ),
                               ],
