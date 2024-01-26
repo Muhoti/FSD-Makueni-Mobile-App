@@ -633,7 +633,7 @@ class _ValuationFormState extends State<ValuationForm> {
                                     setState(() {
                                       marketId = entries[index].MarketID;
                                       marketName = entries[index].MarketName;
-                                      newplotno = entries[index].MarketName;
+                                      newplotno = entries[index].MarketCode;
                                       entries.clear();
                                     });
                                   },
