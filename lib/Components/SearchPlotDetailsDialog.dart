@@ -59,7 +59,10 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
       setState(() {
         entries.clear();
         for (var item in data) {
-          entries.add(SearchItem(item["OwnerName"], item["MarketName"]));
+          entries.add(SearchItem(
+              OwnerName: item["OwnerName"],
+              NewPlotNumber: item["NewPlotNumber"],
+              MarketName: item["MarketName"]));
         }
       });
     } catch (e) {
@@ -178,7 +181,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                               child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                      'Owner: ${entries[index].OwnerName}, PlotNo: ${entries[index].NewPlotNumber}')),
+                                      'Owner: ${entries[index].OwnerName}, Market: ${entries[index].MarketName}')),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>

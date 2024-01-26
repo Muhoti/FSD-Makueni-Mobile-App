@@ -3,5 +3,10 @@
 class SearchItem {
   final String OwnerName;
   final String NewPlotNumber;
-  SearchItem(this.OwnerName, this.NewPlotNumber);
+  final String MarketName;
+  const SearchItem({
+    required this.OwnerName,
+    required this.NewPlotNumber,
+    required this.MarketName,
+  });
 }

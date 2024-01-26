@@ -133,6 +133,7 @@ class _ValuationFormState extends State<ValuationForm> {
 
   getData(String? newPlotNo) async {
     try {
+      print("data $newPlotNo");
       final response = await get(
           Uri.parse(
               "https://edams.makueni.go.ke/api/plotAPI/PropertyDetails/v1?new_plot_number=$newPlotNo"),
@@ -571,6 +572,12 @@ class _ValuationFormState extends State<ValuationForm> {
                           setState(() {
                             landrates = value;
                           });
+                          if (landrates.isNotEmpty) {
+                            setState(() {
+                              sitevalue = (double.tryParse(landrates)! / 0.04)
+                                  .toStringAsFixed(0);
+                            });
+                          }
                         },
                       ),
                     ),
