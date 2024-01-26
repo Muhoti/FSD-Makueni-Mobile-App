@@ -9,6 +9,7 @@ import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
+import 'package:fsd_makueni_mobile_app/Models/SearchMarket.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -27,7 +28,7 @@ class _ValuationFormState extends State<ValuationForm> {
   String ward = '';
   String propertyId = '';
   String marketId = '';
-  String? newPlotNo = '';
+  String marketName = '';
   String tenure = '';
   String ownername = '';
   String idnumber = '';
@@ -70,10 +71,12 @@ class _ValuationFormState extends State<ValuationForm> {
   String remarks = '';
   String areainha = '';
   String accumulatedrates = '';
+  String newplotno = '';
 
   String? editing = '';
   var isLoading;
   String error = '';
+  List<SearchMarket> entries = <SearchMarket>[];
 
   final storage = const FlutterSecureStorage();
   dynamic data;
@@ -88,21 +91,15 @@ class _ValuationFormState extends State<ValuationForm> {
   }
 
   isEditing() async {
-    var edit = await storage.read(key: "EDITING");
-    var newplotno = (await storage.read(key: "NewPlotNumber"));
+    String? newplotno = (await storage.read(key: "NewPlotNumber"));
     String? valuationID = (await storage.read(key: "ValuationID"));
-
-    setState(() {
-      editing = edit;
-      newPlotNo = newplotno;
-    });
 
     if (valuationID != null) {
       getValuation(valuationID);
     }
 
-    if (editing == "TRUE") {
-      getData(newPlotNo);
+    if (newplotno != null) {
+      getData(newplotno);
     } else {}
   }
 
@@ -146,9 +143,12 @@ class _ValuationFormState extends State<ValuationForm> {
 
       var data = json.decode(response.body);
 
+      print("data $data");
+
       setState(() {
         propertyId = data["property"]["property_id"] ?? '';
         marketId = data["property"]["market_id"] ?? '';
+        marketName = data["property"]["market_name"] ?? '';
         tenure = data["property"]["tenure"] ?? '';
         ownername = data["property"]["owner_name"] ?? '';
         idnumber = data["property"]["national_id"] ?? '';
@@ -204,52 +204,74 @@ class _ValuationFormState extends State<ValuationForm> {
         print("data $data");
 
         setState(() {
-          subcounty = data["SubCounty"].toString() ?? '';
-          marketId = data["MarketID"].toString() ?? '';
-          tenure = data["Tenure"].toString() ?? '';
-          ownername = data["OwnerName"].toString() ?? '';
-          idnumber = data["IDNumber"].toString() ?? '';
-          length = data["LengthInFt"].toString() ?? '';
-          width = data["WidthInFt"].toString() ?? '';
-          lr_no = data["LR_number"].toString() ?? '';
-          pinnumber = data["PINNumber"].toString() ?? '';
-          landrates = data["LandRates"].toString() ?? '';
-          idtype = data["IDType"].toString() ?? '';
-          nextofkin = data["NextOfKin"].toString() ?? '';
-          physicallocation = data["PhysicalLocation"].toString() ?? '';
-          postaladdress = data["PostalAddress"].toString() ?? '';
-          postalcode = data["PostalCode"].toString() ?? '';
-          town = data["PostalAddressTown"].toString() ?? '';
-          mobile = data["MobileNumber"].toString() ?? '';
-          email = data["Email"].toString() ?? '';
-          gender = data["Gender"].toString() ?? '';
-          coowners = data["CoOwners"].toString() ?? '';
-          physicaladdress = data["PhysicalAddress"].toString() ?? '';
-          zone = data["Zone"].toString() ?? '';
-          rateablevalue = data["RateableValue"].toString() ?? '';
-          rentpayable = data["RentPayable"].toString() ?? '';
-          rentareas = data["RentArreas"].toString() ?? '';
-          penalty = data["Penalty"].toString() ?? '';
-          accumulatedpenalty = data["AccumulatedPenalty"].toString() ?? '';
-          status = data["Status"].toString() ?? '';
-          use = data["PropertyUseDescription"].toString() ?? '';
-          blocknumber = data["BlockNumber"].toString() ?? '';
-          ownership = data["TypeOfOwnership"].toString() ?? '';
-          mode = data["ModeOfAcquisition"].toString() ?? '';
-          disputed = data["Disputed"].toString() ?? '';
-          naturedisputed = data["NatureOfDisputed"].toString() ?? '';
-          sitevalue = data["SiteValue"].toString() ?? '';
-          developed = data["Developed"].toString() ?? '';
-          developmnetapproved = data["DevelopmentApproved"].toString() ?? '';
-          mainstructure = data["MainStructure"].toString() ?? '';
-          remarks = data["Remarks"].toString() ?? '';
-          areainha = data["AreaInHa"].toString() ?? '';
-          accumulatedrates = data["AccumulatedRates"].toString() ?? '';
+          subcounty = data["SubCounty"].toString();
+          marketId = data["MarketID"].toString();
+          marketName = data["MarketName"].toString();
+          tenure = data["Tenure"].toString();
+          ownername = data["OwnerName"].toString();
+          idnumber = data["IDNumber"].toString();
+          length = data["LengthInFt"].toString();
+          width = data["WidthInFt"].toString();
+          lr_no = data["LR_number"].toString();
+          pinnumber = data["PINNumber"].toString();
+          landrates = data["LandRates"].toString();
+          idtype = data["IDType"].toString();
+          nextofkin = data["NextOfKin"].toString();
+          physicallocation = data["PhysicalLocation"].toString();
+          postaladdress = data["PostalAddress"].toString();
+          postalcode = data["PostalCode"].toString();
+          town = data["PostalAddressTown"].toString();
+          mobile = data["MobileNumber"].toString();
+          email = data["Email"].toString();
+          gender = data["Gender"].toString();
+          coowners = data["CoOwners"].toString();
+          physicaladdress = data["PhysicalAddress"].toString();
+          zone = data["Zone"].toString();
+          rateablevalue = data["RateableValue"].toString();
+          rentpayable = data["RentPayable"].toString();
+          rentareas = data["RentArreas"].toString();
+          penalty = data["Penalty"].toString();
+          accumulatedpenalty = data["AccumulatedPenalty"].toString();
+          status = data["Status"].toString();
+          use = data["PropertyUseDescription"].toString();
+          blocknumber = data["BlockNumber"].toString();
+          ownership = data["TypeOfOwnership"].toString();
+          mode = data["ModeOfAcquisition"].toString();
+          disputed = data["Disputed"].toString();
+          naturedisputed = data["NatureOfDisputed"].toString();
+          sitevalue = data["SiteValue"].toString();
+          developed = data["Developed"].toString();
+          developmnetapproved = data["DevelopmentApproved"].toString();
+          mainstructure = data["MainStructure"].toString();
+          remarks = data["Remarks"].toString();
+          areainha = data["AreaInHa"].toString();
+          accumulatedrates = data["AccumulatedRates"].toString();
         });
       }
     } catch (e) {
       print("data $e");
     }
+  }
+
+  searchMarket(String value) async {
+    try {
+      final response =
+          await get(Uri.parse("${getUrl()}powerbase/searchmarket/$value"));
+
+      var data = json.decode(response.body);
+      if ((data as List<dynamic>).length > 0) {
+        print("data $data");
+        setState(() {
+          entries.clear();
+          for (var item in data) {
+            entries.add(SearchMarket(
+                MarketName: item["MarketName"],
+                MarketID: item["MarketID"],
+                MarketCode: item["MarketCode"]));
+          }
+        });
+      }
+    } catch (e) {}
   }
 
   void _openDrawer() {
@@ -585,16 +607,54 @@ class _ValuationFormState extends State<ValuationForm> {
                   ],
                 ),
                 MyTextInput(
-                  title: 'MarketID',
+                  title: 'Market (Type to search)',
                   lines: 1,
-                  value: marketId,
-                  type: TextInputType.number,
+                  value: marketName,
+                  type: TextInputType.text,
                   onSubmit: (value) {
-                    setState(() {
-                      marketId = value;
-                    });
+                    searchMarket(value);
                   },
                 ),
+                entries.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Card(
+                          elevation: 12,
+                          child: SizedBox(
+                            width: double.maxFinite,
+                            child: ListView.separated(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: entries.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      marketId = entries[index].MarketID;
+                                      marketName = entries[index].MarketName;
+                                      newplotno = entries[index].MarketName;
+                                      entries.clear();
+                                    });
+                                  },
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          'Market: ${entries[index].MarketName}')),
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const Divider(
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(
+                        height: 10,
+                      ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -900,10 +960,11 @@ class _ValuationFormState extends State<ValuationForm> {
                       });
 
                       var res = await submitData(
+                          newplotno,
                           ward,
                           subcounty,
                           marketId,
-                          newPlotNo!,
+                          marketName,
                           tenure,
                           ownername,
                           idnumber,
@@ -970,10 +1031,11 @@ class _ValuationFormState extends State<ValuationForm> {
 }
 
 Future<Message> submitData(
+    String newplotno,
     String ward,
     String subcounty,
     String marketId,
-    String newPlotNo,
+    String marketName,
     String tenure,
     String ownername,
     String idnumber,
@@ -1015,6 +1077,7 @@ Future<Message> submitData(
     String areainha,
     String accumulatedrates) async {
   if (marketId.isEmpty ||
+      marketName.isEmpty ||
       tenure.isEmpty ||
       ownername.isEmpty ||
       idnumber.isEmpty ||
@@ -1034,23 +1097,22 @@ Future<Message> submitData(
   try {
     const storage = FlutterSecureStorage();
     var token = await storage.read(key: "mljwt");
-    var id = await storage.read(key: "NewPlotNumber");
+    String? newplotnumber = await storage.read(key: "NewPlotNumber");
+    String? valuationID = await storage.read(key: "ValuationID");
     var long = await storage.read(key: "long");
     var lat = await storage.read(key: "lat");
     var response;
-    var editing = await storage.read(key: "EDITING");
     var fieldOfficer = await storage.read(key: "id");
 
     storage.delete(key: "NewPlotNumber");
     storage.delete(key: "ValuationID");
-    storage.delete(key: "EDITING");
     storage.delete(key: "id");
     storage.delete(key: "long");
     storage.delete(key: "lat");
 
-    if (editing == 'TRUE') {
+    if (valuationID != null) {
       response = await put(
-        Uri.parse("${getUrl()}valuation/update/$id"),
+        Uri.parse("${getUrl()}valuation/update/$valuationID"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'token': token!
@@ -1059,12 +1121,13 @@ Future<Message> submitData(
           'Ward': ward,
           'SubCounty': subcounty,
           'MarketID': marketId,
-          'NewPlotNumber': newPlotNo,
+          'MarketName': marketName,
+          'NewPlotNumber': newplotnumber ?? newplotno,
           'Tenure': tenure,
           'OwnerName': ownername,
           'IDNumber': idnumber,
-          'LengthInFt': (length),
-          'WidthInFt': (width),
+          'LengthInFt': length,
+          'WidthInFt': width,
           'LRNo': lrno,
           'PINNumber': pinnumber,
           'LandRates': landrates,
@@ -1127,7 +1190,8 @@ Future<Message> submitData(
           'Ward': ward,
           'SubCounty': subcounty,
           'MarketID': marketId,
-          'NewPlotNumber': newPlotNo,
+          'MarketName': marketName,
+          'NewPlotNumber': newplotnumber ?? newplotno,
           'Tenure': tenure,
           'OwnerName': ownername,
           'IDNumber': idnumber,

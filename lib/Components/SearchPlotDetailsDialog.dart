@@ -21,7 +21,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
   String plotName = '';
   String plotNumber = '';
   String parcelNo = '';
-
   String searchItem = 'Search';
   String check = '';
   String error = '';
@@ -69,8 +68,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
   }
 
   addAttribute() {
-    storage.write(key: "EDITING", value: "FALSE");
-    storage.write(key: "NewPlotNumber", value: "0");
     storage.delete(key: "ValuationID");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
@@ -89,37 +86,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
     });
   }
 
-  checkLabel() {
-    switch (searchItem) {
-      case 'Name':
-        setState(() {
-          searchbox = 'Name';
-        });
-
-        break;
-      case 'Phone':
-        setState(() {
-          searchbox = 'Phone';
-        });
-
-        break;
-      case 'National ID':
-        setState(() {
-          searchbox = 'National ID';
-        });
-
-        break;
-      case 'Parcel No':
-        setState(() {
-          searchbox = 'Parcel No';
-        });
-        break;
-      default:
-    }
-
-    return searchbox;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -130,26 +96,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Plot Details',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Color.fromARGB(255, 0, 85, 165)),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text("Plot No: $plotNumber",
-                style: const TextStyle(fontSize: 16, color: Colors.black)),
-            const SizedBox(
-              height: 5,
-            ),
-            Text("Approved Parcel No: $parcelNo",
-                style: const TextStyle(fontSize: 16, color: Colors.black)),
-            const SizedBox(
-              height: 10,
-            ),
             const Text(
               'Search Parcel',
               style: TextStyle(
@@ -162,28 +108,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
             ),
             Row(
               children: [
-                // Flexible(
-                //   flex: 1,
-                //   fit: FlexFit.tight,
-                //   child: MySelectInput(
-                //       label: 'Select Field',
-                //       onSubmit: (searchParameter) {
-                //         setState(() {
-                //           searchItem = searchParameter;
-                //         });
-                //       },
-                //       entries: const [
-                //         "Search",
-                //         "Name",
-                //         "Phone",
-                //         "National ID",
-                //         "Parcel No"
-                //       ],
-                //       value: searchItem),
-                // ),
-                // const SizedBox(
-                //   width: 5,
-                // ),
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
@@ -242,7 +166,6 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                                   storage.write(
                                       key: "NewPlotNumber",
                                       value: entries[index].NewPlotNumber);
-                                  storage.write(key: "EDITING", value: "TRUE");
                                   storage.delete(key: "ValuationID");
                                   entries.clear();
                                 });
@@ -278,6 +201,9 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                       setState(() {
                         isChecked = value!;
                       });
+                      var storage = const FlutterSecureStorage();
+                      storage.delete(key: "ValuationID");
+                      storage.delete(key: "NewPlotNumber");
                     }),
                 const Text(
                   'No match found?',
