@@ -127,7 +127,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                   width: 50,
                                 ),
                                 Text(
-                                  'Map',
+                                  'Mapped Data',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,

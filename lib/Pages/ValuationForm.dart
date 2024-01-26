@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, file_names, non_constant_identifier_names, prefer_typing_uninitialized_variables, empty_catches
 
 import 'dart:convert';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
@@ -9,10 +8,8 @@ import 'package:fsd_makueni_mobile_app/Components/MySelectInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyTextInput.dart';
 import 'package:fsd_makueni_mobile_app/Components/SubmitButton.dart';
 import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
-import 'package:fsd_makueni_mobile_app/Components/UserContainer.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
-import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -93,10 +90,16 @@ class _ValuationFormState extends State<ValuationForm> {
   isEditing() async {
     var edit = await storage.read(key: "EDITING");
     var newplotno = (await storage.read(key: "NewPlotNumber"));
+    String? valuationID = (await storage.read(key: "ValuationID"));
+
     setState(() {
       editing = edit;
       newPlotNo = newplotno;
     });
+
+    if (valuationID != null) {
+      getValuation(valuationID);
+    }
 
     if (editing == "TRUE") {
       getData(newPlotNo);
@@ -107,7 +110,6 @@ class _ValuationFormState extends State<ValuationForm> {
     try {
       final response = await get(Uri.parse("${getUrl()}wards/subcounties"));
       var data = json.decode(response.body);
-      print("data ${data[0]["data"]}");
       getWards(data[0]["data"][0]);
       setState(() {
         subcounty = data[0]["data"][0];
@@ -115,9 +117,7 @@ class _ValuationFormState extends State<ValuationForm> {
             .map((dynamic item) => item.toString())
             .toList();
       });
-    } catch (e) {
-      print("data $e");
-    }
+    } catch (e) {}
   }
 
   getWards(String subcounty) async {
@@ -125,16 +125,13 @@ class _ValuationFormState extends State<ValuationForm> {
       final response =
           await get(Uri.parse("${getUrl()}wards/getwards/$subcounty"));
       var data = json.decode(response.body);
-      print("data ${data[0]["data"]}");
       setState(() {
         ward = data[0]["data"][0];
         wards = (data[0]["data"] as List<dynamic>)
             .map((dynamic item) => item.toString())
             .toList();
       });
-    } catch (e) {
-      print("data $e");
-    }
+    } catch (e) {}
   }
 
   getData(String? newPlotNo) async {
@@ -196,8 +193,77 @@ class _ValuationFormState extends State<ValuationForm> {
     } catch (e) {}
   }
 
+  getValuation(String? ValuationID) async {
+    try {
+      final response =
+          await get(Uri.parse("${getUrl()}valuation/$ValuationID"));
+
+      var data = json.decode(response.body);
+      if ((data as List<dynamic>).length > 0) {
+        data = data[0];
+        print("data $data");
+
+        setState(() {
+          subcounty = data["SubCounty"].toString() ?? '';
+          marketId = data["MarketID"].toString() ?? '';
+          tenure = data["Tenure"].toString() ?? '';
+          ownername = data["OwnerName"].toString() ?? '';
+          idnumber = data["IDNumber"].toString() ?? '';
+          length = data["LengthInFt"].toString() ?? '';
+          width = data["WidthInFt"].toString() ?? '';
+          lr_no = data["LR_number"].toString() ?? '';
+          pinnumber = data["PINNumber"].toString() ?? '';
+          landrates = data["LandRates"].toString() ?? '';
+          idtype = data["IDType"].toString() ?? '';
+          nextofkin = data["NextOfKin"].toString() ?? '';
+          physicallocation = data["PhysicalLocation"].toString() ?? '';
+          postaladdress = data["PostalAddress"].toString() ?? '';
+          postalcode = data["PostalCode"].toString() ?? '';
+          town = data["PostalAddressTown"].toString() ?? '';
+          mobile = data["MobileNumber"].toString() ?? '';
+          email = data["Email"].toString() ?? '';
+          gender = data["Gender"].toString() ?? '';
+          coowners = data["CoOwners"].toString() ?? '';
+          physicaladdress = data["PhysicalAddress"].toString() ?? '';
+          zone = data["Zone"].toString() ?? '';
+          rateablevalue = data["RateableValue"].toString() ?? '';
+          rentpayable = data["RentPayable"].toString() ?? '';
+          rentareas = data["RentArreas"].toString() ?? '';
+          penalty = data["Penalty"].toString() ?? '';
+          accumulatedpenalty = data["AccumulatedPenalty"].toString() ?? '';
+          status = data["Status"].toString() ?? '';
+          use = data["PropertyUseDescription"].toString() ?? '';
+          blocknumber = data["BlockNumber"].toString() ?? '';
+          ownership = data["TypeOfOwnership"].toString() ?? '';
+          mode = data["ModeOfAcquisition"].toString() ?? '';
+          disputed = data["Disputed"].toString() ?? '';
+          naturedisputed = data["NatureOfDisputed"].toString() ?? '';
+          sitevalue = data["SiteValue"].toString() ?? '';
+          developed = data["Developed"].toString() ?? '';
+          developmnetapproved = data["DevelopmentApproved"].toString() ?? '';
+          mainstructure = data["MainStructure"].toString() ?? '';
+          remarks = data["Remarks"].toString() ?? '';
+          areainha = data["AreaInHa"].toString() ?? '';
+          accumulatedrates = data["AccumulatedRates"].toString() ?? '';
+        });
+      }
+    } catch (e) {
+      print("data $e");
+    }
+  }
+
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
+  }
+
+  calculateArea(double lengthInFeet, double widthInFeet) {
+    double lengthInMeters = lengthInFeet * 0.3048;
+    double widthInMeters = widthInFeet * 0.3048;
+    double areaInSquareMeters = lengthInMeters * widthInMeters;
+    double areaInHectares = areaInSquareMeters / 10000.0;
+    setState(() {
+      areainha = areaInHectares.toStringAsFixed(4);
+    });
   }
 
   @override
@@ -364,7 +430,7 @@ class _ValuationFormState extends State<ValuationForm> {
                         gender = value;
                       });
                     },
-                    list: const ['--Select Gender--', 'Male', 'Female'],
+                    list: const ['', 'Male', 'Female'],
                     value: gender),
                 MyTextInput(
                   title: 'Co-Owners (optional)',
@@ -409,6 +475,10 @@ class _ValuationFormState extends State<ValuationForm> {
                           setState(() {
                             length = value;
                           });
+                          if (width.isNotEmpty && length.isNotEmpty) {
+                            calculateArea(double.tryParse(length)!,
+                                double.tryParse(width)!);
+                          }
                         },
                       ),
                     ),
@@ -425,6 +495,10 @@ class _ValuationFormState extends State<ValuationForm> {
                           setState(() {
                             width = value;
                           });
+                          if (width.isNotEmpty && length.isNotEmpty) {
+                            calculateArea(double.tryParse(length)!,
+                                double.tryParse(width)!);
+                          }
                         },
                       ),
                     ),
@@ -453,6 +527,12 @@ class _ValuationFormState extends State<ValuationForm> {
                           setState(() {
                             sitevalue = value;
                           });
+                          if (sitevalue.isNotEmpty) {
+                            setState(() {
+                              landrates = (double.tryParse(sitevalue)! * 0.04)
+                                  .toStringAsFixed(0);
+                            });
+                          }
                         },
                       ),
                     ),
@@ -853,7 +933,6 @@ class _ValuationFormState extends State<ValuationForm> {
                           status,
                           use,
                           blocknumber,
-                         
                           ownership,
                           mode,
                           disputed,
@@ -924,7 +1003,6 @@ Future<Message> submitData(
     String status,
     String use,
     String blocknumber,
-
     String ownership,
     String mode,
     String disputed,
@@ -962,6 +1040,13 @@ Future<Message> submitData(
     var response;
     var editing = await storage.read(key: "EDITING");
     var fieldOfficer = await storage.read(key: "id");
+
+    storage.delete(key: "NewPlotNumber");
+    storage.delete(key: "ValuationID");
+    storage.delete(key: "EDITING");
+    storage.delete(key: "id");
+    storage.delete(key: "long");
+    storage.delete(key: "lat");
 
     if (editing == 'TRUE') {
       response = await put(
@@ -1101,7 +1186,6 @@ Future<Message> submitData(
       }
     }
   } catch (e) {
-    print("data $e");
     return Message(
       token: null,
       success: null,

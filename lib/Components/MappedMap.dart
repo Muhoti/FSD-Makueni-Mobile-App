@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/SearchPlotDetailsDialog.dart';
+import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
@@ -27,12 +28,25 @@ class _MappedMapState extends State<MappedMap> {
   var isLoading = null;
 
   void editMappedForm(Map<String, dynamic> receivedData) {
-    var valuationID = receivedData["ValuationID"];
-    print("data ${valuationID}");
+    try {
+      String? valuationID = receivedData["ValuationID"];
+      if (valuationID!.isNotEmpty) {
+        const storage = FlutterSecureStorage();
+        storage.write(key: "ValuationID", value: valuationID);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const ValuationForm()));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
   void initState() {
+    setState(() {
+      isLoading = LoadingAnimationWidget.horizontalRotatingDots(
+          color: Colors.yellow, size: 100);
+    });
     // #docregion platform_features
     late final PlatformWebViewControllerCreationParams params;
     params = const PlatformWebViewControllerCreationParams();
@@ -47,12 +61,7 @@ class _MappedMapState extends State<MappedMap> {
           onProgress: (int progress) {
             // Update loading bar.
           },
-          onPageStarted: (String url) {
-            setState(() {
-              isLoading = LoadingAnimationWidget.horizontalRotatingDots(
-                  color: Colors.yellow, size: 100);
-            });
-          },
+          onPageStarted: (String url) {},
           onPageFinished: (String url) {
             setState(() {
               isLoading = null;

@@ -17,14 +17,20 @@ class MySelectInput extends StatefulWidget {
 }
 
 class _MySelectInputState extends State<MySelectInput> {
-  late String _selectedOption;
+  late String _selectedOption = '';
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _selectedOption = widget.value != "" ? widget.value : widget.list.first;
-    });
+    if (widget.list.contains(widget.value)) {
+      setState(() {
+        _selectedOption = widget.value;
+      });
+    } else {
+      setState(() {
+        _selectedOption = widget.list.first;
+      });
+    }
   }
 
   @override
@@ -34,6 +40,17 @@ class _MySelectInputState extends State<MySelectInput> {
       setState(() {
         _selectedOption = widget.list.first;
       });
+    }
+    if (oldWidget.value != widget.value) {
+      if (widget.list.contains(widget.value)) {
+        setState(() {
+          _selectedOption = widget.value;
+        });
+      } else {
+        setState(() {
+          _selectedOption = widget.list.first;
+        });
+      }
     }
   }
 
@@ -81,7 +98,6 @@ class _MySelectInputState extends State<MySelectInput> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 0, 16, 0),
               child: DropdownButton<String>(
-                
                 icon: const Align(
                   alignment: Alignment.centerRight,
                   child: Icon(

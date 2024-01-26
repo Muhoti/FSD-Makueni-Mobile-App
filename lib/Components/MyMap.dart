@@ -71,6 +71,10 @@ class _MyMapState extends State<MyMap> {
 
   @override
   void initState() {
+    setState(() {
+      isLoading = LoadingAnimationWidget.horizontalRotatingDots(
+          color: Colors.yellow, size: 100);
+    });
     // #docregion platform_features
     late final PlatformWebViewControllerCreationParams params;
     params = const PlatformWebViewControllerCreationParams();
@@ -85,12 +89,7 @@ class _MyMapState extends State<MyMap> {
           onProgress: (int progress) {
             // Update loading bar.
           },
-          onPageStarted: (String url) {
-            setState(() {
-              isLoading = LoadingAnimationWidget.horizontalRotatingDots(
-                  color: Colors.yellow, size: 100);
-            });
-          },
+          onPageStarted: (String url) {},
           onPageFinished: (String url) {
             setState(() {
               isLoading = null;

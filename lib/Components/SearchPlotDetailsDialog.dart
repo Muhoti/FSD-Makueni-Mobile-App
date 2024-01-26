@@ -138,6 +138,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
   addAttribute() {
     storage.write(key: "EDITING", value: "FALSE");
     storage.write(key: "NewPlotNumber", value: "0");
+    storage.delete(key: "ValuationID");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const ValuationForm()));
   }
@@ -309,6 +310,7 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
                                       key: "NewPlotNumber",
                                       value: entries[index].NewPlotNumber);
                                   storage.write(key: "EDITING", value: "TRUE");
+                                  storage.delete(key: "ValuationID");
                                   entries.clear();
                                 });
                                 Navigator.pushReplacement(

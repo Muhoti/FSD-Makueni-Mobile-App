@@ -36,8 +36,8 @@ class _MyTextInputState extends State<MyTextInput> {
   @override
   void didUpdateWidget(covariant MyTextInput oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.value != "") {
-      _value = widget.value;
+    if (widget.value != oldWidget.value && widget.value != "null") {
+      _controller.text = widget.value;
     }
   }
 
@@ -53,7 +53,7 @@ class _MyTextInputState extends State<MyTextInput> {
                   borderSide: BorderSide(color: Colors.yellow)))),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-        child: TextField(
+        child: TextFormField(
           onChanged: (value) {
             setState(() {
               _value = value;
