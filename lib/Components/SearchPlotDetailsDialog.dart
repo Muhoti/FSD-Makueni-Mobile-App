@@ -49,85 +49,18 @@ class _PlotDetailsState extends State<SearchPlotDetails> {
       entries.clear();
     });
     try {
-      // switch (searchbox) {
-      //   case 'National ID':
-      //     response = await http.get(
-      //         Uri.parse("${getUrl()}valuation/searchid/$v"),
-      //         headers: <String, String>{
-      //           'Content-Type': 'application/json; charset=UTF-8'
-      //         });
-
-      //     print("searching id: $v");
-
-      //     break;
-      //   case 'Name':
-      //     response = await http.get(
-      //         Uri.parse("${getUrl()}valuation/searchname/$v"),
-      //         headers: <String, String>{
-      //           'Content-Type': 'application/json; charset=UTF-8'
-      //         });
-
-      //     print("searching Name: $v");
-
-      //     break;
-      //   case 'Phone':
-      //     response = await http.get(
-      //         Uri.parse("${getUrl()}valuation/searchphone/$v"),
-      //         headers: <String, String>{
-      //           'Content-Type': 'application/json; charset=UTF-8'
-      //         });
-
-      //     break;
-      //   case 'Parcel No':
-      //     response = await http.get(
-      //         Uri.parse("${getUrl()}valuation/searchparcel/$v"),
-      //         headers: <String, String>{
-      //           'Content-Type': 'application/json; charset=UTF-8'
-      //         });
-
-      //     break;
-      //   default:
-      //     'National ID';
-      //     return response;
-      // }
-
       final response = await http.get(
-          Uri.parse("${getUrl()}valuation/searchname/$v"),
+          Uri.parse("${getUrl()}powerbase/searchwildcard/$v"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           });
 
       var data = json.decode(response.body);
 
-      // plotNumber = data[0]["NewPlotNumber"];
-      // plotName = data[0]["OwnerName"];
-      // parcelNo = data[0]["ParcelNo"];
-
       setState(() {
         entries.clear();
         for (var item in data) {
-          entries.add(SearchItem(item["OwnerName"], item["NewPlotNumber"]));
-
-          // switch (searchItem) {
-          //   case 'Name':
-          //     si = item["OwnerName"];
-
-          //     break;
-          //   case 'National ID':
-          //     si = item["NationalID"];
-
-          //     break;
-          //   case 'Parcel No':
-          //     si = item["ParcelNo"];
-
-          //     break;
-          //   case 'Phone':
-          //     si = item["Phone"];
-
-          //     break;
-          //   default:
-          // }
-          // print("THE SEARCH ITEM IS: $si");
+          entries.add(SearchItem(item["OwnerName"], item["MarketName"]));
         }
       });
     } catch (e) {
