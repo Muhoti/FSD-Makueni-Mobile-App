@@ -144,8 +144,6 @@ class _ValuationFormState extends State<ValuationForm> {
 
       var data = json.decode(response.body);
 
-      print("data $data");
-
       setState(() {
         propertyId = data["property"]["property_id"] ?? '';
         marketId = data["property"]["market_id"] ?? '';

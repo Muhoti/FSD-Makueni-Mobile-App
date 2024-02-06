@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fsd_makueni_mobile_app/Components/MyDrawer.dart';
 import 'package:fsd_makueni_mobile_app/Components/PlotDetailsDialog.dart';
 import 'package:fsd_makueni_mobile_app/Components/SearchPlotDetailsDialog.dart';
+import 'package:fsd_makueni_mobile_app/Pages/ValuationForm.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:fsd_makueni_mobile_app/Components/YellowButton.dart';
@@ -41,22 +42,14 @@ class _MyMapState extends State<MyMap> {
     var newPlotNo = receivedData["NewPlotNumber"];
 
     if (newPlotNo != null) {
-      _displayPlotDetailsDialog(newPlotNo);
+      print("data $newPlotNo");
+      const storage = FlutterSecureStorage();
+      storage.write(key: "NewPlotNumber", value: newPlotNo);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const ValuationForm()));
     } else {
       _searchPlotDetailsDialog();
     }
-  }
-
-// It displays the details of the parcel selected.
-  _displayPlotDetailsDialog(newPlotNo) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return PlotDetails(
-          newPlotNo: newPlotNo,
-        );
-      },
-    );
   }
 
   void _searchPlotDetailsDialog() {
