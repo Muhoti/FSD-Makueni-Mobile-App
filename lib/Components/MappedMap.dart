@@ -16,7 +16,9 @@ import 'Utils.dart';
 import 'dart:io';
 
 class MappedMap extends StatefulWidget {
-  const MappedMap({Key? key}) : super(key: key);
+   final double lat;
+  final double lon;
+  const MappedMap({Key? key,  required this.lat, required this.lon}) : super(key: key);
 
   @override
   State<MappedMap> createState() => _MappedMapState();
@@ -66,7 +68,10 @@ class _MappedMapState extends State<MappedMap> {
             setState(() {
               isLoading = null;
             });
+            controller
+                .runJavaScript('adjustMarker(${widget.lon},${widget.lat})');
           },
+          
           onWebResourceError: (WebResourceError error) {
             setState(() {
               isLoading = null;
@@ -85,6 +90,12 @@ class _MappedMapState extends State<MappedMap> {
       ..loadRequest(Uri.parse('${getUrl()}mapped'));
 
     super.initState();
+  }
+
+    @override
+  void didUpdateWidget(covariant MappedMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    controller.runJavaScript('adjustMarker(${widget.lat},${widget.lon})');
   }
 
   @override

@@ -147,7 +147,10 @@ class _MappedDataState extends State<MappedData> {
               Expanded(
                 child: SizedBox(
                   child: long != null && lat != null
-                      ? const MappedMap()
+                      ? MappedMap(
+                        lat: lat,
+                          lon: long,
+                      )
                       : const SizedBox(),
                 ),
               ),

@@ -94,6 +94,8 @@ class _MyMapState extends State<MyMap> {
             setState(() {
               isLoading = null;
             });
+            controller
+                .runJavaScript('adjustMarker(${widget.lon},${widget.lat})');
           },
           onWebResourceError: (WebResourceError error) {
             setState(() {
@@ -117,6 +119,12 @@ class _MyMapState extends State<MyMap> {
       ..loadRequest(Uri.parse('${getUrl()}map'));
 
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    controller.runJavaScript('adjustMarker(${widget.lat},${widget.lon})');
   }
 
   @override
