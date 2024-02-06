@@ -95,10 +95,24 @@ class _ValuationFormState extends State<ValuationForm> {
     String? valuationID = (await storage.read(key: "ValuationID"));
 
     if (valuationID != null) {
+      setState(() {
+        error = "";
+        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+          color: const Color.fromARGB(255, 26, 114, 186),
+          size: 100,
+        );
+      });
       getValuation(valuationID);
     }
 
     if (newplotno != null) {
+      setState(() {
+        error = "";
+        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+          color: const Color.fromARGB(255, 26, 114, 186),
+          size: 100,
+        );
+      });
       getData(newplotno);
     } else {}
   }
@@ -188,8 +202,13 @@ class _ValuationFormState extends State<ValuationForm> {
         remarks = data["property"]["Remarks"] ?? '';
         areainha = data["property"]["area"] ?? '';
         accumulatedrates = data["property"]["AccumulatedRates"] ?? '';
+        isLoading = null;
       });
-    } catch (e) {}
+    } catch (e) {
+      setState(() {
+        isLoading = null;
+      });
+    }
   }
 
   getValuation(String? ValuationID) async {
@@ -245,10 +264,13 @@ class _ValuationFormState extends State<ValuationForm> {
           remarks = data["Remarks"].toString();
           areainha = data["AreaInHa"].toString();
           accumulatedrates = data["AccumulatedRates"].toString();
+          isLoading = null;
         });
       }
     } catch (e) {
-      print("data $e");
+      setState(() {
+        isLoading = null;
+      });
     }
   }
 
