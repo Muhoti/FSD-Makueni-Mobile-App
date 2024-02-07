@@ -11,6 +11,7 @@ import 'package:fsd_makueni_mobile_app/Components/TextResponse.dart';
 import 'package:fsd_makueni_mobile_app/Components/Utils.dart';
 import 'package:fsd_makueni_mobile_app/Models/SearchMarket.dart';
 import 'package:fsd_makueni_mobile_app/Pages/Home.dart';
+import 'package:fsd_makueni_mobile_app/Pages/MapPage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -91,16 +92,14 @@ class _ValuationFormState extends State<ValuationForm> {
   }
 
   isEditing() async {
+    isLoading = LoadingAnimationWidget.horizontalRotatingDots(
+        color: Colors.yellow, size: 100);
     String? newplotno = (await storage.read(key: "NewPlotNumber"));
     String? valuationID = (await storage.read(key: "ValuationID"));
 
     if (valuationID != null) {
       setState(() {
         error = "";
-        isLoading = LoadingAnimationWidget.staggeredDotsWave(
-          color: const Color.fromARGB(255, 26, 114, 186),
-          size: 100,
-        );
       });
       getValuation(valuationID);
     }
@@ -108,10 +107,8 @@ class _ValuationFormState extends State<ValuationForm> {
     if (newplotno != null) {
       setState(() {
         error = "";
-        isLoading = LoadingAnimationWidget.staggeredDotsWave(
-          color: const Color.fromARGB(255, 26, 114, 186),
-          size: 100,
-        );
+        isLoading = LoadingAnimationWidget.horizontalRotatingDots(
+            color: Colors.yellow, size: 100);
       });
       getData(newplotno);
     } else {}
@@ -314,744 +311,759 @@ class _ValuationFormState extends State<ValuationForm> {
     return Scaffold(
       key: _scaffoldKey,
       drawer: const MyDrawer(),
-      body: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(26, 114, 186, 1),
-            Color.fromRGBO(49, 161, 254, 1)
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        )),
-        padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-                  child: Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: GestureDetector(
-                          onTap: _openDrawer,
-                          child: const Icon(
-                            Icons.menu,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      const Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: Text(
-                            "Valuation Form",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          )),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (_) => const Home()));
-                        },
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Text('Owner Information',
-                    style: TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'Owner Name',
-                  lines: 1,
-                  value: ownername,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      ownername = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Phone Number',
-                  lines: 1,
-                  value: mobile,
-                  type: TextInputType.phone,
-                  onSubmit: (value) {
-                    setState(() {
-                      mobile = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Email (optional)',
-                  lines: 1,
-                  value: email,
-                  type: TextInputType.emailAddress,
-                  onSubmit: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(26, 114, 186, 1),
+                Color.fromRGBO(49, 161, 254, 1)
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            )),
+            padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 130,
-                      child: MySelectInput(
-                          label: 'ID Type',
-                          onSubmit: (value) {
-                            setState(() {
-                              idtype = value;
-                            });
-                          },
-                          list: const ['ID', 'Passport'],
-                          value: idtype),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: MyTextInput(
-                        title: 'ID/Passport Number',
-                        lines: 1,
-                        value: idnumber,
-                        type: TextInputType.number,
-                        onSubmit: (value) {
-                          setState(() {
-                            idnumber = value;
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                MyTextInput(
-                  title: 'PIN Number',
-                  lines: 1,
-                  value: pinnumber,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      pinnumber = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Next of Kin (optional)',
-                  lines: 1,
-                  value: nextofkin,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      nextofkin = value;
-                    });
-                  },
-                ),
-                MySelectInput(
-                    label: 'Gender',
-                    onSubmit: (value) {
-                      setState(() {
-                        gender = value;
-                      });
-                    },
-                    list: const ['', 'Male', 'Female'],
-                    value: gender),
-                MyTextInput(
-                  title: 'Co-Owners (optional)',
-                  lines: 1,
-                  value: coowners,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      coowners = value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text('Plot Details',
-                    style: TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
-                const SizedBox(
-                  height: 10,
-                ),
-                MySelectInput(
-                    label: 'Tenure',
-                    onSubmit: (value) {
-                      setState(() {
-                        tenure = value;
-                      });
-                    },
-                    list: const ['', 'Freehold', 'Leasehold'],
-                    value: tenure),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MyTextInput(
-                        title: 'Length (Ft)',
-                        lines: 1,
-                        value: length,
-                        type: TextInputType.number,
-                        onSubmit: (value) {
-                          setState(() {
-                            length = value;
-                          });
-                          if (width.isNotEmpty && length.isNotEmpty) {
-                            calculateArea(double.tryParse(length)!,
-                                double.tryParse(width)!);
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: MyTextInput(
-                        title: 'Width (Ft)',
-                        lines: 1,
-                        value: width,
-                        type: TextInputType.number,
-                        onSubmit: (value) {
-                          setState(() {
-                            width = value;
-                          });
-                          if (width.isNotEmpty && length.isNotEmpty) {
-                            calculateArea(double.tryParse(length)!,
-                                double.tryParse(width)!);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                MyTextInput(
-                  title: 'Area in Ha',
-                  lines: 1,
-                  value: areainha,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      areainha = value;
-                    });
-                  },
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MyTextInput(
-                        title: 'Site Value',
-                        lines: 1,
-                        value: sitevalue,
-                        type: TextInputType.number,
-                        onSubmit: (value) {
-                          setState(() {
-                            sitevalue = value;
-                          });
-                          if (sitevalue.isNotEmpty) {
-                            setState(() {
-                              landrates = (double.tryParse(sitevalue)! * 0.04)
-                                  .toStringAsFixed(0);
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: MyTextInput(
-                        title: 'Land Rate',
-                        lines: 1,
-                        value: landrates,
-                        type: TextInputType.number,
-                        onSubmit: (value) {
-                          setState(() {
-                            landrates = value;
-                          });
-                          if (landrates.isNotEmpty) {
-                            setState(() {
-                              sitevalue = (double.tryParse(landrates)! / 0.04)
-                                  .toStringAsFixed(0);
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MySelectInput(
-                          label: 'Sub County',
-                          onSubmit: (value) {
-                            getWards(value);
-                            setState(() {
-                              subcounty = value;
-                            });
-                          },
-                          list: subcounties,
-                          value: subcounty),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: MySelectInput(
-                          label: 'Ward',
-                          onSubmit: (value) {
-                            setState(() {
-                              ward = value;
-                            });
-                          },
-                          list: wards,
-                          value: subcounty),
-                    ),
-                  ],
-                ),
-                MyTextInput(
-                  title: 'Market (Type to search)',
-                  lines: 1,
-                  value: marketName,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    searchMarket(value);
-                  },
-                ),
-                entries.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: Card(
-                          elevation: 12,
-                          child: SizedBox(
-                            width: double.maxFinite,
-                            child: ListView.separated(
-                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: entries.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      marketId = entries[index].MarketID;
-                                      marketName = entries[index].MarketName;
-                                      newplotno = entries[index].MarketCode;
-                                      entries.clear();
-                                    });
-                                  },
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          'Market: ${entries[index].MarketName}')),
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const Divider(
-                                height: 1,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: GestureDetector(
+                              onTap: _openDrawer,
+                              child: const Icon(
+                                Icons.menu,
+                                color: Colors.white,
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : const SizedBox(
-                        height: 10,
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          const Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                "Valuation Form",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              )),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const MapPage()));
+                            },
+                            child: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text('Other Details (optional)',
-                    style: TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextInput(
-                  title: 'LR Number',
-                  lines: 1,
-                  value: lr_no,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      lr_no = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Physical Location',
-                  lines: 1,
-                  value: physicallocation,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      physicallocation = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Postal Address',
-                  lines: 1,
-                  value: postaladdress,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      postaladdress = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Postal Code',
-                  lines: 1,
-                  value: postalcode,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      postalcode = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Postal Address Town',
-                  lines: 1,
-                  value: town,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      town = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Physical Address',
-                  lines: 1,
-                  value: physicaladdress,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      physicaladdress = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Zone',
-                  lines: 1,
-                  value: zone,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      zone = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Rateable Value',
-                  lines: 1,
-                  value: rateablevalue,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      rateablevalue = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Land Rate Arrears',
-                  lines: 1,
-                  value: landratesarrears,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      landratesarrears = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Rent Payable',
-                  lines: 1,
-                  value: rentpayable,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      rentpayable = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Rent Areas',
-                  lines: 1,
-                  value: rentareas,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      rentareas = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Penalty',
-                  lines: 1,
-                  value: penalty,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      penalty = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Accumulated Penalty',
-                  lines: 1,
-                  value: accumulatedpenalty,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      accumulatedpenalty = value;
-                    });
-                  },
-                ),
-                MySelectInput(
-                    label: 'Status',
-                    onSubmit: (value) {
-                      setState(() {
-                        status = value;
-                      });
-                    },
-                    list: const ['Select Status', '1', '0'],
-                    value: status),
-                MyTextInput(
-                  title: 'Property Use Description',
-                  lines: 1,
-                  value: use,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      use = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Block Number',
-                  lines: 1,
-                  value: blocknumber,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      blocknumber = value;
-                    });
-                  },
-                ),
-                MySelectInput(
-                    label: 'Type of Ownership',
-                    onSubmit: (value) {
-                      setState(() {
-                        ownership = value;
-                      });
-                    },
-                    list: const [
-                      '--Type of Ownership--',
-                      'Individual',
-                      'Group',
-                      'Private Institution'
-                    ],
-                    value: ownership),
-                MySelectInput(
-                    label: 'Mode of Acquisition',
-                    onSubmit: (value) {
-                      setState(() {
-                        mode = value;
-                      });
-                    },
-                    list: const [
-                      '--Mode of Acquisition--',
-                      'Purchased',
-                      'Allotment'
-                    ],
-                    value: mode),
-                MySelectInput(
-                    label: 'Disputed',
-                    onSubmit: (value) {
-                      setState(() {
-                        disputed = value;
-                      });
-                    },
-                    list: const ['--Select Option--', 'Yes', 'No'],
-                    value: disputed),
-                MyTextInput(
-                  title: 'Nature of Disputed',
-                  lines: 1,
-                  value: naturedisputed,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      naturedisputed = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Developed',
-                  lines: 1,
-                  value: developed,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      developed = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Development Approved',
-                  lines: 1,
-                  value: developmnetapproved,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      developmnetapproved = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Main Structure',
-                  lines: 1,
-                  value: mainstructure,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      mainstructure = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Remarks',
-                  lines: 1,
-                  value: remarks,
-                  type: TextInputType.text,
-                  onSubmit: (value) {
-                    setState(() {
-                      remarks = value;
-                    });
-                  },
-                ),
-                MyTextInput(
-                  title: 'Accumulated Rates',
-                  lines: 1,
-                  value: accumulatedrates,
-                  type: TextInputType.number,
-                  onSubmit: (value) {
-                    setState(() {
-                      accumulatedrates = value;
-                    });
-                  },
-                ),
-                Center(
-                  child: isLoading ?? const SizedBox(),
-                ),
-                TextResponse(label: error),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SubmitButton(
-                    label: "Submit",
-                    onButtonPressed: () async {
-                      setState(() {
-                        error = "";
-                        isLoading = LoadingAnimationWidget.staggeredDotsWave(
-                          color: const Color.fromARGB(255, 26, 114, 186),
-                          size: 100,
-                        );
-                      });
+                    ),
+                    const Text('Owner Information',
+                        style: TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    MyTextInput(
+                      title: 'Owner Name',
+                      lines: 1,
+                      value: ownername,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          ownername = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Phone Number',
+                      lines: 1,
+                      value: mobile,
+                      type: TextInputType.phone,
+                      onSubmit: (value) {
+                        setState(() {
+                          mobile = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Email (optional)',
+                      lines: 1,
+                      value: email,
+                      type: TextInputType.emailAddress,
+                      onSubmit: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 130,
+                          child: MySelectInput(
+                              label: 'ID Type',
+                              onSubmit: (value) {
+                                setState(() {
+                                  idtype = value;
+                                });
+                              },
+                              list: const ['ID', 'Passport'],
+                              value: idtype),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: MyTextInput(
+                            title: 'ID/Passport Number',
+                            lines: 1,
+                            value: idnumber,
+                            type: TextInputType.number,
+                            onSubmit: (value) {
+                              setState(() {
+                                idnumber = value;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    MyTextInput(
+                      title: 'PIN Number',
+                      lines: 1,
+                      value: pinnumber,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          pinnumber = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Next of Kin (optional)',
+                      lines: 1,
+                      value: nextofkin,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          nextofkin = value;
+                        });
+                      },
+                    ),
+                    MySelectInput(
+                        label: 'Gender',
+                        onSubmit: (value) {
+                          setState(() {
+                            gender = value;
+                          });
+                        },
+                        list: const ['', 'Male', 'Female'],
+                        value: gender),
+                    MyTextInput(
+                      title: 'Co-Owners (optional)',
+                      lines: 1,
+                      value: coowners,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          coowners = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Text('Plot Details',
+                        style: TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    MySelectInput(
+                        label: 'Tenure',
+                        onSubmit: (value) {
+                          setState(() {
+                            tenure = value;
+                          });
+                        },
+                        list: const ['', 'Freehold', 'Leasehold'],
+                        value: tenure),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MyTextInput(
+                            title: 'Length (Ft)',
+                            lines: 1,
+                            value: length,
+                            type: TextInputType.number,
+                            onSubmit: (value) {
+                              setState(() {
+                                length = value;
+                              });
+                              if (width.isNotEmpty && length.isNotEmpty) {
+                                calculateArea(double.tryParse(length)!,
+                                    double.tryParse(width)!);
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: MyTextInput(
+                            title: 'Width (Ft)',
+                            lines: 1,
+                            value: width,
+                            type: TextInputType.number,
+                            onSubmit: (value) {
+                              setState(() {
+                                width = value;
+                              });
+                              if (width.isNotEmpty && length.isNotEmpty) {
+                                calculateArea(double.tryParse(length)!,
+                                    double.tryParse(width)!);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    MyTextInput(
+                      title: 'Area in Ha',
+                      lines: 1,
+                      value: areainha,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          areainha = value;
+                        });
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MyTextInput(
+                            title: 'Site Value',
+                            lines: 1,
+                            value: sitevalue,
+                            type: TextInputType.number,
+                            onSubmit: (value) {
+                              setState(() {
+                                sitevalue = value;
+                              });
+                              if (sitevalue.isNotEmpty) {
+                                setState(() {
+                                  landrates =
+                                      (double.tryParse(sitevalue)! * 0.04)
+                                          .toStringAsFixed(0);
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: MyTextInput(
+                            title: 'Land Rate',
+                            lines: 1,
+                            value: landrates,
+                            type: TextInputType.number,
+                            onSubmit: (value) {
+                              setState(() {
+                                landrates = value;
+                              });
+                              if (landrates.isNotEmpty) {
+                                setState(() {
+                                  sitevalue =
+                                      (double.tryParse(landrates)! / 0.04)
+                                          .toStringAsFixed(0);
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MySelectInput(
+                              label: 'Sub County',
+                              onSubmit: (value) {
+                                getWards(value);
+                                setState(() {
+                                  subcounty = value;
+                                });
+                              },
+                              list: subcounties,
+                              value: subcounty),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: MySelectInput(
+                              label: 'Ward',
+                              onSubmit: (value) {
+                                setState(() {
+                                  ward = value;
+                                });
+                              },
+                              list: wards,
+                              value: subcounty),
+                        ),
+                      ],
+                    ),
+                    MyTextInput(
+                      title: 'Market (Type to search)',
+                      lines: 1,
+                      value: marketName,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        searchMarket(value);
+                      },
+                    ),
+                    entries.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Card(
+                              elevation: 12,
+                              child: SizedBox(
+                                width: double.maxFinite,
+                                child: ListView.separated(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: entries.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          marketId = entries[index].MarketID;
+                                          marketName =
+                                              entries[index].MarketName;
+                                          newplotno = entries[index].MarketCode;
+                                          entries.clear();
+                                        });
+                                      },
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                              'Market: ${entries[index].MarketName}')),
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider(
+                                    height: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox(
+                            height: 10,
+                          ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Text('Other Details (optional)',
+                        style: TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    MyTextInput(
+                      title: 'LR Number',
+                      lines: 1,
+                      value: lr_no,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          lr_no = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Physical Location',
+                      lines: 1,
+                      value: physicallocation,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          physicallocation = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Postal Address',
+                      lines: 1,
+                      value: postaladdress,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          postaladdress = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Postal Code',
+                      lines: 1,
+                      value: postalcode,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          postalcode = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Postal Address Town',
+                      lines: 1,
+                      value: town,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          town = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Physical Address',
+                      lines: 1,
+                      value: physicaladdress,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          physicaladdress = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Zone',
+                      lines: 1,
+                      value: zone,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          zone = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Rateable Value',
+                      lines: 1,
+                      value: rateablevalue,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          rateablevalue = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Land Rate Arrears',
+                      lines: 1,
+                      value: landratesarrears,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          landratesarrears = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Rent Payable',
+                      lines: 1,
+                      value: rentpayable,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          rentpayable = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Rent Areas',
+                      lines: 1,
+                      value: rentareas,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          rentareas = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Penalty',
+                      lines: 1,
+                      value: penalty,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          penalty = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Accumulated Penalty',
+                      lines: 1,
+                      value: accumulatedpenalty,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          accumulatedpenalty = value;
+                        });
+                      },
+                    ),
+                    MySelectInput(
+                        label: 'Status',
+                        onSubmit: (value) {
+                          setState(() {
+                            status = value;
+                          });
+                        },
+                        list: const ['Select Status', '1', '0'],
+                        value: status),
+                    MyTextInput(
+                      title: 'Property Use Description',
+                      lines: 1,
+                      value: use,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          use = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Block Number',
+                      lines: 1,
+                      value: blocknumber,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          blocknumber = value;
+                        });
+                      },
+                    ),
+                    MySelectInput(
+                        label: 'Type of Ownership',
+                        onSubmit: (value) {
+                          setState(() {
+                            ownership = value;
+                          });
+                        },
+                        list: const [
+                          '--Type of Ownership--',
+                          'Individual',
+                          'Group',
+                          'Private Institution'
+                        ],
+                        value: ownership),
+                    MySelectInput(
+                        label: 'Mode of Acquisition',
+                        onSubmit: (value) {
+                          setState(() {
+                            mode = value;
+                          });
+                        },
+                        list: const [
+                          '--Mode of Acquisition--',
+                          'Purchased',
+                          'Allotment'
+                        ],
+                        value: mode),
+                    MySelectInput(
+                        label: 'Disputed',
+                        onSubmit: (value) {
+                          setState(() {
+                            disputed = value;
+                          });
+                        },
+                        list: const ['--Select Option--', 'Yes', 'No'],
+                        value: disputed),
+                    MyTextInput(
+                      title: 'Nature of Disputed',
+                      lines: 1,
+                      value: naturedisputed,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          naturedisputed = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Developed',
+                      lines: 1,
+                      value: developed,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          developed = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Development Approved',
+                      lines: 1,
+                      value: developmnetapproved,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          developmnetapproved = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Main Structure',
+                      lines: 1,
+                      value: mainstructure,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          mainstructure = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Remarks',
+                      lines: 1,
+                      value: remarks,
+                      type: TextInputType.text,
+                      onSubmit: (value) {
+                        setState(() {
+                          remarks = value;
+                        });
+                      },
+                    ),
+                    MyTextInput(
+                      title: 'Accumulated Rates',
+                      lines: 1,
+                      value: accumulatedrates,
+                      type: TextInputType.number,
+                      onSubmit: (value) {
+                        setState(() {
+                          accumulatedrates = value;
+                        });
+                      },
+                    ),
+                    TextResponse(label: error),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SubmitButton(
+                        label: "Submit",
+                        onButtonPressed: () async {
+                          setState(() {
+                            error = "";
+                            isLoading =
+                                LoadingAnimationWidget.staggeredDotsWave(
+                              color: const Color.fromARGB(255, 26, 114, 186),
+                              size: 100,
+                            );
+                          });
 
-                      var res = await submitData(
-                          newplotno,
-                          ward,
-                          subcounty,
-                          marketId,
-                          marketName,
-                          tenure,
-                          ownername,
-                          idnumber,
-                          length,
-                          width,
-                          lr_no,
-                          pinnumber,
-                          landrates,
-                          idtype,
-                          nextofkin,
-                          physicallocation,
-                          postaladdress,
-                          postalcode,
-                          town,
-                          mobile,
-                          email,
-                          gender,
-                          coowners,
-                          physicaladdress,
-                          zone,
-                          rateablevalue,
-                          landratesarrears,
-                          rentpayable,
-                          rentareas,
-                          penalty,
-                          accumulatedpenalty,
-                          status,
-                          use,
-                          blocknumber,
-                          ownership,
-                          mode,
-                          disputed,
-                          naturedisputed,
-                          sitevalue,
-                          developed,
-                          developmnetapproved,
-                          mainstructure,
-                          remarks,
-                          areainha,
-                          accumulatedrates);
+                          var res = await submitData(
+                              newplotno,
+                              ward,
+                              subcounty,
+                              marketId,
+                              marketName,
+                              tenure,
+                              ownername,
+                              idnumber,
+                              length,
+                              width,
+                              lr_no,
+                              pinnumber,
+                              landrates,
+                              idtype,
+                              nextofkin,
+                              physicallocation,
+                              postaladdress,
+                              postalcode,
+                              town,
+                              mobile,
+                              email,
+                              gender,
+                              coowners,
+                              physicaladdress,
+                              zone,
+                              rateablevalue,
+                              landratesarrears,
+                              rentpayable,
+                              rentareas,
+                              penalty,
+                              accumulatedpenalty,
+                              status,
+                              use,
+                              blocknumber,
+                              ownership,
+                              mode,
+                              disputed,
+                              naturedisputed,
+                              sitevalue,
+                              developed,
+                              developmnetapproved,
+                              mainstructure,
+                              remarks,
+                              areainha,
+                              accumulatedrates);
 
-                      setState(() {
-                        isLoading = null;
-                        if (res.error == null) {
-                          error = res.success;
-                        } else {
-                          error = res.error;
-                        }
-                      });
-                      if (res.error == null) {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) => const Home()));
-                      }
-                    },
-                  ),
+                          setState(() {
+                            isLoading = null;
+                            if (res.error == null) {
+                              error = res.success;
+                            } else {
+                              error = res.error;
+                            }
+                          });
+                          if (res.error == null) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const Home()));
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          Center(
+            child: isLoading ?? const SizedBox(),
+          ),
+        ],
       ),
     );
   }
